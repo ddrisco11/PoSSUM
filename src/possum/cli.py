@@ -10,6 +10,7 @@ def main():
     p.add_argument("input",help="Normalized JSONL records")
     p.add_argument("--output",default="runs/pilot")
     p.add_argument("--components",nargs="+",default=["bge","bert"],choices=["bge","bert","modernbert","gliner","gliner2"])
+    p.add_argument("--expert-scores",nargs="*",default=[],help="Frozen expert caches as name=file.npz")
     p.add_argument("--device",choices=["cpu","mps"],default="cpu")
     p.add_argument("--seed",type=int,default=42)
     p.add_argument("--limit",type=int,default=800)
@@ -22,9 +23,10 @@ def main():
     args=parser.parse_args()
     if args.command == "pilot":
         from .pilot import run
-        run(args.input,args.output,args.components,args.seed,args.limit,args.device)
+        run(args.input,args.output,args.components,args.seed,args.limit,args.device,args.expert_scores)
         return
-    from .data import read_jsonl
+    from .data import read_jsonl, normalize
+    import hashlib
     rows=read_jsonl(args.input)
     kw={"model_id":args.model_id} if args.model_id else {}
     n=args.component
@@ -56,8 +58,8 @@ def main():
     result=model.encode(texts) if hasattr(model,"encode") else model.score(texts)
     target=Path(args.output)
     target.parent.mkdir(parents=True,exist_ok=True)
-    np.savez_compressed(target,values=result,ids=np.array([r.get("id",str(i)) for i,r in enumerate(rows)]))
-    target.with_suffix(".json").write_text(json.dumps({"component":n,"model_id":args.model_id,"revision":getattr(model,"revision",None),"server_version":getattr(model,"version",None),"kind":"features" if hasattr(model,"encode") else "scores"},indent=2))
+    np.savez_compressed(target,values=result,ids=np.array([r.get("id",hashlib.sha256(normalize(r["text"]).encode()).hexdigest()) for i,r in enumerate(rows)]))
+    target.with_suffix(".json").write_text(json.dumps({"component":n,"model_id":args.model_id,"revision":getattr(model,"revision",None),"server_version":getattr(model,"version",None),"frozen_zero_shot":not hasattr(model,"encode"),"kind":"features" if hasattr(model,"encode") else "scores"},indent=2))
 
 if __name__ == "__main__":
     main()

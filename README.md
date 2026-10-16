@@ -31,3 +31,19 @@ Use one component at a time and cache scores. The default pilot avoids 7–27B w
 All commits use the repository owner's configured Git identity. Record checkpoint revisions, dataset hashes, split membership, dependency versions, seeds, score prompts, and device in every run. Raw corpora, model caches and sample-level outputs stay ignored. Public reports contain aggregate metrics only.
 
 This experiment measures expressed viewpoint, not an individual's beliefs. Party/source labels are noisy supervision; they are not human verification of a passage's viewpoint. Neutral and ambiguous input is outside the binary training target. Production abstention and politicalness detection remain separate evaluation tasks.
+
+## Run an expert independently
+```bash
+# These commands emit features or two-column scores; they do not train a model.
+possum score bge data/development.jsonl --output runs/bge-features.npz --device mps
+possum score gliner data/development.jsonl --output runs/gliner.npz
+possum score openjev data/development.jsonl --output runs/openjev.npz
+# After explicitly preparing a local 4-bit checkpoint:
+possum score mlx data/development.jsonl --model-id /path/to/pinned-mlx-model --output runs/causal.npz
+# Integrate frozen zero-shot caches into the same calibrated mixture:
+possum pilot data/corpus.jsonl --expert-scores gliner=runs/gliner.npz --output runs/with-gliner
+```
+
+Score only development rows during selection; use `split.json` to construct that input. External caches must cover every selected development ID, and include their JSON metadata sidecars. Learned external heads are rejected because fold provenance is required. Encoder `score` commands emit features rather than untrained classification logits. `--model-id` swaps the checkpoint within a module.
+
+The optional CI template is in `docs/ci-example.yml`. It is not active: the GitHub OAuth credential used for setup lacks workflow scope. Local tests do not require that scope.

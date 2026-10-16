@@ -15,14 +15,14 @@ from .data import prepare, split_rows, read_jsonl
 from .learning import temperature, metrics, fit_gate, predict_gate, fit_neural, bootstrap_delta
 
 
-def run(path, output, components=("bge", "bert"), seed=42, limit=800, device="cpu"):
+def run(path, output, components=("bge", "bert"), seed=42, limit=800, device="cpu", expert_scores=()):
     torch.set_num_threads(4)
     out = Path(output)
     if (out/"report.json").exists():
         raise ValueError("Use a new output directory; completed runs are immutable")
     out.mkdir(parents=True, exist_ok=True)
     rows = prepare(read_jsonl(path))
-    parts = split_rows(rows, seed)
+    parts = split_rows(rows, 42)
     # Cap development after reserving test, proportionally across partitions.
     rng = np.random.default_rng(seed)
     dev_total = sum(len(v) for k, v in parts.items() if k != "test")
@@ -44,7 +44,7 @@ def run(path, output, components=("bge", "bert"), seed=42, limit=800, device="cp
     a, c, g, v = (local[k] for k in ("fit", "calibration", "gate", "validation"))
     membership = {k: [rows[i]["id"] for i in ids] for k, ids in parts.items()}
     (out/"split.json").write_text(json.dumps({"full": membership, "pilot": {k:[rows[i]["id"] for i in ids] for k,ids in chosen.items()}}, indent=2))
-    config = dict(seed=seed, components=list(components), limit=limit, device=device, input_sha256=hashlib.sha256(Path(path).read_bytes()).hexdigest(), python=platform.python_version(), packages={k:importlib.metadata.version(k) for k in ("torch","transformers","numpy","scikit-learn")})
+    config = dict(seed=seed, split_seed=42, components=list(components), limit=limit, device=device, input_sha256=hashlib.sha256(Path(path).read_bytes()).hexdigest(), python=platform.python_version(), packages={k:importlib.metadata.version(k) for k in ("torch","transformers","numpy","scikit-learn")})
     scores, durations, revisions = {}, {}, {}
     start = time.perf_counter()
     tfidf = TfidfVectorizer(ngram_range=(1,2), min_df=2, max_features=15000)
@@ -79,6 +79,22 @@ def run(path, output, components=("bge", "bert"), seed=42, limit=800, device="cp
         gc.collect()
         if torch.backends.mps.is_available():
             torch.mps.empty_cache()
+    for specification in expert_scores:
+        name, filename = specification.split("=", 1)
+        if name in scores:
+            raise ValueError(f"Duplicate expert {name}")
+        artifact = np.load(filename, allow_pickle=False)
+        metadata = json.loads(Path(filename).with_suffix(".json").read_text())
+        if metadata.get("kind") != "scores" or not metadata.get("frozen_zero_shot"):
+            raise ValueError("External scores must be frozen zero-shot experts; trained experts need fold provenance")
+        ids = artifact["ids"].tolist()
+        if len(ids) != len(set(ids)):
+            raise ValueError("Duplicate score IDs")
+        lookup = dict(zip(ids, artifact["values"]))
+        scores[name] = np.asarray([lookup[r["id"]] for r in dev])
+        if scores[name].shape != (len(dev), 2):
+            raise ValueError("Expected two scores per example, ordered left/right")
+        revisions[name] = metadata
     neural = fit_neural(bge[a], y[a], seed)
     with torch.inference_mode():
         scores["bge_neural"] = neural(torch.tensor(bge, dtype=torch.float32)).numpy()
