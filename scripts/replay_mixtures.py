@@ -25,7 +25,12 @@ c,g,v=(positions[k] for k in ('calibration','gate','validation'))
 extra={}
 for spec in a.expert:
  name,path=spec.split('=',1)
+ metadata=json.loads(Path(path).with_suffix('.json').read_text())
+ if metadata.get('kind') != 'scores' or not metadata.get('frozen_zero_shot'):
+  raise ValueError('Replay requires frozen zero-shot score artifacts')
  data=np.load(path,allow_pickle=False)
+ if len(set(data['ids'].tolist())) != len(data['ids']):
+  raise ValueError('Duplicate score IDs')
  lookup=dict(zip(data['ids'].tolist(),data['values']))
  raw=np.asarray([lookup[i] for i in ids])
  t=temperature(raw[c],y[c])

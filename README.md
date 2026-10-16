@@ -5,7 +5,7 @@
 
 A short experiment: does a small, embedding-conditioned mixture beat a strong single model at classifying the political viewpoint expressed in a short U.S. political passage?
 
-**Labels:** `0 = Left`, `1 = Right`. **Status:** initial implementation; no scientific conclusions yet. Model weights and source datasets are downloaded separately and never committed.
+**Labels:** `0 = Left`, `1 = Right`. **Status:** compact M2 pilot completed; [results and limitations](reports/initial-pilot.md). No scientific conclusions yet. Model weights and source datasets are downloaded separately and never committed.
 
 ## Experiment in three steps
 1. Freeze encoders; run a small grouped pilot with BGE-small, BERT, GLiNER, and a lexical baseline.
