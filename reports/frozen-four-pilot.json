@@ -1,0 +1,322 @@
+{
+  "single_experts": {
+    "bert": {
+      "macro_f1": 0.4306366047745358,
+      "balanced_accuracy": 0.508994708994709,
+      "log_loss": 0.5787256313030351,
+      "brier": 0.20178294687933804,
+      "ece": 0.1694299962910466
+    },
+    "gliner": {
+      "macro_f1": 0.6268051080081155,
+      "balanced_accuracy": 0.674074074074074,
+      "log_loss": 0.6479988619352153,
+      "brier": 0.2291038285926104,
+      "ece": 0.056361820154155154
+    },
+    "mistral": {
+      "macro_f1": 0.6287439613526571,
+      "balanced_accuracy": 0.6608465608465608,
+      "log_loss": 0.7052275535992616,
+      "brier": 0.24754831126071963,
+      "ece": 0.1349271237861665
+    },
+    "qwen": {
+      "macro_f1": 0.6179245283018868,
+      "balanced_accuracy": 0.6169312169312169,
+      "log_loss": 0.6008276115614887,
+      "brier": 0.20703262424431754,
+      "ece": 0.04876479839336062
+    }
+  },
+  "equal_mixture": {
+    "macro_f1": 0.6999460819554277,
+    "balanced_accuracy": 0.6965608465608466,
+    "log_loss": 0.5727981551521997,
+    "brier": 0.193213280647489,
+    "ece": 0.1213752804757787
+  },
+  "experts": [
+    "bert",
+    "gliner",
+    "mistral",
+    "qwen"
+  ],
+  "note": "Same frozen expert predictions and fixed data split; seeds vary only mixture initialization. Development validation diagnostic, not a significance test.",
+  "extra_experts": {
+    "mistral": {
+      "temperature": 1.3429778908255325,
+      "metrics": {
+        "macro_f1": 0.6287439613526571,
+        "balanced_accuracy": 0.6608465608465608,
+        "log_loss": 0.7052275535992616,
+        "brier": 0.24754831126071963,
+        "ece": 0.1349271237861665
+      }
+    },
+    "qwen": {
+      "temperature": 2.200147262036154,
+      "metrics": {
+        "macro_f1": 0.6179245283018868,
+        "balanced_accuracy": 0.6169312169312169,
+        "log_loss": 0.6008276115614887,
+        "brier": 0.20703262424431754,
+        "ece": 0.04876479839336062
+      }
+    }
+  },
+  "seeds": {
+    "42": {
+      "fixed": {
+        "metrics": {
+          "macro_f1": 0.6259733939000649,
+          "balanced_accuracy": 0.6518518518518519,
+          "log_loss": 0.617511510848999,
+          "brier": 0.2150474190711975,
+          "ece": 0.07372610261605222
+        },
+        "mean_weights": {
+          "bert": 0.09446267783641815,
+          "gliner": 0.0724085196852684,
+          "mistral": 0.6252961754798889,
+          "qwen": 0.20783261954784393
+        }
+      },
+      "expert_gate": {
+        "metrics": {
+          "macro_f1": 0.6710020691693763,
+          "balanced_accuracy": 0.6812169312169312,
+          "log_loss": 0.6014454960823059,
+          "brier": 0.20580492913722992,
+          "ece": 0.09153102478891048
+        },
+        "mean_weights": {
+          "bert": 0.3656112253665924,
+          "gliner": 0.011212832294404507,
+          "mistral": 0.6215184330940247,
+          "qwen": 0.0016574527835473418
+        }
+      },
+      "hybrid_gate": {
+        "metrics": {
+          "macro_f1": 0.5218423551756886,
+          "balanced_accuracy": 0.5886243386243386,
+          "log_loss": 2.8105955123901367,
+          "brier": 0.4156002700328827,
+          "ece": 0.4191191541323872
+        },
+        "mean_weights": {
+          "bert": 0.004474485293030739,
+          "gliner": 7.573462062282488e-05,
+          "mistral": 6.61695739836432e-05,
+          "qwen": 3.6090561479795724e-05,
+          "self": 0.9953474998474121
+        },
+        "leave_one_out": {
+          "bert": {
+            "macro_f1": 0.5154165842074014,
+            "balanced_accuracy": 0.5838624338624339,
+            "log_loss": 2.633028030395508,
+            "brier": 0.41595929861068726,
+            "ece": 0.4221732672655357
+          },
+          "gliner": {
+            "macro_f1": 0.5659690627843494,
+            "balanced_accuracy": 0.6354497354497355,
+            "log_loss": 2.42586350440979,
+            "brier": 0.37852758169174194,
+            "ece": 0.3777194169332397
+          },
+          "mistral": {
+            "macro_f1": 0.5597310126582278,
+            "balanced_accuracy": 0.6261904761904762,
+            "log_loss": 2.3186442852020264,
+            "brier": 0.3731417953968048,
+            "ece": 0.3488063868486656
+          },
+          "qwen": {
+            "macro_f1": 0.5723101265822785,
+            "balanced_accuracy": 0.6402116402116402,
+            "log_loss": 2.3816590309143066,
+            "brier": 0.37791192531585693,
+            "ece": 0.3445348912065135
+          }
+        }
+      }
+    },
+    "43": {
+      "fixed": {
+        "metrics": {
+          "macro_f1": 0.6259733939000649,
+          "balanced_accuracy": 0.6518518518518519,
+          "log_loss": 0.617511510848999,
+          "brier": 0.2150474190711975,
+          "ece": 0.07372610261605222
+        },
+        "mean_weights": {
+          "bert": 0.09446267783641815,
+          "gliner": 0.0724085196852684,
+          "mistral": 0.6252961754798889,
+          "qwen": 0.20783261954784393
+        }
+      },
+      "expert_gate": {
+        "metrics": {
+          "macro_f1": 0.6654040404040404,
+          "balanced_accuracy": 0.6764550264550264,
+          "log_loss": 0.6056086421012878,
+          "brier": 0.2073855847120285,
+          "ece": 0.08097414363105343
+        },
+        "mean_weights": {
+          "bert": 0.3380490839481354,
+          "gliner": 0.014366613700985909,
+          "mistral": 0.6434141397476196,
+          "qwen": 0.0041701761074364185
+        }
+      },
+      "hybrid_gate": {
+        "metrics": {
+          "macro_f1": 0.54058974866416,
+          "balanced_accuracy": 0.611904761904762,
+          "log_loss": 2.9305403232574463,
+          "brier": 0.41730985045433044,
+          "ece": 0.4148440049879206
+        },
+        "mean_weights": {
+          "bert": 0.0018761492101475596,
+          "gliner": 0.00016645110736135393,
+          "mistral": 1.3620719983009622e-05,
+          "qwen": 2.9180266210460104e-05,
+          "self": 0.9979146122932434
+        },
+        "leave_one_out": {
+          "bert": {
+            "macro_f1": 0.5408805031446541,
+            "balanced_accuracy": 0.6029100529100528,
+            "log_loss": 2.5786678791046143,
+            "brier": 0.40206825733184814,
+            "ece": 0.3966662553871203
+          },
+          "gliner": {
+            "macro_f1": 0.5657629131209183,
+            "balanced_accuracy": 0.6399470899470899,
+            "log_loss": 2.731795310974121,
+            "brier": 0.39018094539642334,
+            "ece": 0.3627287644260334
+          },
+          "mistral": {
+            "macro_f1": 0.546721571111815,
+            "balanced_accuracy": 0.6211640211640211,
+            "log_loss": 2.917618751525879,
+            "brier": 0.39989951252937317,
+            "ece": 0.3981081134868118
+          },
+          "qwen": {
+            "macro_f1": 0.6742915670877432,
+            "balanced_accuracy": 0.6814814814814815,
+            "log_loss": 0.7505673766136169,
+            "brier": 0.2126755565404892,
+            "ece": 0.13284987661073794
+          }
+        }
+      }
+    },
+    "44": {
+      "fixed": {
+        "metrics": {
+          "macro_f1": 0.6259733939000649,
+          "balanced_accuracy": 0.6518518518518519,
+          "log_loss": 0.617511510848999,
+          "brier": 0.2150474190711975,
+          "ece": 0.07372610261605222
+        },
+        "mean_weights": {
+          "bert": 0.09446267783641815,
+          "gliner": 0.0724085196852684,
+          "mistral": 0.6252961754798889,
+          "qwen": 0.20783261954784393
+        }
+      },
+      "expert_gate": {
+        "metrics": {
+          "macro_f1": 0.682229876259727,
+          "balanced_accuracy": 0.6907407407407407,
+          "log_loss": 0.604367196559906,
+          "brier": 0.20654736459255219,
+          "ece": 0.08545558969929534
+        },
+        "mean_weights": {
+          "bert": 0.36176690459251404,
+          "gliner": 0.011805090121924877,
+          "mistral": 0.6247355937957764,
+          "qwen": 0.0016923516523092985
+        }
+      },
+      "hybrid_gate": {
+        "metrics": {
+          "macro_f1": 0.5844947735191637,
+          "balanced_accuracy": 0.6632275132275133,
+          "log_loss": 2.549267292022705,
+          "brier": 0.3819851279258728,
+          "ece": 0.3629991524624375
+        },
+        "mean_weights": {
+          "bert": 0.33384063839912415,
+          "gliner": 0.005966630764305592,
+          "mistral": 0.00081773498095572,
+          "qwen": 0.0002766686084214598,
+          "self": 0.6590983271598816
+        },
+        "leave_one_out": {
+          "bert": {
+            "macro_f1": 0.5218423551756886,
+            "balanced_accuracy": 0.5886243386243386,
+            "log_loss": 2.661909818649292,
+            "brier": 0.41491052508354187,
+            "ece": 0.4173362217609238
+          },
+          "gliner": {
+            "macro_f1": 0.5721747388414056,
+            "balanced_accuracy": 0.6447089947089947,
+            "log_loss": 2.609067440032959,
+            "brier": 0.3850797116756439,
+            "ece": 0.34960764983914927
+          },
+          "mistral": {
+            "macro_f1": 0.5533884559085334,
+            "balanced_accuracy": 0.6214285714285714,
+            "log_loss": 2.498307228088379,
+            "brier": 0.3889981210231781,
+            "ece": 0.35523015298183613
+          },
+          "qwen": {
+            "macro_f1": 0.5723101265822785,
+            "balanced_accuracy": 0.6357142857142857,
+            "log_loss": 2.206716775894165,
+            "brier": 0.36521732807159424,
+            "ece": 0.3379186328102207
+          }
+        }
+      }
+    }
+  },
+  "routing_training_seconds": 2.777137208999193,
+  "evaluation_context": {
+    "fit": 317,
+    "calibration": 116,
+    "gate": 205,
+    "validation": 159,
+    "validation_groups": 2,
+    "untouched_test": 374,
+    "source": "U.S. Manifesto",
+    "labels": "Human policy codes mapped to binary RILE labels; weak ideology supervision",
+    "backbones": "All frozen",
+    "split_note": "20% document-group holdout contains 31.9% of rows",
+    "scope": "Three routing initializations on a fixed document split, not independent dataset repetitions"
+  },
+  "scoring_seconds": {
+    "mistral": 554.9964794110165,
+    "qwen": 931.3163530060137
+  }
+}

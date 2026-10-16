@@ -37,13 +37,15 @@ The reserved synthetic test remains unopened. Its group-constrained split is 75/
 
 See the [human-text evaluation report](reports/external-evaluation.md), [initial synthetic pilot](reports/initial-pilot.md), [training protocol](docs/evaluation.md), [external evaluation protocol](docs/external-evaluation.md), [model registry](docs/models.md), and [dataset manifest](docs/datasets.md).
 
-A frozen four-expert pilot is configured for BERT, GLiNER 2.5, Mistral 7B v0.3 and Qwen3.5 9B, with 4-bit MLX causal scoring. Only the BERT classification probe and mixture heads learn parameters; all backbones remain frozen. A bounded U.S. Manifesto subset uses document-separated calibration, routing training and validation. See [corpus status](docs/corpus-status.md).
+The completed **frozen four-expert pilot** uses BERT, GLiNER 2.5, Mistral 7B v0.3 and Qwen3.5 9B. On 159 validation passages from two held-out U.S. Manifesto document groups, equal averaging achieved **0.700 macro-F1**, compared with **0.665–0.682** for neural routing and **0.522–0.584** for routing with self prediction. The strongest individual expert by macro-F1 was Mistral at **0.629**. Equal averaging also had the lowest log loss, **0.573**, among these four experts and their tested mixtures.
+
+These results support further evaluation of ensembling, but do **not** establish a benefit from learned routing. Self-prediction weights reached 65.9–99.8%, with poor validation log loss (2.55–2.93), consistent with overfitting on only 205 router-training examples. Labels come from human policy codes mapped to ideology rather than direct human left/right judgments. Three initialization seeds share one document split; 374 reserved test passages remain untouched. All backbones stayed frozen. See the [complete four-expert results](reports/frozen-four-pilot.json) and [corpus status](docs/corpus-status.md).
 
 ## Intended use and limitations
 
 PoSSUM is a development model for studying expressed political viewpoint in text. It does not infer an individual's beliefs. Party and publisher metadata provide noisy supervision rather than passage-level ground truth. Neutral, ambiguous and nonpolitical text is outside the binary training target; abstention and politicalness detection need separate evaluation.
 
-A small human-annotated sample has been evaluated; representative human-text evaluation and broader domain testing remain incomplete. OpenJev, Mistral, Qwen and ModernBERT have not completed checkpoint-level inference in the pilot. Training data and component weights retain their upstream licenses; see the model registry and dataset manifest.
+A small human-annotated sample has been evaluated; representative human-text evaluation and broader domain testing remain incomplete. OpenJev and ModernBERT have not completed checkpoint-level inference in the pilot. Training data and component weights retain their upstream licenses; see the model registry and dataset manifest.
 
 ## Local setup (Apple Silicon)
 ```bash
