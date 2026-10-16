@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="800" viewBox="0 0 1600 800" role="img" aria-labelledby="title desc">
+<title id="title">PoSSUM — Political Orientation and Slant Scoring Using Mixtures</title><desc id="desc">A geometric blue and red possum with a curled tail, framed by a subtle research diagram on an ivory background.</desc>
+<defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#182c44" stroke-opacity=".055"/></pattern></defs>
+<path fill="#f7f5ef" d="M0 0h1600v800H0z"/><path fill="url(#grid)" d="M800 0h800v800H800z"/>
+<path d="M70 80h1460" stroke="#182c44" stroke-width="2"/><text x="70" y="60" font-family="Helvetica,Arial,sans-serif" font-size="17" letter-spacing="4" fill="#182c44">EXPERIMENT 001 / POLITICAL LANGUAGE</text>
+<text x="70" y="340" font-family="Helvetica,Arial,sans-serif" font-size="142" font-weight="700" letter-spacing="-7" fill="#182c44">PoSSUM</text>
+<text x="78" y="405" font-family="Helvetica,Arial,sans-serif" font-size="29" fill="#182c44">Political Orientation and Slant</text><text x="78" y="447" font-family="Helvetica,Arial,sans-serif" font-size="29" fill="#182c44">Scoring Using Mixtures</text>
+<path d="M80 505h72" stroke="#3262a8" stroke-width="8"/><path d="M162 505h72" stroke="#d9564f" stroke-width="8"/>
+<text x="78" y="558" font-family="Helvetica,Arial,sans-serif" font-size="18" letter-spacing="2" fill="#617081">SMALL MODELS. MEASURED MIXTURES.</text>
+<g transform="translate(790 145)">
+<circle cx="360" cy="235" r="215" fill="none" stroke="#c9c9c2" stroke-width="1.5"/>
+<path d="M455 365C720 490 763 269 645 260C566 254 575 355 636 340" fill="none" stroke="#d9564f" stroke-width="28" stroke-linecap="round"/>
+<path d="M137 343C102 240 165 144 294 141C397 118 496 183 506 292L477 378L338 396Z" fill="#3262a8"/>
+<path d="M294 141C397 118 496 183 506 292L477 378L338 396L289 291Z" fill="#d9564f"/>
+<path d="M184 345l-35 77h88l18-56M379 370l20 52h92l-48-75" fill="#182c44"/>
+<path d="M143 202C103 155 112 90 148 101C181 107 211 156 204 187" fill="#182c44"/>
+<path d="M157 167c-25-27-26-50-12-46c18 5 34 29 35 45" fill="#d9564f"/>
+<path d="M247 185C236 127 261 84 289 106C313 126 314 172 291 200" fill="#182c44"/>
+<path d="M268 164c-9-26 0-47 11-37c11 11 11 29 5 44" fill="#d9564f"/>
+<path d="M122 199C173 173 242 175 302 218L245 302L109 346L54 311Z" fill="#fffaf0"/>
+<path d="M122 199l61 62-74 85-55-35Z" fill="#e4e6e5"/>
+<path d="M60 297l35 17-36 18-20-19Z" fill="#d9564f"/><ellipse cx="164" cy="251" rx="13" ry="15" fill="#182c44"/><circle cx="168" cy="246" r="4" fill="white"/>
+<path d="M107 297l-63-12m65 23-69 10m77 0-57 32" stroke="#182c44" stroke-width="2" fill="none"/>
+<path d="M175 337q39 17 65-8" fill="none" stroke="#182c44" stroke-width="3"/>
+</g>
+<path d="M70 715h1460" stroke="#182c44" stroke-width="2"/><text x="70" y="752" font-family="Helvetica,Arial,sans-serif" font-size="16" letter-spacing="2" fill="#617081">LEFT / RIGHT · TEXT-LEVEL VIEWPOINT · LEARNED WEIGHTING</text><text x="1390" y="752" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#617081">ddrisco11</text>
+</svg>
