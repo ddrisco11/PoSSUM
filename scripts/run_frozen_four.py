@@ -1,7 +1,8 @@
 """Sequential frozen-expert pilot with resumable scoring and measured throughput."""
-import argparse, json, subprocess, sys, time
+import argparse, json, subprocess, sys, time, zipfile
 from pathlib import Path
 import numpy as np
+from possum.checkpoints import save_scores, save_json
 
 MODELS = {
  'mistral': ('mlx-community/Mistral-7B-v0.3-4bit','5e8b40756eaa1cb5131715937c77107b4421c3a5'),
@@ -16,25 +17,36 @@ if a.worker:
  from huggingface_hub import snapshot_download
  from possum.components.causal import MLXCausal
  repo,rev=MODELS[a.worker]
- print(f'Downloading/loading {repo} @ {rev}',flush=True)
- path=snapshot_download(repo,revision=rev)
- model=MLXCausal(path)
  rows=[json.loads(l) for l in (root/'development.jsonl').read_text().splitlines()]
  target=root/f'{a.worker}_raw.npz';values=[];elapsed=[]
  progress=root/f'{a.worker}_progress.json'
  if target.exists():
-  old=np.load(target,allow_pickle=False)
-  assert old['ids'].tolist()==[r['id'] for r in rows[:len(old['ids'])]]
-  values=old['values'].tolist()
-  elapsed=json.loads(progress.read_text())['chunk_seconds']
+  try:
+   with np.load(target,allow_pickle=False) as old:
+    cached_ids=old['ids'].tolist();values=old['values'].tolist()
+    elapsed=old['chunk_seconds'].tolist() if 'chunk_seconds' in old else []
+  except (OSError,ValueError,EOFError,zipfile.BadZipFile):
+   with np.load(root/f'{a.worker}_recovery.npz',allow_pickle=False) as old:
+    cached_ids=old['ids'].tolist();values=old['values'].tolist();elapsed=[]
+   print(f'{a.worker}: restored recovery snapshot',flush=True)
+  assert cached_ids==[r['id'] for r in rows[:len(cached_ids)]]
+  if not elapsed and progress.exists():
+   elapsed=json.loads(progress.read_text()).get('chunk_seconds',[])
+ if len(values)==len(rows):
+  save_json(target.with_suffix('.json'),dict(kind='scores',frozen_zero_shot=True,model_id=repo,revision=rev))
+  print(f'{a.worker}: complete cache reused; no model load needed',flush=True)
+  sys.exit(0)
+ print(f'Downloading/loading {repo} @ {rev}; resume from {len(values)}/{len(rows)}',flush=True)
+ path=snapshot_download(repo,revision=rev)
+ model=MLXCausal(path)
  for start in range(len(values),len(rows),10):
   t=time.perf_counter();values.extend(model.score([r['text'] for r in rows[start:start+10]]).tolist());elapsed.append(time.perf_counter()-t)
-  np.savez_compressed(target,values=np.asarray(values),ids=np.array([r['id'] for r in rows[:len(values)]]))
+  save_scores(target,values,[r['id'] for r in rows[:len(values)]],elapsed)
   seconds=sum(elapsed)/len(values)
   status=dict(completed=len(values),total=len(rows),chunk_seconds=elapsed,seconds_per_excerpt=seconds,projected_100k_hours=seconds*100000/3600)
-  progress.write_text(json.dumps(status,indent=2))
+  save_json(progress,status)
   print(f'{a.worker}: {len(values)}/{len(rows)}, {seconds:.3f} seconds/excerpt',flush=True)
- target.with_suffix('.json').write_text(json.dumps(dict(kind='scores',frozen_zero_shot=True,model_id=repo,revision=rev),indent=2))
+ save_json(target.with_suffix('.json'),dict(kind='scores',frozen_zero_shot=True,model_id=repo,revision=rev))
 else:
  from possum.data import prepare,read_jsonl
  if not Path(a.input).exists():

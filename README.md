@@ -66,6 +66,8 @@ Open the read-only Tkinter dashboard from the repository root:
 
 It refreshes every two seconds with component progress, measured scoring speed, current-stage ETA and the live pipeline log. Use `--run /path/to/run` to inspect another run. Closing the window leaves training running. The Python installation must include Tkinter.
 
+Scoring checkpoints are saved every ten passages using atomic replacement and disk synchronization. Resume an interrupted frozen four-expert run with `python -u scripts/run_frozen_four.py`; completed expert caches are reused before loading weights. Resume only after the previous process has stopped. The small routing fits restart if interrupted; expert scoring remains cached. Checkpoints live in ignored `runs/`, not on GitHub.
+
 ## Reproducibility
 Record checkpoint revisions, dataset hashes, split membership, dependency versions, seeds, score prompts, and device in every run. Raw corpora, model caches and sample-level outputs stay ignored. Public reports contain aggregate metrics only.
 
