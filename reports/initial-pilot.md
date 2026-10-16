@@ -31,7 +31,7 @@ The hybrid self branch received roughly 0.02–0.03% average routing weight. Thi
 
 ## Verification and limits
 
-Eight local tests cover provenance failures, conflicting labels, transitive grouping, disjoint splits, temperature calibration, convex gate behavior, multi-token candidate boundaries, and gradient flow into the self branch. GLiNER, BGE and BERT completed real inference. Mistral, Qwen, OpenJev, MLX and ModernBERT adapters have not completed checkpoint-level inference in this setup. Their readiness is not implied by unit-test success.
+Eight local tests cover provenance failures, conflicting labels, transitive grouping, disjoint splits, temperature calibration, convex gate behavior, multi-token candidate boundaries, and gradient flow into the self branch. GLiNER, BGE and BERT completed real inference. Mistral, Qwen, OpenJev, MLX and ModernBERT adapters have not completed checkpoint-level inference in the pilot environment. Their readiness is not implied by unit-test success.
 
 `requirements-tested.txt` records installed package versions. Model revisions are pinned in the package registry. Compact encoder inference used normalized pooled features, eager attention, batch size 8 and a 256-token cap; overlength inputs may be truncated. Runtime figures in compact-pilot.json include loading/feature extraction/head fitting and are not isolated inference benchmarks. Peak memory was not measured.
 
@@ -39,4 +39,4 @@ The first synthetic pilot does not satisfy the final human-text evaluation requi
 
 ## Next experiment
 
-Recover human-text document/author groups and assemble several independent validation groups. Compare BERT, lexical baseline, GLiNER, expert gate and hybrid gate on those before deciding to drop experts or fine-tune. OpenJev is deferred for memory; Mistral/Qwen require an explicitly prepared quantized backend and further runtime validation. CI remains a saved template because the current GitHub OAuth scope cannot publish workflows.
+Recover human-text document/author groups and assemble several independent validation groups. Compare BERT, lexical baseline, GLiNER, expert gate and hybrid gate on those before deciding to drop experts or fine-tune. OpenJev is deferred for memory; Mistral/Qwen require a quantized backend and further runtime validation.

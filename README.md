@@ -25,10 +25,10 @@ pytest
 possum --help
 ```
 
-Use one component at a time and cache scores. The default pilot avoids 7–27B weight downloads. OpenJev is disabled on a 16 GB Mac; its smallest official MLX checkpoint alone is approximately 15 GB. Optional MLX causal audits require `pip install -e '.[mlx]'` and explicit model selection. No cloud compute is started automatically.
+Use one component at a time and cache scores. The default pilot avoids 7–27B weight downloads. OpenJev is disabled on a 16 GB Mac; its smallest official MLX checkpoint alone is approximately 15 GB. Optional MLX causal audits require `pip install -e '.[mlx]'` and explicit model selection.
 
 ## Reproducibility
-All commits use the repository owner's configured Git identity. Record checkpoint revisions, dataset hashes, split membership, dependency versions, seeds, score prompts, and device in every run. Raw corpora, model caches and sample-level outputs stay ignored. Public reports contain aggregate metrics only.
+Record checkpoint revisions, dataset hashes, split membership, dependency versions, seeds, score prompts, and device in every run. Raw corpora, model caches and sample-level outputs stay ignored. Public reports contain aggregate metrics only.
 
 This experiment measures expressed viewpoint, not an individual's beliefs. Party/source labels are noisy supervision; they are not human verification of a passage's viewpoint. Neutral and ambiguous input is outside the binary training target. Production abstention and politicalness detection remain separate evaluation tasks.
 
@@ -38,7 +38,7 @@ This experiment measures expressed viewpoint, not an individual's beliefs. Party
 possum score bge data/development.jsonl --output runs/bge-features.npz --device mps
 possum score gliner data/development.jsonl --output runs/gliner.npz
 possum score openjev data/development.jsonl --output runs/openjev.npz
-# After explicitly preparing a local 4-bit checkpoint:
+# Run a local 4-bit checkpoint:
 possum score mlx data/development.jsonl --model-id /path/to/pinned-mlx-model --output runs/causal.npz
 # Integrate frozen zero-shot caches into the same calibrated mixture:
 possum pilot data/corpus.jsonl --expert-scores gliner=runs/gliner.npz --output runs/with-gliner
@@ -46,7 +46,7 @@ possum pilot data/corpus.jsonl --expert-scores gliner=runs/gliner.npz --output r
 
 Score only development rows during selection; use `split.json` to construct that input. External caches must cover every selected development ID, and include their JSON metadata sidecars. Learned external heads are rejected because fold provenance is required. Encoder `score` commands emit features rather than untrained classification logits. `--model-id` swaps the checkpoint within a module.
 
-The optional CI template is in `docs/ci-example.yml`. It is not active: the GitHub OAuth credential used for setup lacks workflow scope. Local tests do not require that scope.
+An optional GitHub Actions test workflow is provided in `docs/ci-example.yml`; automated CI is not enabled.
 
 ## The gate can also answer
 The **hybrid gate** assigns probability mass to its own BGE-conditioned prediction as well as to external experts. Its K+1 weights sum to one. The self classifier and routing head train jointly, while experts stay frozen. Reports compare this with an experts-only gate and expose the average self weight.

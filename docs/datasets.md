@@ -1,6 +1,6 @@
 # Dataset manifest and admission rules
 
-The requested counts are planning estimates, not verified counts of eligible independent passages. A normalized record is JSON with `text`, `label` (0 left / 1 right), `source`, `label_kind` (`human`, `weak`, `synthetic`), and nonempty `group_ids` (globally namespaced original document and author identities). Optional `excluded: true` removes neutral/ambiguous/nonpolitical rows. Never map unknown labels silently.
+Dataset size estimates must be checked after filtering and deduplication. A normalized record is JSON with `text`, `label` (0 left / 1 right), `source`, `label_kind` (`human`, `weak`, `synthetic`), and nonempty `group_ids` (globally namespaced original document and author identities). Optional `excluded: true` removes neutral/ambiguous/nonpolitical rows. Never map unknown labels silently.
 
 | Dataset | Supervision / action | Source |
 |---|---|---|
@@ -24,4 +24,4 @@ python scripts/fetch_synthetic_pilot.py
 possum pilot data/synthetic.jsonl --components bge bert --limit 800 --device mps --output runs/synthetic-42
 ```
 
-Eight issue groups cannot yield an exact 80/20 row split: two held-out groups approximate the requested split, with actual proportions reported. This synthetic-only pilot can verify software and expose gross signal failures; it cannot establish generalization or justify a final expert drop.
+Eight issue groups cannot yield an exact 80/20 row split: two held-out groups produce a 75/25 split, with actual proportions reported. This synthetic-only pilot can verify software and expose gross signal failures; it cannot establish generalization or justify a final expert drop.
