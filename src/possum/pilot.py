@@ -3,6 +3,7 @@ import gc
 import hashlib
 import json
 import platform
+import joblib
 import time
 from pathlib import Path
 import importlib.metadata
@@ -51,6 +52,7 @@ def run(path, output, components=("bge", "bert"), seed=42, limit=800, device="cp
     tfidf.fit([xtext[i] for i in a])
     xt = tfidf.transform(xtext)
     head = LogisticRegression(C=1, max_iter=500).fit(xt[a], y[a])
+    joblib.dump({"vectorizer": tfidf, "head": head}, out/"tfidf.joblib")
     scores["tfidf"] = np.log(np.clip(head.predict_proba(xt), 1e-7, 1))
     durations["tfidf"] = time.perf_counter()-start
     bge = None
@@ -66,12 +68,16 @@ def run(path, output, components=("bge", "bert"), seed=42, limit=800, device="cp
             if name == "bge":
                 bge = features
             head = LogisticRegression(C=1, max_iter=500).fit(features[a], y[a])
+            joblib.dump(head, out/f"{name}_head.joblib")
             scores[name] = np.log(np.clip(head.predict_proba(features), 1e-7, 1))
             np.save(out/f"{name}_features.npy", features)
         elif name in ("gliner", "gliner2"):
             from .components.gliner import GLiNER
             model = GLiNER("fastino/gliner2-base-v1" if name == "gliner2" else "fastino/gliner2.5-base-v1")
             scores[name] = model.score(xtext)
+            revisions[name] = model.revision
+            np.savez_compressed(out/f"{name}_raw.npz", values=scores[name], ids=np.array([r["id"] for r in dev]))
+            (out/f"{name}_raw.json").write_text(json.dumps({"kind":"scores", "frozen_zero_shot":True, "model_id":model.model_id, "revision":model.revision}, indent=2))
         else:
             raise ValueError("Pilot supports compact models. Run optional expert scores separately with possum score.")
         durations[name] = time.perf_counter()-start
@@ -98,6 +104,7 @@ def run(path, output, components=("bge", "bert"), seed=42, limit=800, device="cp
     neural = fit_neural(bge[a], y[a], seed)
     with torch.inference_mode():
         scores["bge_neural"] = neural(torch.tensor(bge, dtype=torch.float32)).numpy()
+    torch.save(neural.state_dict(), out/"bge_neural.pt")
     names = list(scores)
     temperatures = {k:temperature(s[c], y[c]) for k,s in scores.items()}
     probs = np.stack([softmax(scores[k]/temperatures[k], axis=1)[:,1] for k in names], axis=1)
