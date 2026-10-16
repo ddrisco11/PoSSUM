@@ -1,4 +1,4 @@
-<img src="assets/cover.svg" alt="Cartoon red and blue possum wearing an Uncle Sam hat beside the PoSSUM title" width="100%">
+<img src="assets/possum-model-card.png" alt="Cartoon red and blue possum wearing an Uncle Sam hat beside the PoSSUM title" width="100%">
 
 # PoSSUM
 **Political Slant Scoring Using Mixtures**
