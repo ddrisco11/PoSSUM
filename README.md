@@ -14,7 +14,7 @@ PoSSUM classifies the political viewpoint expressed in short English passages ab
 | Input | Approximately 20–150 words |
 | Architecture | Dense mixture of calibrated predictions with an optional self-prediction branch |
 | Components | BERT, BGE-small, GLiNER; optional ModernBERT, OpenJev, Mistral and Qwen adapters |
-| Status | Development implementation with a compact synthetic pilot; no validated release checkpoint |
+| Status | Development implementation with synthetic training and external human-text diagnostics; no validated release checkpoint |
 | Language and domain | English, U.S. politics |
 
 Model weights and source datasets are downloaded separately. Every enabled expert runs; the gate does not provide sparse inference routing.
@@ -23,15 +23,25 @@ Model weights and source datasets are downloaded separately. Every enabled exper
 
 The compact pilot uses frozen encoders with fitted classification heads. Expert fitting, temperature calibration, gate training and validation use disjoint groups. Comparisons include single models, equal averaging, a fixed mixture, an experts-only gate and a hybrid gate with its own classifier.
 
-The completed pilot used 480 synthetic development passages. BERT achieved 0.987 macro-F1 and 0.0950 log loss on 80 validation passages from one topic group. Mixture improvements were small; these results do not establish performance on human-authored text. The reserved test set has not been scored. The grouped pilot uses a 75/25 development/test split; the broader evaluation target is 80/20.
+The first pilot used 480 synthetic development passages and achieved 0.987 BERT macro-F1 on a single synthetic validation topic. A subsequent **source-held-out evaluation** used 97 human-labeled IBC sentences and 300 weakly labeled party-platform passages, without retraining or recalibrating on either source.
 
-See the [pilot report](reports/initial-pilot.md), [training and evaluation protocol](docs/evaluation.md), [model registry](docs/models.md), and [dataset manifest](docs/datasets.md).
+| Model | Human IBC macro-F1 | Platform macro-F1 (weak labels) |
+|---|---:|---:|
+| BERT + fitted head | 0.514 | 0.483 |
+| GLiNER 2.5 | 0.566 | 0.602 |
+| Hybrid gate, seeds 42–44 | 0.514–0.531 | 0.495–0.499 |
+
+**The synthetic-trained mixture does not yet demonstrate reliable transfer or an advantage over the strongest external expert.** All evaluated models also had external log loss worse than a constant 0.5 predictor. Human-data training and calibration remain necessary. The IBC sample is small and lacks original document IDs; these are diagnostic results, not a definitive benchmark.
+
+The reserved synthetic test remains unopened. Its group-constrained split is 75/25; the broader evaluation target remains 80/20. External source-held-out diagnostics are separate from that split.
+
+See the [human-text evaluation report](reports/external-evaluation.md), [initial synthetic pilot](reports/initial-pilot.md), [training protocol](docs/evaluation.md), [external evaluation protocol](docs/external-evaluation.md), [model registry](docs/models.md), and [dataset manifest](docs/datasets.md).
 
 ## Intended use and limitations
 
 PoSSUM is a development model for studying expressed political viewpoint in text. It does not infer an individual's beliefs. Party and publisher metadata provide noisy supervision rather than passage-level ground truth. Neutral, ambiguous and nonpolitical text is outside the binary training target; abstention and politicalness detection need separate evaluation.
 
-Human-verified evaluation and broader domain testing remain incomplete. OpenJev, Mistral, Qwen and ModernBERT have not completed checkpoint-level inference in the pilot. Training data and component weights retain their upstream licenses; see the model registry and dataset manifest.
+A small human-annotated sample has been evaluated; representative human-text evaluation and broader domain testing remain incomplete. OpenJev, Mistral, Qwen and ModernBERT have not completed checkpoint-level inference in the pilot. Training data and component weights retain their upstream licenses; see the model registry and dataset manifest.
 
 ## Local setup (Apple Silicon)
 ```bash

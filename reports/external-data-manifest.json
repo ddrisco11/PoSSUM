@@ -1,0 +1,28 @@
+{
+  "ibc": {
+    "url": "https://people.cs.umass.edu/~miyyer/data/sample_ibc.tar.gz",
+    "sha256": "3282d478e446c6f67ca506203199372606a8a4881cdba16d68e876eb6553ba49",
+    "raw_label_counts": [
+      50,
+      50,
+      50
+    ],
+    "eligible": 97,
+    "neutral_excluded": 50
+  },
+  "platform": {
+    "dataset": "mlburnham/dem_rep_party_platform_topics",
+    "sampling": "16 evenly spaced 100-row windows from upstream train; 150 unique eligible rows per label maximum",
+    "raw_rows": 1600,
+    "eligible_unique": 1132,
+    "selected": 300,
+    "sha256": "64d95a5970e07d286b5fb123d6454df5e273f7a920ddbfa7f606fbd727109f6e"
+  },
+  "label_counts": {
+    "ibc_official_sample:0": 49,
+    "ibc_official_sample:1": 48,
+    "party_platform:0": 150,
+    "party_platform:1": 150
+  },
+  "role": "external diagnostic evaluation only; never fit or calibrate on these labels"
+}

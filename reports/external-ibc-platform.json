@@ -1,0 +1,767 @@
+{
+  "protocol": "Frozen synthetic-trained recipe, source-held-out external diagnostic. No external labels used for training, calibration, seed selection or hyperparameter tuning.",
+  "training_counts": {
+    "fit": 240,
+    "calibration": 80,
+    "gate": 80,
+    "validation": 80
+  },
+  "external_input_count": 397,
+  "after_length_and_dedup": 397,
+  "overlap_removed": 0,
+  "near_overlap_removed": 0,
+  "by_source": {
+    "ibc_official_sample": {
+      "n": 97,
+      "label_kind": "human",
+      "label_counts_left_right": [
+        49,
+        48
+      ],
+      "metrics": {
+        "tfidf": {
+          "macro_f1": 0.5154845154845156,
+          "balanced_accuracy": 0.5382653061224489,
+          "log_loss": 1.1201519660092072,
+          "brier": 0.353297748838843,
+          "ece": 0.2872287597046558,
+          "confusion_matrix_left_right": [
+            [
+              16,
+              33
+            ],
+            [
+              12,
+              36
+            ]
+          ],
+          "predicted_right_fraction": 0.711340206185567
+        },
+        "bge": {
+          "macro_f1": 0.4870137501469033,
+          "balanced_accuracy": 0.539328231292517,
+          "log_loss": 0.9947214752672375,
+          "brier": 0.3451838241844062,
+          "ece": 0.31393230330083793,
+          "confusion_matrix_left_right": [
+            [
+              11,
+              38
+            ],
+            [
+              7,
+              41
+            ]
+          ],
+          "predicted_right_fraction": 0.8144329896907216
+        },
+        "bert": {
+          "macro_f1": 0.5141165755919854,
+          "balanced_accuracy": 0.5491071428571428,
+          "log_loss": 1.5687330744875587,
+          "brier": 0.3769698639201403,
+          "ece": 0.34819086003279287,
+          "confusion_matrix_left_right": [
+            [
+              14,
+              35
+            ],
+            [
+              9,
+              39
+            ]
+          ],
+          "predicted_right_fraction": 0.7628865979381443
+        },
+        "bge_neural": {
+          "macro_f1": 0.33019460138104206,
+          "balanced_accuracy": 0.43707482993197283,
+          "log_loss": 0.937026692997508,
+          "brier": 0.34494174722082815,
+          "ece": 0.3259348549793676,
+          "confusion_matrix_left_right": [
+            [
+              2,
+              47
+            ],
+            [
+              8,
+              40
+            ]
+          ],
+          "predicted_right_fraction": 0.8969072164948454
+        },
+        "gliner": {
+          "macro_f1": 0.5658567774936061,
+          "balanced_accuracy": 0.5676020408163265,
+          "log_loss": 0.7507105494880708,
+          "brier": 0.26109128223929823,
+          "ece": 0.13281583244778478,
+          "confusion_matrix_left_right": [
+            [
+              25,
+              24
+            ],
+            [
+              18,
+              30
+            ]
+          ],
+          "predicted_right_fraction": 0.5567010309278351
+        },
+        "equal_mixture": {
+          "macro_f1": 0.43806236903734747,
+          "balanced_accuracy": 0.5193452380952381,
+          "log_loss": 0.7948390955701935,
+          "brier": 0.2915461317318252,
+          "ece": 0.23480698049067464,
+          "confusion_matrix_left_right": [
+            [
+              7,
+              42
+            ],
+            [
+              5,
+              43
+            ]
+          ],
+          "predicted_right_fraction": 0.8762886597938144
+        },
+        "fixed_mixture_seed42": {
+          "macro_f1": 0.43315444245676804,
+          "balanced_accuracy": 0.49829931972789115,
+          "log_loss": 0.8985613584518433,
+          "brier": 0.31624308228492737,
+          "ece": 0.2617550719644606,
+          "confusion_matrix_left_right": [
+            [
+              8,
+              41
+            ],
+            [
+              8,
+              40
+            ]
+          ],
+          "predicted_right_fraction": 0.8350515463917526
+        },
+        "expert_gate_seed42": {
+          "macro_f1": 0.5223863506240696,
+          "balanced_accuracy": 0.5595238095238095,
+          "log_loss": 1.4115360975265503,
+          "brier": 0.3563520610332489,
+          "ece": 0.3094999999115148,
+          "confusion_matrix_left_right": [
+            [
+              14,
+              35
+            ],
+            [
+              8,
+              40
+            ]
+          ],
+          "predicted_right_fraction": 0.7731958762886598
+        },
+        "hybrid_gate_seed42": {
+          "macro_f1": 0.5306451612903226,
+          "balanced_accuracy": 0.5699404761904762,
+          "log_loss": 1.3748306035995483,
+          "brier": 0.3554270267486572,
+          "ece": 0.3098231308239022,
+          "confusion_matrix_left_right": [
+            [
+              14,
+              35
+            ],
+            [
+              7,
+              41
+            ]
+          ],
+          "predicted_right_fraction": 0.7835051546391752
+        },
+        "fixed_mixture_seed43": {
+          "macro_f1": 0.43315444245676804,
+          "balanced_accuracy": 0.49829931972789115,
+          "log_loss": 0.8985613584518433,
+          "brier": 0.31624308228492737,
+          "ece": 0.2617550719644606,
+          "confusion_matrix_left_right": [
+            [
+              8,
+              41
+            ],
+            [
+              8,
+              40
+            ]
+          ],
+          "predicted_right_fraction": 0.8350515463917526
+        },
+        "expert_gate_seed43": {
+          "macro_f1": 0.5223863506240696,
+          "balanced_accuracy": 0.5595238095238095,
+          "log_loss": 1.4113281965255737,
+          "brier": 0.3563216030597687,
+          "ece": 0.32579031064338293,
+          "confusion_matrix_left_right": [
+            [
+              14,
+              35
+            ],
+            [
+              8,
+              40
+            ]
+          ],
+          "predicted_right_fraction": 0.7731958762886598
+        },
+        "hybrid_gate_seed43": {
+          "macro_f1": 0.5141165755919854,
+          "balanced_accuracy": 0.5491071428571428,
+          "log_loss": 1.4094419479370117,
+          "brier": 0.3600447475910187,
+          "ece": 0.33721908404655065,
+          "confusion_matrix_left_right": [
+            [
+              14,
+              35
+            ],
+            [
+              9,
+              39
+            ]
+          ],
+          "predicted_right_fraction": 0.7628865979381443
+        },
+        "fixed_mixture_seed44": {
+          "macro_f1": 0.43315444245676804,
+          "balanced_accuracy": 0.49829931972789115,
+          "log_loss": 0.8985613584518433,
+          "brier": 0.31624308228492737,
+          "ece": 0.2617550719644606,
+          "confusion_matrix_left_right": [
+            [
+              8,
+              41
+            ],
+            [
+              8,
+              40
+            ]
+          ],
+          "predicted_right_fraction": 0.8350515463917526
+        },
+        "expert_gate_seed44": {
+          "macro_f1": 0.5223863506240696,
+          "balanced_accuracy": 0.5595238095238095,
+          "log_loss": 1.3937721252441406,
+          "brier": 0.35479995608329773,
+          "ece": 0.33033762641788755,
+          "confusion_matrix_left_right": [
+            [
+              14,
+              35
+            ],
+            [
+              8,
+              40
+            ]
+          ],
+          "predicted_right_fraction": 0.7731958762886598
+        },
+        "hybrid_gate_seed44": {
+          "macro_f1": 0.5277935016415713,
+          "balanced_accuracy": 0.559311224489796,
+          "log_loss": 1.4090139865875244,
+          "brier": 0.35847029089927673,
+          "ece": 0.33853279929800134,
+          "confusion_matrix_left_right": [
+            [
+              15,
+              34
+            ],
+            [
+              9,
+              39
+            ]
+          ],
+          "predicted_right_fraction": 0.7525773195876289
+        }
+      }
+    },
+    "party_platform": {
+      "n": 300,
+      "label_kind": "weak",
+      "label_counts_left_right": [
+        150,
+        150
+      ],
+      "metrics": {
+        "tfidf": {
+          "macro_f1": 0.4909502262443439,
+          "balanced_accuracy": 0.5,
+          "log_loss": 0.9703386873674494,
+          "brier": 0.3301053145386436,
+          "ece": 0.2551270034475522,
+          "confusion_matrix_left_right": [
+            [
+              55,
+              95
+            ],
+            [
+              55,
+              95
+            ]
+          ],
+          "predicted_right_fraction": 0.6333333333333333
+        },
+        "bge": {
+          "macro_f1": 0.5104039167686658,
+          "balanced_accuracy": 0.52,
+          "log_loss": 0.8410445173638601,
+          "brier": 0.2996249075740508,
+          "ece": 0.18846260948727528,
+          "confusion_matrix_left_right": [
+            [
+              57,
+              93
+            ],
+            [
+              51,
+              99
+            ]
+          ],
+          "predicted_right_fraction": 0.64
+        },
+        "bert": {
+          "macro_f1": 0.4830518838034041,
+          "balanced_accuracy": 0.4833333333333334,
+          "log_loss": 1.5613072847323748,
+          "brier": 0.40732425856486026,
+          "ece": 0.36521762226223176,
+          "confusion_matrix_left_right": [
+            [
+              69,
+              81
+            ],
+            [
+              74,
+              76
+            ]
+          ],
+          "predicted_right_fraction": 0.5233333333333333
+        },
+        "bge_neural": {
+          "macro_f1": 0.49236192714453586,
+          "balanced_accuracy": 0.52,
+          "log_loss": 0.8397578536817052,
+          "brier": 0.3020784002413802,
+          "ece": 0.19521235709389057,
+          "confusion_matrix_left_right": [
+            [
+              43,
+              107
+            ],
+            [
+              37,
+              113
+            ]
+          ],
+          "predicted_right_fraction": 0.7333333333333333
+        },
+        "gliner": {
+          "macro_f1": 0.6018196049959728,
+          "balanced_accuracy": 0.61,
+          "log_loss": 0.7125239448204413,
+          "brier": 0.24663213376528054,
+          "ece": 0.12218440616004923,
+          "confusion_matrix_left_right": [
+            [
+              113,
+              37
+            ],
+            [
+              80,
+              70
+            ]
+          ],
+          "predicted_right_fraction": 0.3566666666666667
+        },
+        "equal_mixture": {
+          "macro_f1": 0.5384615384615384,
+          "balanced_accuracy": 0.5466666666666666,
+          "log_loss": 0.7439747355210085,
+          "brier": 0.27016965997030845,
+          "ece": 0.12183202644286138,
+          "confusion_matrix_left_right": [
+            [
+              62,
+              88
+            ],
+            [
+              48,
+              102
+            ]
+          ],
+          "predicted_right_fraction": 0.6333333333333333
+        },
+        "fixed_mixture_seed42": {
+          "macro_f1": 0.5059985885673959,
+          "balanced_accuracy": 0.51,
+          "log_loss": 0.850310742855072,
+          "brier": 0.30639004707336426,
+          "ece": 0.19996583978335064,
+          "confusion_matrix_left_right": [
+            [
+              63,
+              87
+            ],
+            [
+              60,
+              90
+            ]
+          ],
+          "predicted_right_fraction": 0.59
+        },
+        "expert_gate_seed42": {
+          "macro_f1": 0.4985737208058477,
+          "balanced_accuracy": 0.5,
+          "log_loss": 1.315981388092041,
+          "brier": 0.3771267235279083,
+          "ece": 0.3183314438660939,
+          "confusion_matrix_left_right": [
+            [
+              67,
+              83
+            ],
+            [
+              67,
+              83
+            ]
+          ],
+          "predicted_right_fraction": 0.5533333333333333
+        },
+        "hybrid_gate_seed42": {
+          "macro_f1": 0.4950452007000256,
+          "balanced_accuracy": 0.4966666666666667,
+          "log_loss": 1.334743618965149,
+          "brier": 0.3797016441822052,
+          "ece": 0.32286125679810845,
+          "confusion_matrix_left_right": [
+            [
+              66,
+              84
+            ],
+            [
+              67,
+              83
+            ]
+          ],
+          "predicted_right_fraction": 0.5566666666666666
+        },
+        "fixed_mixture_seed43": {
+          "macro_f1": 0.5059985885673959,
+          "balanced_accuracy": 0.51,
+          "log_loss": 0.850310742855072,
+          "brier": 0.30639004707336426,
+          "ece": 0.19996583978335064,
+          "confusion_matrix_left_right": [
+            [
+              63,
+              87
+            ],
+            [
+              60,
+              90
+            ]
+          ],
+          "predicted_right_fraction": 0.59
+        },
+        "expert_gate_seed43": {
+          "macro_f1": 0.4985737208058477,
+          "balanced_accuracy": 0.5,
+          "log_loss": 1.3238407373428345,
+          "brier": 0.37838393449783325,
+          "ece": 0.32681883811950685,
+          "confusion_matrix_left_right": [
+            [
+              67,
+              83
+            ],
+            [
+              67,
+              83
+            ]
+          ],
+          "predicted_right_fraction": 0.5533333333333333
+        },
+        "hybrid_gate_seed43": {
+          "macro_f1": 0.4985737208058477,
+          "balanced_accuracy": 0.5,
+          "log_loss": 1.3169808387756348,
+          "brier": 0.37810829281806946,
+          "ece": 0.3132916631301244,
+          "confusion_matrix_left_right": [
+            [
+              67,
+              83
+            ],
+            [
+              67,
+              83
+            ]
+          ],
+          "predicted_right_fraction": 0.5533333333333333
+        },
+        "fixed_mixture_seed44": {
+          "macro_f1": 0.5059985885673959,
+          "balanced_accuracy": 0.51,
+          "log_loss": 0.850310742855072,
+          "brier": 0.30639004707336426,
+          "ece": 0.19996583978335064,
+          "confusion_matrix_left_right": [
+            [
+              63,
+              87
+            ],
+            [
+              60,
+              90
+            ]
+          ],
+          "predicted_right_fraction": 0.59
+        },
+        "expert_gate_seed44": {
+          "macro_f1": 0.491888037083259,
+          "balanced_accuracy": 0.4933333333333333,
+          "log_loss": 1.326805591583252,
+          "brier": 0.37928837537765503,
+          "ece": 0.32838459451993307,
+          "confusion_matrix_left_right": [
+            [
+              66,
+              84
+            ],
+            [
+              68,
+              82
+            ]
+          ],
+          "predicted_right_fraction": 0.5533333333333333
+        },
+        "hybrid_gate_seed44": {
+          "macro_f1": 0.4985737208058477,
+          "balanced_accuracy": 0.5,
+          "log_loss": 1.328609824180603,
+          "brier": 0.38125771284103394,
+          "ece": 0.32511231581370037,
+          "confusion_matrix_left_right": [
+            [
+              67,
+              83
+            ],
+            [
+              67,
+              83
+            ]
+          ],
+          "predicted_right_fraction": 0.5533333333333333
+        }
+      }
+    }
+  },
+  "mean_weights": {
+    "fixed_mixture_seed42": {
+      "ibc_official_sample": {
+        "tfidf": 0.38618725538253784,
+        "bge": 0.16074658930301666,
+        "bert": 0.37202584743499756,
+        "bge_neural": 0.03826766088604927,
+        "gliner": 0.04277271404862404
+      },
+      "party_platform": {
+        "tfidf": 0.3861863911151886,
+        "bge": 0.1607472151517868,
+        "bert": 0.3720249831676483,
+        "bge_neural": 0.038267772644758224,
+        "gliner": 0.0427725724875927
+      }
+    },
+    "expert_gate_seed42": {
+      "ibc_official_sample": {
+        "tfidf": 0.09327659755945206,
+        "bge": 0.05502365902066231,
+        "bert": 0.8465641736984253,
+        "bge_neural": 0.0026755689177662134,
+        "gliner": 0.002460146090015769
+      },
+      "party_platform": {
+        "tfidf": 0.14669127762317657,
+        "bge": 0.06181969493627548,
+        "bert": 0.7863520383834839,
+        "bge_neural": 0.002634855918586254,
+        "gliner": 0.002501919399946928
+      }
+    },
+    "hybrid_gate_seed42": {
+      "ibc_official_sample": {
+        "tfidf": 0.09331955760717392,
+        "bge": 0.06753411889076233,
+        "bert": 0.8313082456588745,
+        "bge_neural": 0.0017671100795269012,
+        "gliner": 0.0024855018127709627,
+        "self": 0.003585094353184104
+      },
+      "party_platform": {
+        "tfidf": 0.11950269341468811,
+        "bge": 0.057572875171899796,
+        "bert": 0.8177013397216797,
+        "bge_neural": 0.0011500981636345387,
+        "gliner": 0.0018155619036406279,
+        "self": 0.0022573666647076607
+      }
+    },
+    "fixed_mixture_seed43": {
+      "ibc_official_sample": {
+        "tfidf": 0.38618725538253784,
+        "bge": 0.16074658930301666,
+        "bert": 0.37202584743499756,
+        "bge_neural": 0.03826766088604927,
+        "gliner": 0.04277271404862404
+      },
+      "party_platform": {
+        "tfidf": 0.3861863911151886,
+        "bge": 0.1607472151517868,
+        "bert": 0.3720249831676483,
+        "bge_neural": 0.038267772644758224,
+        "gliner": 0.0427725724875927
+      }
+    },
+    "expert_gate_seed43": {
+      "ibc_official_sample": {
+        "tfidf": 0.09245184063911438,
+        "bge": 0.05011509731411934,
+        "bert": 0.8518256545066833,
+        "bge_neural": 0.002023325301706791,
+        "gliner": 0.0035840715281665325
+      },
+      "party_platform": {
+        "tfidf": 0.14038757979869843,
+        "bge": 0.05633679777383804,
+        "bert": 0.7975544333457947,
+        "bge_neural": 0.0020525422878563404,
+        "gliner": 0.003668653080239892
+      }
+    },
+    "hybrid_gate_seed43": {
+      "ibc_official_sample": {
+        "tfidf": 0.10053422302007675,
+        "bge": 0.055788666009902954,
+        "bert": 0.8358420133590698,
+        "bge_neural": 0.001917897374369204,
+        "gliner": 0.001898145885206759,
+        "self": 0.004019176587462425
+      },
+      "party_platform": {
+        "tfidf": 0.13682864606380463,
+        "bge": 0.05575263872742653,
+        "bert": 0.8009901642799377,
+        "bge_neural": 0.0015861268620938063,
+        "gliner": 0.0016439207829535007,
+        "self": 0.0031986492685973644
+      }
+    },
+    "fixed_mixture_seed44": {
+      "ibc_official_sample": {
+        "tfidf": 0.38618725538253784,
+        "bge": 0.16074658930301666,
+        "bert": 0.37202584743499756,
+        "bge_neural": 0.03826766088604927,
+        "gliner": 0.04277271404862404
+      },
+      "party_platform": {
+        "tfidf": 0.3861863911151886,
+        "bge": 0.1607472151517868,
+        "bert": 0.3720249831676483,
+        "bge_neural": 0.038267772644758224,
+        "gliner": 0.0427725724875927
+      }
+    },
+    "expert_gate_seed44": {
+      "ibc_official_sample": {
+        "tfidf": 0.09104015678167343,
+        "bge": 0.07059721648693085,
+        "bert": 0.8343368172645569,
+        "bge_neural": 0.0020670148078352213,
+        "gliner": 0.001958625391125679
+      },
+      "party_platform": {
+        "tfidf": 0.13765138387680054,
+        "bge": 0.06691634654998779,
+        "bert": 0.7921539545059204,
+        "bge_neural": 0.0017000538064166903,
+        "gliner": 0.0015784288989380002
+      }
+    },
+    "hybrid_gate_seed44": {
+      "ibc_official_sample": {
+        "tfidf": 0.09672164171934128,
+        "bge": 0.05033130571246147,
+        "bert": 0.8493155837059021,
+        "bge_neural": 0.0009652615990489721,
+        "gliner": 0.0011522741988301277,
+        "self": 0.0015138816088438034
+      },
+      "party_platform": {
+        "tfidf": 0.1499430537223816,
+        "bge": 0.05288982018828392,
+        "bert": 0.7932310104370117,
+        "bge_neural": 0.0010768109932541847,
+        "gliner": 0.0011936851078644395,
+        "self": 0.0016655237413942814
+      }
+    }
+  },
+  "temperature": {
+    "tfidf": 0.14025460509385382,
+    "bge": 0.3243146725123824,
+    "bert": 0.09397969370622962,
+    "bge_neural": 6.441185532252699,
+    "gliner": 2.999962841713471
+  },
+  "checkpoint_revisions": {
+    "bge": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+    "bert": "86b5e0934494bd15c9632b12f734a8a67f723594",
+    "gliner": "54785d51df8d86a0d8f2eb212fec15871aad2c4d"
+  },
+  "runtime_seconds": {
+    "bge": 4.292541667000478,
+    "bert": 6.136504334001074,
+    "gliner": 41.692957499999466
+  },
+  "encoder_truncated_rows": {
+    "bge": 0,
+    "bert": 0
+  },
+  "device": "mps",
+  "packages": {
+    "torch": "2.14.1",
+    "transformers": "5.20.1",
+    "gliner2": "2.1.0",
+    "scikit-learn": "1.9.1"
+  },
+  "input_sha256": {
+    "data/synthetic.jsonl": "149ff799474036143b349805141667b925f3d8818c50e1e73952b39fe0f7468b",
+    "data/external/external.jsonl": "c8f389a32974bb5ead37a4d3114e3b71d814b10931c48d075a4f663bd4305ebf"
+  },
+  "limitations": [
+    "IBC official sample only; full corpus is not included.",
+    "Book/author and platform document IDs are unavailable; entire sources are held out, and no independence-based confidence interval is claimed.",
+    "Platform labels are party-derived proxies; not human passage-level ideological annotations and may include neutral text.",
+    "Historical party labels do not necessarily match contemporary left/right positions.",
+    "Source-level holdout cannot rule out backbone pretraining contamination or semantic paraphrase overlap.",
+    "Synthetic final-test partition remains untouched. External sets become diagnostic benchmarks after reporting and cannot serve as a future pristine final test."
+  ]
+}
