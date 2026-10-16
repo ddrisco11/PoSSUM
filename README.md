@@ -56,6 +56,16 @@ possum --help
 
 Use one component at a time and cache scores. The default pilot avoids 7–27B weight downloads. OpenJev is disabled on a 16 GB Mac; its smallest official MLX checkpoint alone is approximately 15 GB. Optional MLX causal audits require `pip install -e '.[mlx]'` and explicit model selection.
 
+## Live training monitor
+
+Open the read-only Tkinter dashboard from the repository root:
+
+```bash
+.venv/bin/python scripts/monitor_training.py
+```
+
+It refreshes every two seconds with component progress, measured scoring speed, current-stage ETA and the live pipeline log. Use `--run /path/to/run` to inspect another run. Closing the window leaves training running. The Python installation must include Tkinter.
+
 ## Reproducibility
 Record checkpoint revisions, dataset hashes, split membership, dependency versions, seeds, score prompts, and device in every run. Raw corpora, model caches and sample-level outputs stay ignored. Public reports contain aggregate metrics only.
 
