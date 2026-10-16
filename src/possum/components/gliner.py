@@ -4,7 +4,12 @@ import numpy as np
 class GLiNER:
     def __init__(self, model_id="fastino/gliner2.5-base-v1"):
         from gliner2.classification import Classifier, ClassificationSchema
-        self.model = Classifier.from_pretrained(model_id)
+        from ..revisions import resolve
+        from huggingface_hub import snapshot_download
+        self.revision = resolve(model_id)
+        self.model_id = model_id
+        checkpoint = snapshot_download(model_id, revision=self.revision)
+        self.model = Classifier.from_pretrained(checkpoint)
         self.schema = ClassificationSchema().single("political_viewpoint", ["left-wing U.S. political viewpoint", "right-wing U.S. political viewpoint"])
     def score(self, texts):
         rows = []

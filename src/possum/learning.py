@@ -27,9 +27,15 @@ def metrics(y, p):
 
 
 class Gate(torch.nn.Module):
-    def __init__(self, experts, fixed=False):
+    def __init__(self, experts, fixed=False, self_branch=False):
         super().__init__()
         self.fixed = fixed
+        self.self_branch = self_branch
+        if fixed and self_branch:
+            raise ValueError("Self prediction is a neural-gate extension")
+        if self_branch:
+            self.self_head = torch.nn.Sequential(torch.nn.Linear(384, 32), torch.nn.Tanh(), torch.nn.Linear(32, 1))
+        experts += int(self_branch)
         if fixed:
             self.logits = torch.nn.Parameter(torch.zeros(experts))
         else:
@@ -37,12 +43,15 @@ class Gate(torch.nn.Module):
     def weights(self, x):
         return torch.softmax(self.logits.expand(len(x), -1) if self.fixed else self.net(x), -1)
     def forward(self, x, probabilities):
+        if self.self_branch:
+            own = torch.sigmoid(self.self_head(x))
+            probabilities = torch.cat([probabilities, own], dim=-1)
         return (self.weights(x)*probabilities).sum(-1).clamp(1e-7, 1-1e-7)
 
 
-def fit_gate(x, probabilities, y, fixed=False, seed=42, epochs=150):
+def fit_gate(x, probabilities, y, fixed=False, seed=42, epochs=150, self_branch=False):
     torch.manual_seed(seed)
-    model = Gate(probabilities.shape[1], fixed)
+    model = Gate(probabilities.shape[1], fixed, self_branch)
     xx, pp, yy = [torch.as_tensor(v, dtype=torch.float32) for v in (x, probabilities, y)]
     opt = torch.optim.AdamW(model.parameters(), lr=.01, weight_decay=.02)
     for _ in range(epochs):

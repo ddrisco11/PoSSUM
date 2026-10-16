@@ -21,3 +21,6 @@ Use a fixed prefix ending `This statement reflects a` and candidate continuation
 
 ## Later work
 Grouped cross-fitting can replace the conservative held-out stacking design. Fine-tune BERT only inside training folds, regenerate out-of-fold scores, recalibrate, and rerun the same ablations. Domain/source holdouts and human annotation are required before a claim about viewpoint generalization.
+
+## Self-prediction branch
+The hybrid gate has two neural branches over the 384-dimensional embedding: a routing network producing K+1 softmax weights, and a small binary classifier producing its own probability. The final right probability is `w_self * sigmoid(self_head(x)) + sum(w_k * p_k)`. Both branches learn jointly on gate-fit data; expert parameters and temperatures remain frozen. The separately trained BGE neural expert remains an ablation baseline, distinct from the joint self branch. We compare experts-only and hybrid gates, and retrain hybrid leave-one-expert-out variants. Self-weight is a routing coefficient, not confidence or causal attribution.

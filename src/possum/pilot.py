@@ -105,8 +105,8 @@ def run(path, output, components=("bge", "bert"), seed=42, limit=800, device="cp
     predicted = {k:probs[v,j] for j,k in enumerate(names)}
     predicted["equal_mixture"] = probs[v].mean(1)
     fitted = {}
-    for fixed, name in ((True,"fixed_mixture"),(False,"neural_gate")):
-        model = fit_gate(bge[g], probs[g], y[g], fixed=fixed, seed=seed)
+    for fixed, name in ((True,"fixed_mixture"),(False,"neural_gate"),(False,"hybrid_gate")):
+        model = fit_gate(bge[g], probs[g], y[g], fixed=fixed, seed=seed, self_branch=name=="hybrid_gate")
         predicted[name] = predict_gate(model,bge[v],probs[v])
         torch.save(model.state_dict(),out/f"{name}.pt")
         with torch.inference_mode():
@@ -124,7 +124,7 @@ def run(path, output, components=("bge", "bert"), seed=42, limit=800, device="cp
     errors = np.stack([(predicted[k]>=.5).astype(int)-y[v] for k in names])
     with np.errstate(invalid="ignore", divide="ignore"):
         corr = np.corrcoef(errors)
-    report = dict(config=config, checkpoint_revisions=revisions, full_counts={k:len(ids) for k,ids in parts.items()}, pilot_counts={k:len(ids) for k,ids in local.items()}, validation_groups=len(set(groups)), metrics=measured, temperature=temperatures, runtime_seconds=durations, mean_gate_weights=dict(zip(names,fitted["neural_gate"])), leave_one_out=ablations, paired_log_loss_delta=intervals, error_correlation=np.where(np.isfinite(corr),corr,0).tolist(), error_correlation_note="Undefined constant-error correlations stored as zero", source_metrics={s:{k:metrics(y[v][mask],p[mask]) for k,p in predicted.items()} for s in sorted(set(dev[i]["source"] for i in v)) if (mask:=np.array([dev[i]["source"]==s for i in v])).any()}, conclusion="Diagnostic pilot only. Final test untouched; no component-drop or MoE claim without diverse human-verified evaluation and repeated seeds.")
+    report = dict(config=config, checkpoint_revisions=revisions, full_counts={k:len(ids) for k,ids in parts.items()}, pilot_counts={k:len(ids) for k,ids in local.items()}, validation_groups=len(set(groups)), metrics=measured, temperature=temperatures, runtime_seconds=durations, mean_gate_weights=dict(zip(names,fitted["neural_gate"])), hybrid_gate_weights=dict(zip(names+["self"],fitted["hybrid_gate"])), leave_one_out=ablations, paired_log_loss_delta=intervals, error_correlation=np.where(np.isfinite(corr),corr,0).tolist(), error_correlation_note="Undefined constant-error correlations stored as zero", source_metrics={s:{k:metrics(y[v][mask],p[mask]) for k,p in predicted.items()} for s in sorted(set(dev[i]["source"] for i in v)) if (mask:=np.array([dev[i]["source"]==s for i in v])).any()}, conclusion="Diagnostic pilot only. Final test untouched; no component-drop or MoE claim without diverse human-verified evaluation and repeated seeds.")
     (out/"report.json").write_text(json.dumps(report,indent=2,allow_nan=False))
     print(json.dumps({"output":str(out),"metrics":measured,"conclusion":report["conclusion"]},indent=2))
     return report

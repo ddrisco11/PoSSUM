@@ -17,3 +17,6 @@ possum = "possum.cli:main"
 where = ["src"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
+
+[tool.setuptools.package-data]
+possum = ["model_revisions.json"]

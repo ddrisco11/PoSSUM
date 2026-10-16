@@ -74,3 +74,20 @@ def test_multitoken_candidate_and_boundary_guard():
         def encode(self,text,add_special_tokens=True):return [len(text)]
     with pytest.raises(ValueError,match='boundary'):
         candidate_ids(Bad(),'prefix',' left')
+
+
+def test_self_branch_assigns_own_mass_and_receives_gradients():
+    torch.manual_seed(3)
+    gate=Gate(2,self_branch=True)
+    x=torch.randn(12,384)
+    experts=torch.full((12,2),.5)
+    y=torch.tensor([0.,1.]*6)
+    w=gate.weights(x)
+    assert w.shape==(12,3)
+    assert torch.allclose(w.sum(1),torch.ones(12))
+    own=torch.sigmoid(gate.self_head(x)).squeeze(1)
+    expected=(w[:,:2]*experts).sum(1)+w[:,2]*own
+    assert torch.allclose(gate(x,experts),expected)
+    torch.nn.functional.binary_cross_entropy(gate(x,experts),y).backward()
+    assert gate.self_head[0].weight.grad.abs().sum()>0
+    assert gate.net[0].weight.grad.abs().sum()>0

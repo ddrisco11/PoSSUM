@@ -47,3 +47,10 @@ possum pilot data/corpus.jsonl --expert-scores gliner=runs/gliner.npz --output r
 Score only development rows during selection; use `split.json` to construct that input. External caches must cover every selected development ID, and include their JSON metadata sidecars. Learned external heads are rejected because fold provenance is required. Encoder `score` commands emit features rather than untrained classification logits. `--model-id` swaps the checkpoint within a module.
 
 The optional CI template is in `docs/ci-example.yml`. It is not active: the GitHub OAuth credential used for setup lacks workflow scope. Local tests do not require that scope.
+
+## The gate can also answer
+The **hybrid gate** assigns probability mass to its own BGE-conditioned prediction as well as to external experts. Its K+1 weights sum to one. The self classifier and routing head train jointly, while experts stay frozen. Reports compare this with an experts-only gate and expose the average self weight.
+
+```bash
+python scripts/replay_mixtures.py runs/synthetic-42 --output reports/hybrid-pilot.json
+```

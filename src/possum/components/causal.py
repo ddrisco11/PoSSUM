@@ -1,3 +1,4 @@
+from ..revisions import resolve
 """Exact teacher-forced candidate scores, never sampled completions."""
 import numpy as np
 
@@ -23,7 +24,7 @@ class Causal:
         import torch
         from transformers import AutoTokenizer, AutoModelForCausalLM, AutoModelForImageTextToText
         from huggingface_hub import model_info
-        self.revision = revision or model_info(model_id).sha
+        self.revision = resolve(model_id, revision)
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, revision=self.revision)
         cls = AutoModelForImageTextToText if "Qwen3.5" in model_id else AutoModelForCausalLM
         self.model = cls.from_pretrained(model_id, revision=self.revision, dtype=torch.float16 if device != "cpu" else torch.float32).to(device).eval()

@@ -1,3 +1,4 @@
+from ..revisions import resolve
 """Frozen encoder features; a supervised head is fitted separately inside training."""
 import numpy as np
 import torch
@@ -8,10 +9,11 @@ from huggingface_hub import model_info
 class Encoder:
     def __init__(self, model_id, pooling="mean", device="cpu", revision=None):
         self.model_id = model_id
-        self.revision = revision or model_info(model_id).sha
+        self.revision = resolve(model_id, revision)
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, revision=self.revision)
         self.model = AutoModel.from_pretrained(model_id, revision=self.revision, attn_implementation="eager").to(device).eval()
         self.pooling, self.device = pooling, device
+        self.max_length = 256
         self.model.requires_grad_(False)
 
     def encode(self, texts, batch_size=8):
