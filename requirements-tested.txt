@@ -53,3 +53,7 @@ typer==0.27.3
 typing-inspection==0.4.4
 typing_extensions==4.16.0
 urllib3==2.8.0
+
+# Apple Silicon causal scoring
+mlx==0.32.4
+mlx-lm==0.32.2

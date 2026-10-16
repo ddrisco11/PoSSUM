@@ -1,0 +1,52 @@
+{
+  "Jacobvs/PoliticalTweets": {
+    "counts": {
+      "raw": 190491,
+      "length_excluded": 75898,
+      "retweet": 55,
+      "exact_duplicates": 355,
+      "conflicting_texts": 0,
+      "candidates": 114183,
+      "left": 62033,
+      "right": 52150
+    },
+    "unique_groups": 481,
+    "download_sha256": {
+      "train-0.parquet": "8942e3943d9ae7ebd3109d08e78ccdd64a277c57ece2ec3a0853c2781bc43622"
+    },
+    "status": "downloaded and normalized; cross-source near deduplication, split assignment and weak-label admission remain separate steps"
+  },
+  "mlburnham/dem_rep_party_platform_topics": {
+    "counts": {
+      "raw": 20172,
+      "length_excluded": 5132,
+      "exact_duplicates": 6505,
+      "conflicting_texts": 0,
+      "candidates": 8535,
+      "left": 4540,
+      "right": 3995
+    },
+    "unique_groups": 1,
+    "download_sha256": {
+      "test-0.parquet": "0ed60786552edbe0471aaafcc349674fcc672c886059528942e8aedb863499ee",
+      "train-1.parquet": "4ca49df59b8f010b6d8b4c5bed0d47b5070a535b2aca04f0a9ca8efbf8366592"
+    },
+    "status": "downloaded and normalized; cross-source near deduplication, split assignment and weak-label admission remain separate steps"
+  },
+  "cajcodes/political-bias": {
+    "counts": {
+      "raw": 657,
+      "length_excluded": 456,
+      "neutral": 201,
+      "conflicting_texts": 0,
+      "candidates": 0,
+      "left": 0,
+      "right": 0
+    },
+    "unique_groups": 0,
+    "download_sha256": {
+      "train-0.parquet": "c837d4276097568d62ef36fed2f83a40f2f9a8d14e7c7ed361d01dfd2455a25c"
+    },
+    "status": "downloaded and normalized; cross-source near deduplication, split assignment and weak-label admission remain separate steps"
+  }
+}

@@ -89,20 +89,21 @@ def run(args):
         if torch.backends.mps.is_available():torch.mps.empty_cache()
     neural=fit_neural(x[a],y[a],42)
     with torch.inference_mode():raw_scores['bge_neural']=neural(torch.tensor(ex,dtype=torch.float32)).numpy()
-    ep=np.stack([softmax(raw_scores[name]/original['temperature'][name],axis=1)[:,1] for name in names],axis=1)
     temperatures=dict(original['temperature'])
     # GLiNER temperature uses only the original synthetic calibration partition.
     gliner_cache=np.load(args.gliner_cache,allow_pickle=False)
     gliner_lookup=dict(zip(gliner_cache['ids'].tolist(),gliner_cache['values']))
     gs=np.array([gliner_lookup[i] for i in ids])
     t=temperature(gs[c],y[c]);temperatures['gliner']=t
-    train_probs=np.column_stack([train_probs,softmax(gs/t,axis=1)[:,1]])
+    if "gliner" not in names:
+        train_probs=np.column_stack([train_probs,softmax(gs/t,axis=1)[:,1]])
     print('Scoring gliner',flush=True);start=time.perf_counter()
     model=GLiNER();revisions['gliner']=model.revision
     gs_external=model.score(texts)
     runtime['gliner']=time.perf_counter()-start
-    ep=np.column_stack([ep,softmax(gs_external/t,axis=1)[:,1]])
-    names.append('gliner')
+    raw_scores['gliner']=gs_external
+    if 'gliner' not in names:names.append('gliner')
+    ep=np.stack([softmax(raw_scores[name]/temperatures[name],axis=1)[:,1] for name in names],axis=1)
     del model;gc.collect()
     predictions={name:ep[:,i] for i,name in enumerate(names)}
     predictions['equal_mixture']=ep.mean(1)

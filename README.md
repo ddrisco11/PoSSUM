@@ -37,6 +37,8 @@ The reserved synthetic test remains unopened. Its group-constrained split is 75/
 
 See the [human-text evaluation report](reports/external-evaluation.md), [initial synthetic pilot](reports/initial-pilot.md), [training protocol](docs/evaluation.md), [external evaluation protocol](docs/external-evaluation.md), [model registry](docs/models.md), and [dataset manifest](docs/datasets.md).
 
+A frozen four-expert pilot is configured for BERT, GLiNER 2.5, Mistral 7B v0.3 and Qwen3.5 9B, with 4-bit MLX causal scoring. Only the BERT classification probe and mixture heads learn parameters; all backbones remain frozen. A bounded U.S. Manifesto subset uses document-separated calibration, routing training and validation. See [corpus status](docs/corpus-status.md).
+
 ## Intended use and limitations
 
 PoSSUM is a development model for studying expressed political viewpoint in text. It does not infer an individual's beliefs. Party and publisher metadata provide noisy supervision rather than passage-level ground truth. Neutral, ambiguous and nonpolitical text is outside the binary training target; abstention and politicalness detection need separate evaluation.

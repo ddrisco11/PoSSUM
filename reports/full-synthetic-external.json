@@ -1,0 +1,767 @@
+{
+  "protocol": "Frozen synthetic-trained recipe, source-held-out external diagnostic. No external labels used for training, calibration, seed selection or hyperparameter tuning.",
+  "training_counts": {
+    "fit": 1200,
+    "calibration": 400,
+    "gate": 400,
+    "validation": 400
+  },
+  "external_input_count": 397,
+  "after_length_and_dedup": 397,
+  "overlap_removed": 0,
+  "near_overlap_removed": 0,
+  "by_source": {
+    "ibc_official_sample": {
+      "n": 97,
+      "label_kind": "human",
+      "label_counts_left_right": [
+        49,
+        48
+      ],
+      "metrics": {
+        "tfidf": {
+          "macro_f1": 0.48183760683760685,
+          "balanced_accuracy": 0.48533163265306123,
+          "log_loss": 0.9820338274014592,
+          "brier": 0.33848843479823004,
+          "ece": 0.26993829489008736,
+          "confusion_matrix_left_right": [
+            [
+              20,
+              29
+            ],
+            [
+              21,
+              27
+            ]
+          ],
+          "predicted_right_fraction": 0.5773195876288659
+        },
+        "bge": {
+          "macro_f1": 0.45382882882882886,
+          "balanced_accuracy": 0.48703231292517,
+          "log_loss": 1.0223518901391364,
+          "brier": 0.3562051782832589,
+          "ece": 0.28315006711126606,
+          "confusion_matrix_left_right": [
+            [
+              12,
+              37
+            ],
+            [
+              13,
+              35
+            ]
+          ],
+          "predicted_right_fraction": 0.7422680412371134
+        },
+        "bert": {
+          "macro_f1": 0.5257227891156463,
+          "balanced_accuracy": 0.5257227891156463,
+          "log_loss": 1.2460711361220638,
+          "brier": 0.35094385816263635,
+          "ece": 0.3428883396941039,
+          "confusion_matrix_left_right": [
+            [
+              26,
+              23
+            ],
+            [
+              23,
+              25
+            ]
+          ],
+          "predicted_right_fraction": 0.4948453608247423
+        },
+        "gliner": {
+          "macro_f1": 0.5658567774936061,
+          "balanced_accuracy": 0.5676020408163265,
+          "log_loss": 0.734119072034477,
+          "brier": 0.2576726530412665,
+          "ece": 0.15992828744369453,
+          "confusion_matrix_left_right": [
+            [
+              25,
+              24
+            ],
+            [
+              18,
+              30
+            ]
+          ],
+          "predicted_right_fraction": 0.5567010309278351
+        },
+        "bge_neural": {
+          "macro_f1": 0.431981981981982,
+          "balanced_accuracy": 0.46641156462585037,
+          "log_loss": 0.8770207955540548,
+          "brier": 0.3237458541333166,
+          "ece": 0.2847676630487147,
+          "confusion_matrix_left_right": [
+            [
+              11,
+              38
+            ],
+            [
+              14,
+              34
+            ]
+          ],
+          "predicted_right_fraction": 0.7422680412371134
+        },
+        "equal_mixture": {
+          "macro_f1": 0.4060586529165324,
+          "balanced_accuracy": 0.4134778911564626,
+          "log_loss": 0.7558082736447866,
+          "brier": 0.2767976017898498,
+          "ece": 0.23627663119018677,
+          "confusion_matrix_left_right": [
+            [
+              15,
+              34
+            ],
+            [
+              23,
+              25
+            ]
+          ],
+          "predicted_right_fraction": 0.6082474226804123
+        },
+        "fixed_mixture_seed42": {
+          "macro_f1": 0.5146385606302566,
+          "balanced_accuracy": 0.5159438775510204,
+          "log_loss": 0.8357018828392029,
+          "brier": 0.3004804849624634,
+          "ece": 0.2560292445507246,
+          "confusion_matrix_left_right": [
+            [
+              23,
+              26
+            ],
+            [
+              21,
+              27
+            ]
+          ],
+          "predicted_right_fraction": 0.5463917525773195
+        },
+        "expert_gate_seed42": {
+          "macro_f1": 0.5459574468085107,
+          "balanced_accuracy": 0.5467687074829932,
+          "log_loss": 1.0139281749725342,
+          "brier": 0.3065522313117981,
+          "ece": 0.24628183460727182,
+          "confusion_matrix_left_right": [
+            [
+              25,
+              24
+            ],
+            [
+              20,
+              28
+            ]
+          ],
+          "predicted_right_fraction": 0.5360824742268041
+        },
+        "hybrid_gate_seed42": {
+          "macro_f1": 0.5177556818181819,
+          "balanced_accuracy": 0.5703656462585034,
+          "log_loss": 1.4902278184890747,
+          "brier": 0.3751783072948456,
+          "ece": 0.34619887710846575,
+          "confusion_matrix_left_right": [
+            [
+              12,
+              37
+            ],
+            [
+              5,
+              43
+            ]
+          ],
+          "predicted_right_fraction": 0.8247422680412371
+        },
+        "fixed_mixture_seed43": {
+          "macro_f1": 0.5146385606302566,
+          "balanced_accuracy": 0.5159438775510204,
+          "log_loss": 0.8357018828392029,
+          "brier": 0.3004804849624634,
+          "ece": 0.2560292445507246,
+          "confusion_matrix_left_right": [
+            [
+              23,
+              26
+            ],
+            [
+              21,
+              27
+            ]
+          ],
+          "predicted_right_fraction": 0.5463917525773195
+        },
+        "expert_gate_seed43": {
+          "macro_f1": 0.5549983996585939,
+          "balanced_accuracy": 0.5573979591836735,
+          "log_loss": 1.0179449319839478,
+          "brier": 0.30846235156059265,
+          "ece": 0.23220582721159627,
+          "confusion_matrix_left_right": [
+            [
+              24,
+              25
+            ],
+            [
+              18,
+              30
+            ]
+          ],
+          "predicted_right_fraction": 0.5670103092783505
+        },
+        "hybrid_gate_seed43": {
+          "macro_f1": 0.5498111171073934,
+          "balanced_accuracy": 0.5580357142857143,
+          "log_loss": 0.9795345664024353,
+          "brier": 0.3125835061073303,
+          "ece": 0.23188994717352168,
+          "confusion_matrix_left_right": [
+            [
+              21,
+              28
+            ],
+            [
+              15,
+              33
+            ]
+          ],
+          "predicted_right_fraction": 0.6288659793814433
+        },
+        "fixed_mixture_seed44": {
+          "macro_f1": 0.5146385606302566,
+          "balanced_accuracy": 0.5159438775510204,
+          "log_loss": 0.8357018828392029,
+          "brier": 0.3004804849624634,
+          "ece": 0.2560292445507246,
+          "confusion_matrix_left_right": [
+            [
+              23,
+              26
+            ],
+            [
+              21,
+              27
+            ]
+          ],
+          "predicted_right_fraction": 0.5463917525773195
+        },
+        "expert_gate_seed44": {
+          "macro_f1": 0.5559459171723624,
+          "balanced_accuracy": 0.5571853741496599,
+          "log_loss": 1.0307233333587646,
+          "brier": 0.30876532196998596,
+          "ece": 0.24049911302389557,
+          "confusion_matrix_left_right": [
+            [
+              25,
+              24
+            ],
+            [
+              19,
+              29
+            ]
+          ],
+          "predicted_right_fraction": 0.5463917525773195
+        },
+        "hybrid_gate_seed44": {
+          "macro_f1": 0.5018674136321195,
+          "balanced_accuracy": 0.54953231292517,
+          "log_loss": 3.2518885135650635,
+          "brier": 0.4270343482494354,
+          "ece": 0.42001194437754524,
+          "confusion_matrix_left_right": [
+            [
+              12,
+              37
+            ],
+            [
+              7,
+              41
+            ]
+          ],
+          "predicted_right_fraction": 0.8041237113402062
+        }
+      }
+    },
+    "party_platform": {
+      "n": 300,
+      "label_kind": "weak",
+      "label_counts_left_right": [
+        150,
+        150
+      ],
+      "metrics": {
+        "tfidf": {
+          "macro_f1": 0.5032836616995033,
+          "balanced_accuracy": 0.5033333333333333,
+          "log_loss": 0.9181612034004131,
+          "brier": 0.3171105799820238,
+          "ece": 0.2348313388179345,
+          "confusion_matrix_left_right": [
+            [
+              74,
+              76
+            ],
+            [
+              73,
+              77
+            ]
+          ],
+          "predicted_right_fraction": 0.51
+        },
+        "bge": {
+          "macro_f1": 0.5059985885673959,
+          "balanced_accuracy": 0.51,
+          "log_loss": 0.9094282410488548,
+          "brier": 0.31639107012707324,
+          "ece": 0.22748587536315126,
+          "confusion_matrix_left_right": [
+            [
+              63,
+              87
+            ],
+            [
+              60,
+              90
+            ]
+          ],
+          "predicted_right_fraction": 0.59
+        },
+        "bert": {
+          "macro_f1": 0.47737556561085975,
+          "balanced_accuracy": 0.4866666666666667,
+          "log_loss": 1.5730002776920924,
+          "brier": 0.40728720442313,
+          "ece": 0.36750156555761354,
+          "confusion_matrix_left_right": [
+            [
+              93,
+              57
+            ],
+            [
+              97,
+              53
+            ]
+          ],
+          "predicted_right_fraction": 0.36666666666666664
+        },
+        "gliner": {
+          "macro_f1": 0.6018196049959728,
+          "balanced_accuracy": 0.61,
+          "log_loss": 0.6983257568550949,
+          "brier": 0.24334134153077622,
+          "ece": 0.10847692967493851,
+          "confusion_matrix_left_right": [
+            [
+              113,
+              37
+            ],
+            [
+              80,
+              70
+            ]
+          ],
+          "predicted_right_fraction": 0.3566666666666667
+        },
+        "bge_neural": {
+          "macro_f1": 0.48416289592760187,
+          "balanced_accuracy": 0.49333333333333335,
+          "log_loss": 0.8870515225745151,
+          "brier": 0.3154054674382035,
+          "ece": 0.22214740427831808,
+          "confusion_matrix_left_right": [
+            [
+              54,
+              96
+            ],
+            [
+              56,
+              94
+            ]
+          ],
+          "predicted_right_fraction": 0.6333333333333333
+        },
+        "equal_mixture": {
+          "macro_f1": 0.5328142380422691,
+          "balanced_accuracy": 0.5333333333333333,
+          "log_loss": 0.7475255274966704,
+          "brier": 0.2715205691355902,
+          "ece": 0.11883694582192868,
+          "confusion_matrix_left_right": [
+            [
+              75,
+              75
+            ],
+            [
+              65,
+              85
+            ]
+          ],
+          "predicted_right_fraction": 0.5333333333333333
+        },
+        "fixed_mixture_seed42": {
+          "macro_f1": 0.48027852600283893,
+          "balanced_accuracy": 0.4833333333333334,
+          "log_loss": 0.8671501874923706,
+          "brier": 0.3120511472225189,
+          "ece": 0.23394547502199806,
+          "confusion_matrix_left_right": [
+            [
+              84,
+              66
+            ],
+            [
+              89,
+              61
+            ]
+          ],
+          "predicted_right_fraction": 0.42333333333333334
+        },
+        "expert_gate_seed42": {
+          "macro_f1": 0.49123417828142724,
+          "balanced_accuracy": 0.49666666666666665,
+          "log_loss": 1.3278863430023193,
+          "brier": 0.3738618493080139,
+          "ece": 0.3187984265883764,
+          "confusion_matrix_left_right": [
+            [
+              90,
+              60
+            ],
+            [
+              91,
+              59
+            ]
+          ],
+          "predicted_right_fraction": 0.39666666666666667
+        },
+        "hybrid_gate_seed42": {
+          "macro_f1": 0.4503862150920975,
+          "balanced_accuracy": 0.5066666666666667,
+          "log_loss": 1.4713597297668457,
+          "brier": 0.3978499472141266,
+          "ece": 0.3620654334624609,
+          "confusion_matrix_left_right": [
+            [
+              28,
+              122
+            ],
+            [
+              26,
+              124
+            ]
+          ],
+          "predicted_right_fraction": 0.82
+        },
+        "fixed_mixture_seed43": {
+          "macro_f1": 0.48027852600283893,
+          "balanced_accuracy": 0.4833333333333334,
+          "log_loss": 0.8671501874923706,
+          "brier": 0.3120511472225189,
+          "ece": 0.23394547502199806,
+          "confusion_matrix_left_right": [
+            [
+              84,
+              66
+            ],
+            [
+              89,
+              61
+            ]
+          ],
+          "predicted_right_fraction": 0.42333333333333334
+        },
+        "expert_gate_seed43": {
+          "macro_f1": 0.48449555812621437,
+          "balanced_accuracy": 0.49,
+          "log_loss": 1.2603365182876587,
+          "brier": 0.3683944046497345,
+          "ece": 0.3129339506228765,
+          "confusion_matrix_left_right": [
+            [
+              89,
+              61
+            ],
+            [
+              92,
+              58
+            ]
+          ],
+          "predicted_right_fraction": 0.39666666666666667
+        },
+        "hybrid_gate_seed43": {
+          "macro_f1": 0.47408970622717983,
+          "balanced_accuracy": 0.4766666666666667,
+          "log_loss": 1.1455663442611694,
+          "brier": 0.3568477928638458,
+          "ece": 0.3077853848536809,
+          "confusion_matrix_left_right": [
+            [
+              82,
+              68
+            ],
+            [
+              89,
+              61
+            ]
+          ],
+          "predicted_right_fraction": 0.43
+        },
+        "fixed_mixture_seed44": {
+          "macro_f1": 0.48027852600283893,
+          "balanced_accuracy": 0.4833333333333334,
+          "log_loss": 0.8671501874923706,
+          "brier": 0.3120511472225189,
+          "ece": 0.23394547502199806,
+          "confusion_matrix_left_right": [
+            [
+              84,
+              66
+            ],
+            [
+              89,
+              61
+            ]
+          ],
+          "predicted_right_fraction": 0.42333333333333334
+        },
+        "expert_gate_seed44": {
+          "macro_f1": 0.49050173769274896,
+          "balanced_accuracy": 0.4966666666666667,
+          "log_loss": 1.3447434902191162,
+          "brier": 0.37628716230392456,
+          "ece": 0.32108249684174855,
+          "confusion_matrix_left_right": [
+            [
+              91,
+              59
+            ],
+            [
+              92,
+              58
+            ]
+          ],
+          "predicted_right_fraction": 0.39
+        },
+        "hybrid_gate_seed44": {
+          "macro_f1": 0.4728343465045593,
+          "balanced_accuracy": 0.5066666666666667,
+          "log_loss": 3.182067394256592,
+          "brier": 0.4511950612068176,
+          "ece": 0.4442237311601639,
+          "confusion_matrix_left_right": [
+            [
+              38,
+              112
+            ],
+            [
+              36,
+              114
+            ]
+          ],
+          "predicted_right_fraction": 0.7533333333333333
+        }
+      }
+    }
+  },
+  "mean_weights": {
+    "fixed_mixture_seed42": {
+      "ibc_official_sample": {
+        "tfidf": 0.1460902988910675,
+        "bge": 0.28984400629997253,
+        "bert": 0.48257818818092346,
+        "gliner": 0.043641384690999985,
+        "bge_neural": 0.03784680366516113
+      },
+      "party_platform": {
+        "tfidf": 0.1460903435945511,
+        "bge": 0.28984335064888,
+        "bert": 0.4825761318206787,
+        "gliner": 0.04364132136106491,
+        "bge_neural": 0.037846650928258896
+      }
+    },
+    "expert_gate_seed42": {
+      "ibc_official_sample": {
+        "tfidf": 0.20953691005706787,
+        "bge": 0.14200657606124878,
+        "bert": 0.6454136967658997,
+        "gliner": 0.0016439527971670032,
+        "bge_neural": 0.0013989194994792342
+      },
+      "party_platform": {
+        "tfidf": 0.19063664972782135,
+        "bge": 0.099839948117733,
+        "bert": 0.7079198956489563,
+        "gliner": 0.0008583133458159864,
+        "bge_neural": 0.0007451260462403297
+      }
+    },
+    "hybrid_gate_seed42": {
+      "ibc_official_sample": {
+        "tfidf": 0.0014277008594945073,
+        "bge": 0.05222717300057411,
+        "bert": 0.019931301474571228,
+        "gliner": 0.003233319381251931,
+        "bge_neural": 0.0016801238525658846,
+        "self": 0.9215004444122314
+      },
+      "party_platform": {
+        "tfidf": 0.0005980954738333821,
+        "bge": 0.011118820868432522,
+        "bert": 0.03334563225507736,
+        "gliner": 0.000984311569482088,
+        "bge_neural": 0.0005276750889606774,
+        "self": 0.9534245729446411
+      }
+    },
+    "fixed_mixture_seed43": {
+      "ibc_official_sample": {
+        "tfidf": 0.1460902988910675,
+        "bge": 0.28984400629997253,
+        "bert": 0.48257818818092346,
+        "gliner": 0.043641384690999985,
+        "bge_neural": 0.03784680366516113
+      },
+      "party_platform": {
+        "tfidf": 0.1460903435945511,
+        "bge": 0.28984335064888,
+        "bert": 0.4825761318206787,
+        "gliner": 0.04364132136106491,
+        "bge_neural": 0.037846650928258896
+      }
+    },
+    "expert_gate_seed43": {
+      "ibc_official_sample": {
+        "tfidf": 0.0964982733130455,
+        "bge": 0.376749187707901,
+        "bert": 0.5195022821426392,
+        "gliner": 0.003290287684649229,
+        "bge_neural": 0.003960056230425835
+      },
+      "party_platform": {
+        "tfidf": 0.12614864110946655,
+        "bge": 0.2211495190858841,
+        "bert": 0.6482221484184265,
+        "gliner": 0.0021259994246065617,
+        "bge_neural": 0.0023537753149867058
+      }
+    },
+    "hybrid_gate_seed43": {
+      "ibc_official_sample": {
+        "tfidf": 0.004914287943392992,
+        "bge": 0.5246931910514832,
+        "bert": 0.40133601427078247,
+        "gliner": 0.007775333244353533,
+        "bge_neural": 0.0055106994695961475,
+        "self": 0.05577047914266586
+      },
+      "party_platform": {
+        "tfidf": 0.004488349426537752,
+        "bge": 0.29344984889030457,
+        "bert": 0.6390394568443298,
+        "gliner": 0.00505497632548213,
+        "bge_neural": 0.003934063017368317,
+        "self": 0.05403313413262367
+      }
+    },
+    "fixed_mixture_seed44": {
+      "ibc_official_sample": {
+        "tfidf": 0.1460902988910675,
+        "bge": 0.28984400629997253,
+        "bert": 0.48257818818092346,
+        "gliner": 0.043641384690999985,
+        "bge_neural": 0.03784680366516113
+      },
+      "party_platform": {
+        "tfidf": 0.1460903435945511,
+        "bge": 0.28984335064888,
+        "bert": 0.4825761318206787,
+        "gliner": 0.04364132136106491,
+        "bge_neural": 0.037846650928258896
+      }
+    },
+    "expert_gate_seed44": {
+      "ibc_official_sample": {
+        "tfidf": 0.21185322105884552,
+        "bge": 0.11908182501792908,
+        "bert": 0.6672257781028748,
+        "gliner": 0.0011109672486782074,
+        "bge_neural": 0.0007281230646185577
+      },
+      "party_platform": {
+        "tfidf": 0.18294677138328552,
+        "bge": 0.09579918533563614,
+        "bert": 0.7201682925224304,
+        "gliner": 0.0006526660872623324,
+        "bge_neural": 0.0004331386589910835
+      }
+    },
+    "hybrid_gate_seed44": {
+      "ibc_official_sample": {
+        "tfidf": 0.00017632140952628106,
+        "bge": 0.00391235901042819,
+        "bert": 0.00014107293100096285,
+        "gliner": 0.00019989859720226377,
+        "bge_neural": 6.460215081460774e-05,
+        "self": 0.9955056309700012
+      },
+      "party_platform": {
+        "tfidf": 1.5861740394029766e-05,
+        "bge": 0.00032824871595948935,
+        "bert": 0.00013073495938442647,
+        "gliner": 4.8755980969872326e-05,
+        "bge_neural": 1.2575221262522973e-05,
+        "self": 0.9994636178016663
+      }
+    }
+  },
+  "temperature": {
+    "tfidf": 0.24969798528369627,
+    "bge": 0.6244749839042372,
+    "bert": 0.24593357760248735,
+    "gliner": 3.325909031572158,
+    "bge_neural": 5.126231096961368
+  },
+  "checkpoint_revisions": {
+    "bge": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+    "bert": "86b5e0934494bd15c9632b12f734a8a67f723594",
+    "gliner": "54785d51df8d86a0d8f2eb212fec15871aad2c4d"
+  },
+  "runtime_seconds": {
+    "bge": 3.6252729580010055,
+    "bert": 6.422198207999827,
+    "gliner": 40.104728750000504
+  },
+  "encoder_truncated_rows": {
+    "bge": 0,
+    "bert": 0
+  },
+  "device": "mps",
+  "packages": {
+    "torch": "2.14.1",
+    "transformers": "5.20.1",
+    "gliner2": "2.1.0",
+    "scikit-learn": "1.9.1"
+  },
+  "input_sha256": {
+    "data/synthetic.jsonl": "149ff799474036143b349805141667b925f3d8818c50e1e73952b39fe0f7468b",
+    "data/external/external.jsonl": "c8f389a32974bb5ead37a4d3114e3b71d814b10931c48d075a4f663bd4305ebf"
+  },
+  "limitations": [
+    "IBC official sample only; full corpus is not included.",
+    "Book/author and platform document IDs are unavailable; entire sources are held out, and no independence-based confidence interval is claimed.",
+    "Platform labels are party-derived proxies; not human passage-level ideological annotations and may include neutral text.",
+    "Historical party labels do not necessarily match contemporary left/right positions.",
+    "Source-level holdout cannot rule out backbone pretraining contamination or semantic paraphrase overlap.",
+    "Synthetic final-test partition remains untouched. External sets become diagnostic benchmarks after reporting and cannot serve as a future pristine final test."
+  ]
+}

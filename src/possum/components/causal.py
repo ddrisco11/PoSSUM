@@ -56,11 +56,18 @@ class MLXCausal:
         import mlx.core as mx
         rows = []
         for text in texts:
-            row = []
-            for candidate in (" left", " right"):
-                a, b = candidate_ids(self.tokenizer, prompt(text), candidate)
-                logits = self.model(mx.array([b]))[0].astype(mx.float32)
-                lp = logits - mx.logsumexp(logits, axis=-1, keepdims=True)
-                row.append(float(sum(lp[j-1, b[j]] for j in range(len(a), len(b)))))
+            pairs = [candidate_ids(self.tokenizer, prompt(text), c) for c in (" left", " right")]
+            if all(len(b) == len(a)+1 for a,b in pairs):
+                # Shared prefix: one exact forward pass, no sampled generation.
+                logits = self.model(mx.array([pairs[0][0]]))[0, -1].astype(mx.float32)
+                lp = logits - mx.logsumexp(logits)
+                row = [float(lp[b[-1]]) for a,b in pairs]
+            else:
+                row = []
+                for a,b in pairs:
+                    logits = self.model(mx.array([b]))[0].astype(mx.float32)
+                    lp = logits - mx.logsumexp(logits, axis=-1, keepdims=True)
+                    row.append(float(sum(lp[j-1,b[j]] for j in range(len(a),len(b)))))
             rows.append(row)
+            mx.clear_cache()
         return np.asarray(rows)

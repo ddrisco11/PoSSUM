@@ -1,0 +1,29 @@
+{
+  "model_id": "google-bert/bert-base-uncased",
+  "revision": "86b5e0934494bd15c9632b12f734a8a67f723594",
+  "device": "mps",
+  "batch_size": 8,
+  "sequence_length": 256,
+  "precision": "float32",
+  "optimizer": "AdamW",
+  "trainable_parameters": 109483778,
+  "warmup_steps": 3,
+  "measured_steps": 12,
+  "median_step_seconds": 0.8019122294999761,
+  "min_step_seconds": 0.7853167920002306,
+  "max_step_seconds": 0.8313543330004904,
+  "examples_per_second": 9.97615412972105,
+  "current_mps_allocated_bytes": 1771795712,
+  "estimates_hours_three_epochs": {
+    "10000": 0.8353252390624751,
+    "50000": 4.176626195312376,
+    "100000": 8.353252390624752,
+    "180000": 15.03585430312455
+  },
+  "limitations": [
+    "Timing benchmark only, not a trained model or accuracy result.",
+    "Repeated one real training batch at fixed 256-token padding; excludes tokenization, validation, checkpointing, and data transfer overhead.",
+    "Extrapolation assumes stable throughput; long runs may throttle or encounter memory pressure.",
+    "Estimates cover one BERT fine-tuning run, not all experts, folds, seeds, or parameter searches."
+  ]
+}

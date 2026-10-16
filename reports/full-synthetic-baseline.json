@@ -1,0 +1,286 @@
+{
+  "config": {
+    "seed": 42,
+    "split_seed": 42,
+    "components": [
+      "bge",
+      "bert",
+      "gliner"
+    ],
+    "limit": 2400,
+    "device": "mps",
+    "input_sha256": "149ff799474036143b349805141667b925f3d8818c50e1e73952b39fe0f7468b",
+    "python": "3.12.11",
+    "packages": {
+      "torch": "2.14.1",
+      "transformers": "5.20.1",
+      "numpy": "2.5.4",
+      "scikit-learn": "1.9.1"
+    }
+  },
+  "checkpoint_revisions": {
+    "bge": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+    "bert": "86b5e0934494bd15c9632b12f734a8a67f723594",
+    "gliner": "54785d51df8d86a0d8f2eb212fec15871aad2c4d"
+  },
+  "full_counts": {
+    "fit": 1200,
+    "calibration": 400,
+    "gate": 400,
+    "validation": 400,
+    "test": 800
+  },
+  "pilot_counts": {
+    "fit": 1200,
+    "calibration": 400,
+    "gate": 400,
+    "validation": 400
+  },
+  "validation_groups": 1,
+  "metrics": {
+    "tfidf": {
+      "macro_f1": 0.9774987343038046,
+      "balanced_accuracy": 0.9775,
+      "log_loss": 0.09097807245198368,
+      "brier": 0.02224760311955005,
+      "ece": 0.04229215611089075
+    },
+    "bge": {
+      "macro_f1": 0.9499949994999499,
+      "balanced_accuracy": 0.95,
+      "log_loss": 0.22245463214655678,
+      "brier": 0.05662856205086948,
+      "ece": 0.11729767482494938
+    },
+    "bert": {
+      "macro_f1": 0.9799994999874997,
+      "balanced_accuracy": 0.98,
+      "log_loss": 0.08858486068407931,
+      "brier": 0.020808904648012758,
+      "ece": 0.033872822735625016
+    },
+    "gliner": {
+      "macro_f1": 0.7118834608989506,
+      "balanced_accuracy": 0.7325,
+      "log_loss": 0.47977147502538214,
+      "brier": 0.16050945607367648,
+      "ece": 0.08318156636902126
+    },
+    "bge_neural": {
+      "macro_f1": 0.9274632782846315,
+      "balanced_accuracy": 0.9275,
+      "log_loss": 0.31716772627518863,
+      "brier": 0.08579702595766944,
+      "ece": 0.15675820019096137
+    },
+    "equal_mixture": {
+      "macro_f1": 0.975,
+      "balanced_accuracy": 0.975,
+      "log_loss": 0.20874129760624238,
+      "brier": 0.043409014946231075,
+      "ece": 0.1535620665053673
+    },
+    "fixed_mixture": {
+      "macro_f1": 0.98,
+      "balanced_accuracy": 0.98,
+      "log_loss": 0.13491708040237427,
+      "brier": 0.025941915810108185,
+      "ece": 0.09246672928333283
+    },
+    "neural_gate": {
+      "macro_f1": 0.9824998906243163,
+      "balanced_accuracy": 0.9824999999999999,
+      "log_loss": 0.08431261032819748,
+      "brier": 0.01918044500052929,
+      "ece": 0.03520495727658269
+    },
+    "hybrid_gate": {
+      "macro_f1": 0.7524687294272547,
+      "balanced_accuracy": 0.765,
+      "log_loss": 0.4866396188735962,
+      "brier": 0.16211248934268951,
+      "ece": 0.13107436031103137
+    }
+  },
+  "temperature": {
+    "tfidf": 0.24969798528369627,
+    "bge": 0.6244749839042372,
+    "bert": 0.24593357760248735,
+    "gliner": 3.325909031572158,
+    "bge_neural": 5.126231096961368
+  },
+  "runtime_seconds": {
+    "tfidf": 0.20881370800088916,
+    "bge": 12.2983917499987,
+    "bert": 25.758071917000052,
+    "gliner": 240.03648124999927
+  },
+  "mean_gate_weights": {
+    "tfidf": 0.2754364013671875,
+    "bge": 0.0366428978741169,
+    "bert": 0.687547504901886,
+    "gliner": 0.00019716063980013132,
+    "bge_neural": 0.00017603520245756954
+  },
+  "hybrid_gate_weights": {
+    "tfidf": 0.00020973352366127074,
+    "bge": 0.004677286837249994,
+    "bert": 0.017339453101158142,
+    "gliner": 0.0002194943663198501,
+    "bge_neural": 0.00012197373143862933,
+    "self": 0.9774320125579834
+  },
+  "leave_one_out": {
+    "tfidf": {
+      "macro_f1": 0.9749993749843746,
+      "balanced_accuracy": 0.975,
+      "log_loss": 0.09990664571523666,
+      "brier": 0.02289651893079281,
+      "ece": 0.041754495352506645
+    },
+    "bge": {
+      "macro_f1": 0.9799994999874997,
+      "balanced_accuracy": 0.98,
+      "log_loss": 0.08851726353168488,
+      "brier": 0.020273972302675247,
+      "ece": 0.03462579548358918
+    },
+    "bert": {
+      "macro_f1": 0.9749899959983994,
+      "balanced_accuracy": 0.975,
+      "log_loss": 0.14821508526802063,
+      "brier": 0.03610391914844513,
+      "ece": 0.08699298724532127
+    },
+    "gliner": {
+      "macro_f1": 0.98,
+      "balanced_accuracy": 0.98,
+      "log_loss": 0.08341453224420547,
+      "brier": 0.019249873235821724,
+      "ece": 0.03754653692245483
+    },
+    "bge_neural": {
+      "macro_f1": 0.98,
+      "balanced_accuracy": 0.98,
+      "log_loss": 0.08412368595600128,
+      "brier": 0.019320612773299217,
+      "ece": 0.034118396788835555
+    }
+  },
+  "paired_log_loss_delta": {
+    "bert": {
+      "interval": null,
+      "reason": "Fewer than three validation groups; no reliable interval"
+    },
+    "fixed_mixture": {
+      "interval": null,
+      "reason": "Fewer than three validation groups; no reliable interval"
+    }
+  },
+  "error_correlation": [
+    [
+      1.0,
+      0.44598099873795394,
+      0.11984362740303617,
+      0.10565065916716598,
+      0.4933498271725503
+    ],
+    [
+      0.44598099873795394,
+      1.0,
+      0.2391405836330573,
+      0.2040316599501872,
+      0.6636093824841703
+    ],
+    [
+      0.11984362740303615,
+      0.2391405836330573,
+      1.0,
+      0.09850263099221675,
+      0.20074119901556925
+    ],
+    [
+      0.10565065916716598,
+      0.2040316599501872,
+      0.09850263099221675,
+      1.0,
+      0.26116272235867055
+    ],
+    [
+      0.4933498271725503,
+      0.6636093824841705,
+      0.20074119901556925,
+      0.26116272235867055,
+      1.0
+    ]
+  ],
+  "error_correlation_note": "Undefined constant-error correlations stored as zero",
+  "source_metrics": {
+    "JyotiNayak/political_ideologies": {
+      "tfidf": {
+        "macro_f1": 0.9774987343038046,
+        "balanced_accuracy": 0.9775,
+        "log_loss": 0.09097807245198368,
+        "brier": 0.02224760311955005,
+        "ece": 0.04229215611089075
+      },
+      "bge": {
+        "macro_f1": 0.9499949994999499,
+        "balanced_accuracy": 0.95,
+        "log_loss": 0.22245463214655678,
+        "brier": 0.05662856205086948,
+        "ece": 0.11729767482494938
+      },
+      "bert": {
+        "macro_f1": 0.9799994999874997,
+        "balanced_accuracy": 0.98,
+        "log_loss": 0.08858486068407931,
+        "brier": 0.020808904648012758,
+        "ece": 0.033872822735625016
+      },
+      "gliner": {
+        "macro_f1": 0.7118834608989506,
+        "balanced_accuracy": 0.7325,
+        "log_loss": 0.47977147502538214,
+        "brier": 0.16050945607367648,
+        "ece": 0.08318156636902126
+      },
+      "bge_neural": {
+        "macro_f1": 0.9274632782846315,
+        "balanced_accuracy": 0.9275,
+        "log_loss": 0.31716772627518863,
+        "brier": 0.08579702595766944,
+        "ece": 0.15675820019096137
+      },
+      "equal_mixture": {
+        "macro_f1": 0.975,
+        "balanced_accuracy": 0.975,
+        "log_loss": 0.20874129760624238,
+        "brier": 0.043409014946231075,
+        "ece": 0.1535620665053673
+      },
+      "fixed_mixture": {
+        "macro_f1": 0.98,
+        "balanced_accuracy": 0.98,
+        "log_loss": 0.13491708040237427,
+        "brier": 0.025941915810108185,
+        "ece": 0.09246672928333283
+      },
+      "neural_gate": {
+        "macro_f1": 0.9824998906243163,
+        "balanced_accuracy": 0.9824999999999999,
+        "log_loss": 0.08431261032819748,
+        "brier": 0.01918044500052929,
+        "ece": 0.03520495727658269
+      },
+      "hybrid_gate": {
+        "macro_f1": 0.7524687294272547,
+        "balanced_accuracy": 0.765,
+        "log_loss": 0.4866396188735962,
+        "brier": 0.16211248934268951,
+        "ece": 0.13107436031103137
+      }
+    }
+  },
+  "conclusion": "Diagnostic pilot only. Final test untouched; no component-drop or MoE claim without diverse human-verified evaluation and repeated seeds."
+}

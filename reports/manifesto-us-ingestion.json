@@ -1,0 +1,61 @@
+{
+  "core_version": "MPDS2026a",
+  "corpus_version": "2026-1",
+  "country": "United States",
+  "documents": 12,
+  "document_ids": [
+    "61320_199211",
+    "61320_200411",
+    "61320_201211",
+    "61320_201611",
+    "61320_202011",
+    "61320_202411",
+    "61620_200411",
+    "61620_200811",
+    "61620_201211",
+    "61620_201611",
+    "61620_202011",
+    "61620_202411"
+  ],
+  "counts": {
+    "raw_quasi_sentences": 20144,
+    "unmapped_or_neutral": 7845,
+    "length_excluded": 8010,
+    "candidates": 4289,
+    "left": 1836,
+    "right": 2453
+  },
+  "left_codes": [
+    103,
+    105,
+    106,
+    107,
+    202,
+    403,
+    404,
+    406,
+    412,
+    413,
+    504,
+    506,
+    701
+  ],
+  "right_codes": [
+    104,
+    201,
+    203,
+    305,
+    401,
+    402,
+    407,
+    414,
+    505,
+    601,
+    603,
+    605,
+    606
+  ],
+  "mapping_source": "https://manifesto-project.wzb.eu/down/tutorials/main-dataset.html",
+  "annotation": "Human-coded policy categories mapped to ideology; not direct human left/right judgments",
+  "sha256": "5854a6f76431e7d75f46b0e1c6c6e4cae929601c5601ab1a72e0d4e4d66b1697"
+}
