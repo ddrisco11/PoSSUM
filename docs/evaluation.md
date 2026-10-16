@@ -1,4 +1,4 @@
-# Short experiment protocol
+# Training and evaluation protocol
 
 ## Question and scope
 Predict left/right viewpoint in English U.S. political text of 20–150 whitespace-separated words. A disagreement with a politician or a quotation need not express the author's own view. Exclude neutral, ambiguous and nonpolitical examples only when the dataset supplies reliable labels or human review; do not pretend party metadata performs that filtering.
@@ -6,7 +6,7 @@ Predict left/right viewpoint in English U.S. political text of 20–150 whitespa
 ## Splits
 Reserve approximately 20% of connected source groups for a final test. Group by original document and author, including shared identities across datasets; join near-duplicate clusters before splitting. Remaining 80% is development. Within development allocate disjoint expert-fit, calibration, gate-fit and validation groups. This held-out stacking design avoids fitting a gate on in-sample expert scores; it trades some efficiency for an easily audited pilot. Group proportions will not be exactly 80/20 at row level.
 
-Pilot: cap at 800 accepted rows from development, with both labels and sufficient groups. Never inspect final-test metrics to choose components. Primary evaluation should ultimately use human-verified, unseen text; party-platform and synthetic pilot metrics are diagnostic only. IBC passages shorter than 20 words are excluded in the strict experiment and can be reported in a separately identified sensitivity run.
+Pilot: cap at 800 accepted rows from development, with both labels and sufficient groups. Never inspect final-test metrics to choose components. Primary evaluation should ultimately use human-verified, unseen text; party-platform and synthetic pilot metrics are diagnostic only. IBC passages shorter than 20 words are excluded in the strict evaluation and can be reported in a separately identified sensitivity run.
 
 ## Comparisons
 TF–IDF logistic regression; frozen BERT with a fitted logistic head; BGE-small with logistic head; BGE-small neural classifier; GLiNER zero-shot scores; optional OpenJev and causal Mistral/Qwen scores. Base BERT has no trained political classification head: a randomly initialized classification layer is not a valid expert.

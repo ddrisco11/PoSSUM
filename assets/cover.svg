@@ -1,27 +1,63 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="800" viewBox="0 0 1600 800" role="img" aria-labelledby="title desc">
-<title id="title">PoSSUM — Political Orientation and Slant Scoring Using Mixtures</title><desc id="desc">A geometric blue and red possum with a curled tail, framed by a subtle research diagram on an ivory background.</desc>
-<defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#182c44" stroke-opacity=".055"/></pattern></defs>
-<path fill="#f7f5ef" d="M0 0h1600v800H0z"/><path fill="url(#grid)" d="M800 0h800v800H800z"/>
-<path d="M70 80h1460" stroke="#182c44" stroke-width="2"/><text x="70" y="60" font-family="Helvetica,Arial,sans-serif" font-size="17" letter-spacing="4" fill="#182c44">EXPERIMENT 001 / POLITICAL LANGUAGE</text>
-<text x="70" y="340" font-family="Helvetica,Arial,sans-serif" font-size="142" font-weight="700" letter-spacing="-7" fill="#182c44">PoSSUM</text>
-<text x="78" y="405" font-family="Helvetica,Arial,sans-serif" font-size="29" fill="#182c44">Political Orientation and Slant</text><text x="78" y="447" font-family="Helvetica,Arial,sans-serif" font-size="29" fill="#182c44">Scoring Using Mixtures</text>
-<path d="M80 505h72" stroke="#3262a8" stroke-width="8"/><path d="M162 505h72" stroke="#d9564f" stroke-width="8"/>
-<text x="78" y="558" font-family="Helvetica,Arial,sans-serif" font-size="18" letter-spacing="2" fill="#617081">SMALL MODELS. MEASURED MIXTURES.</text>
-<g transform="translate(790 145)">
-<circle cx="360" cy="235" r="215" fill="none" stroke="#c9c9c2" stroke-width="1.5"/>
-<path d="M455 365C720 490 763 269 645 260C566 254 575 355 636 340" fill="none" stroke="#d9564f" stroke-width="28" stroke-linecap="round"/>
-<path d="M137 343C102 240 165 144 294 141C397 118 496 183 506 292L477 378L338 396Z" fill="#3262a8"/>
-<path d="M294 141C397 118 496 183 506 292L477 378L338 396L289 291Z" fill="#d9564f"/>
-<path d="M184 345l-35 77h88l18-56M379 370l20 52h92l-48-75" fill="#182c44"/>
-<path d="M143 202C103 155 112 90 148 101C181 107 211 156 204 187" fill="#182c44"/>
-<path d="M157 167c-25-27-26-50-12-46c18 5 34 29 35 45" fill="#d9564f"/>
-<path d="M247 185C236 127 261 84 289 106C313 126 314 172 291 200" fill="#182c44"/>
-<path d="M268 164c-9-26 0-47 11-37c11 11 11 29 5 44" fill="#d9564f"/>
-<path d="M122 199C173 173 242 175 302 218L245 302L109 346L54 311Z" fill="#fffaf0"/>
-<path d="M122 199l61 62-74 85-55-35Z" fill="#e4e6e5"/>
-<path d="M60 297l35 17-36 18-20-19Z" fill="#d9564f"/><ellipse cx="164" cy="251" rx="13" ry="15" fill="#182c44"/><circle cx="168" cy="246" r="4" fill="white"/>
-<path d="M107 297l-63-12m65 23-69 10m77 0-57 32" stroke="#182c44" stroke-width="2" fill="none"/>
-<path d="M175 337q39 17 65-8" fill="none" stroke="#182c44" stroke-width="3"/>
+<title id="title">PoSSUM — Political Slant Scoring Using Mixtures</title>
+<desc id="desc">A playful flat-vector red and blue possum wearing a striped Uncle Sam top hat, with a curled tail and an ivory face. Model card cover on warm ivory.</desc>
+<defs>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#182c44" stroke-opacity=".045"/></pattern>
+  <path id="star" d="M0-11 3-4 11-3 5 2 7 10 0 6-7 10-5 2-11-3-3-4Z"/>
+  <clipPath id="crown"><path d="M169 37H310L298 158H181Z"/></clipPath>
+</defs>
+<path fill="#f7f5ef" d="M0 0H1600V800H0Z"/>
+<path fill="url(#grid)" d="M800 0H1600V800H800Z"/>
+<path d="M70 89H1530" stroke="#182c44" stroke-width="2"/>
+<g font-family="Helvetica,Arial,sans-serif" fill="#182c44">
+  <text x="70" y="62" font-size="17" letter-spacing="3.5">PoSSUM / MODEL CARD</text>
+  <text x="1530" y="62" text-anchor="end" font-size="16" letter-spacing="2">POLITICAL LANGUAGE</text>
+  <text x="70" y="346" font-size="142" font-weight="700" letter-spacing="-7">PoSSUM</text>
+  <text x="78" y="412" font-size="32">Political Slant Scoring</text>
+  <text x="78" y="456" font-size="32">Using Mixtures</text>
+  <text x="78" y="558" font-size="17" letter-spacing="2" fill="#617081">TEXT-LEVEL VIEWPOINT · LEARNED MIXTURES</text>
 </g>
-<path d="M70 715h1460" stroke="#182c44" stroke-width="2"/><text x="70" y="752" font-family="Helvetica,Arial,sans-serif" font-size="16" letter-spacing="2" fill="#617081">LEFT / RIGHT · TEXT-LEVEL VIEWPOINT · LEARNED WEIGHTING</text><text x="1390" y="752" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#617081">ddrisco11</text>
+<path d="M80 506H152" stroke="#3262a8" stroke-width="8"/>
+<path d="M164 506H236" stroke="#dc5652" stroke-width="8"/>
+<g transform="translate(825 160)">
+  <circle cx="345" cy="271" r="224" fill="#eeeee7"/>
+  <!-- Curled, prehensile tail. -->
+  <path d="M440 387C603 493 720 379 654 299C619 256 558 282 575 323C581 339 600 344 615 335" fill="none" stroke="#182c44" stroke-width="36" stroke-linecap="round"/>
+  <path d="M440 387C603 493 720 379 654 299C619 256 558 282 575 323C581 339 600 344 615 335" fill="none" stroke="#dc5652" stroke-width="24" stroke-linecap="round"/>
+  <!-- Compact two-tone body and oversized cartoon feet. -->
+  <path d="M151 344C112 245 177 171 287 169C403 150 497 227 496 324Q498 391 445 415H245Q178 405 151 344Z" fill="#3262a8" stroke="#182c44" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M287 172C399 155 493 228 493 323Q495 388 443 412H351L303 315Z" fill="#dc5652"/>
+  <path d="M217 365 198 421H247Q259 419 256 406L247 370M409 370 420 421H469Q483 419 474 406L450 371" fill="#182c44" stroke="#182c44" stroke-width="9" stroke-linejoin="round"/>
+  <path d="M205 421H244M427 421H465" stroke="#f6d5c8" stroke-width="10" stroke-linecap="round"/>
+  <path d="M218 418V427M234 418V427M440 418V427M454 418V427" stroke="#182c44" stroke-width="2"/>
+  <!-- Big ears and long, pointed ivory face. -->
+  <ellipse cx="151" cy="201" rx="33" ry="46" transform="rotate(-27 151 201)" fill="#182c44"/>
+  <ellipse cx="151" cy="201" rx="19" ry="29" transform="rotate(-27 151 201)" fill="#e9958e"/>
+  <ellipse cx="279" cy="188" rx="33" ry="46" transform="rotate(15 279 188)" fill="#182c44"/>
+  <ellipse cx="279" cy="188" rx="19" ry="29" transform="rotate(15 279 188)" fill="#e9958e"/>
+  <path d="M146 229Q224 198 293 250L242 312 94 363 55 331Z" fill="#fffaf0" stroke="#182c44" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M146 232 183 288 94 359 60 331Z" fill="#e4e7e5"/>
+  <path d="M50 321Q42 326 50 335L67 343Q75 340 76 330L62 319Z" fill="#dc5652" stroke="#182c44" stroke-width="4" stroke-linejoin="round"/>
+  <ellipse cx="181" cy="278" rx="15" ry="19" fill="#182c44"/>
+  <circle cx="186" cy="271" r="5" fill="#fffaf0"/>
+  <path d="M162 248Q174 238 188 243M103 339Q119 348 132 337" fill="none" stroke="#182c44" stroke-width="4" stroke-linecap="round"/>
+  <path d="M99 316 40 300M100 329 32 332M109 342 56 366" stroke="#182c44" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="219" cy="303" rx="14" ry="8" fill="#e9958e"/>
+  <!-- Uncle Sam hat: crisp stripes, navy star band, exaggerated brim. -->
+  <g transform="rotate(-10 239 190)">
+    <path d="M169 37H310L298 158H181Z" fill="#fffaf0"/>
+    <g clip-path="url(#crown)" fill="#dc5652">
+      <path d="M169 30H190V164H169ZM214 30H236V164H214ZM259 30H281V164H259ZM304 30H324V164H304Z"/>
+    </g>
+    <path d="M169 37H310L298 158H181Z" fill="none" stroke="#182c44" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M179 135H301L298 176H182Z" fill="#3262a8" stroke="#182c44" stroke-width="5"/>
+    <g fill="#fffaf0"><use href="#star" transform="translate(207 156) scale(.8)"/><use href="#star" transform="translate(240 156) scale(.8)"/><use href="#star" transform="translate(273 156) scale(.8)"/></g>
+    <path d="M148 175Q239 184 329 175L333 190Q239 208 145 190Z" fill="#3262a8" stroke="#182c44" stroke-width="6" stroke-linejoin="round"/>
+  </g>
+</g>
+<path d="M70 715H1530" stroke="#182c44" stroke-width="2"/>
+<g font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#617081">
+  <text x="70" y="752" letter-spacing="2">LEFT / RIGHT · ENGLISH · U.S. POLITICS</text>
+  <text x="1530" y="752" text-anchor="end">ddrisco11 / PoSSUM</text>
+</g>
 </svg>

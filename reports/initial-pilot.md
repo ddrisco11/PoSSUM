@@ -37,6 +37,6 @@ Eight local tests cover provenance failures, conflicting labels, transitive grou
 
 The first synthetic pilot does not satisfy the final human-text evaluation requirement. IBC/Manifesto/platform/tweet admission still needs original grouping provenance and verified label mappings; optional datasets remain manifest entries. No raw corpora or model weights were published.
 
-## Next experiment
+## Further evaluation
 
 Recover human-text document/author groups and assemble several independent validation groups. Compare BERT, lexical baseline, GLiNER, expert gate and hybrid gate on those before deciding to drop experts or fine-tune. OpenJev is deferred for memory; Mistral/Qwen require a quantized backend and further runtime validation.

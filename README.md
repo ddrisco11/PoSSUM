@@ -1,20 +1,37 @@
-<img src="assets/cover.svg" alt="Red and blue vector possum beside PoSSUM title" width="100%">
+<img src="assets/cover.svg" alt="Cartoon red and blue possum wearing an Uncle Sam hat beside the PoSSUM title" width="100%">
 
 # PoSSUM
-**Political Orientation and Slant Scoring Using Mixtures**
+**Political Slant Scoring Using Mixtures**
 
-A short experiment: does a small, embedding-conditioned mixture beat a strong single model at classifying the political viewpoint expressed in a short U.S. political passage?
+## Model overview
 
-**Labels:** `0 = Left`, `1 = Right`. **Status:** compact M2 pilot completed; [results and limitations](reports/initial-pilot.md). No scientific conclusions yet. Model weights and source datasets are downloaded separately and never committed.
+PoSSUM classifies the political viewpoint expressed in short English passages about U.S. politics. It combines component predictions with a neural gate conditioned on 384-dimensional BGE-small embeddings. The hybrid gate can also assign weight to its own prediction.
 
-## Experiment in three steps
-1. Freeze encoders; run a small grouped pilot with BGE-small, BERT, GLiNER, and a lexical baseline.
-2. Calibrate component scores; compare best single, equal average, fixed mixture, and a 384 → 32 → K neural gate. Run leave-one-component-out ablations.
-3. Only if validation evidence supports it, expand the data, audit Mistral/Qwen logits, and fine-tune selected encoders. Open the reserved test set once the recipe is fixed.
+| Property | Specification |
+|---|---|
+| Task | Binary political slant classification |
+| Labels | `0 = Left`, `1 = Right` |
+| Input | Approximately 20–150 words |
+| Architecture | Dense mixture of calibrated predictions with an optional self-prediction branch |
+| Components | BERT, BGE-small, GLiNER; optional ModernBERT, OpenJev, Mistral and Qwen adapters |
+| Status | Development implementation with a compact synthetic pilot; no validated release checkpoint |
+| Language and domain | English, U.S. politics |
 
-This is a dense mixture of predictions, not a sparsely routed language model: every enabled expert runs. A gate does not automatically reduce inference cost.
+Model weights and source datasets are downloaded separately. Every enabled expert runs; the gate does not provide sparse inference routing.
 
-See [experiment protocol](docs/experiment.md), [model registry](docs/models.md), and [dataset manifest](docs/datasets.md).
+## Training and evaluation
+
+The compact pilot uses frozen encoders with fitted classification heads. Expert fitting, temperature calibration, gate training and validation use disjoint groups. Comparisons include single models, equal averaging, a fixed mixture, an experts-only gate and a hybrid gate with its own classifier.
+
+The completed pilot used 480 synthetic development passages. BERT achieved 0.987 macro-F1 and 0.0950 log loss on 80 validation passages from one topic group. Mixture improvements were small; these results do not establish performance on human-authored text. The reserved test set has not been scored. The grouped pilot uses a 75/25 development/test split; the broader evaluation target is 80/20.
+
+See the [pilot report](reports/initial-pilot.md), [training and evaluation protocol](docs/evaluation.md), [model registry](docs/models.md), and [dataset manifest](docs/datasets.md).
+
+## Intended use and limitations
+
+PoSSUM is a development model for studying expressed political viewpoint in text. It does not infer an individual's beliefs. Party and publisher metadata provide noisy supervision rather than passage-level ground truth. Neutral, ambiguous and nonpolitical text is outside the binary training target; abstention and politicalness detection need separate evaluation.
+
+Human-verified evaluation and broader domain testing remain incomplete. OpenJev, Mistral, Qwen and ModernBERT have not completed checkpoint-level inference in the pilot. Training data and component weights retain their upstream licenses; see the model registry and dataset manifest.
 
 ## Local setup (Apple Silicon)
 ```bash
@@ -29,8 +46,6 @@ Use one component at a time and cache scores. The default pilot avoids 7–27B w
 
 ## Reproducibility
 Record checkpoint revisions, dataset hashes, split membership, dependency versions, seeds, score prompts, and device in every run. Raw corpora, model caches and sample-level outputs stay ignored. Public reports contain aggregate metrics only.
-
-This experiment measures expressed viewpoint, not an individual's beliefs. Party/source labels are noisy supervision; they are not human verification of a passage's viewpoint. Neutral and ambiguous input is outside the binary training target. Production abstention and politicalness detection remain separate evaluation tasks.
 
 ## Run an expert independently
 ```bash

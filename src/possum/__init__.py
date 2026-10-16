@@ -1,1 +1,1 @@
-"""PoSSUM: a small, auditable political viewpoint experiment."""
+"""PoSSUM: Political Slant Scoring Using Mixtures."""

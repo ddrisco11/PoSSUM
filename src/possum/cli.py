@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 def main():
-    parser = argparse.ArgumentParser(description="PoSSUM modular experiment")
+    parser = argparse.ArgumentParser(description="PoSSUM political slant classification")
     sub = parser.add_subparsers(dest="command", required=True)
     p = sub.add_parser("pilot",help="Run compact experts; reserve final test without scoring it")
     p.add_argument("input",help="Normalized JSONL records")
