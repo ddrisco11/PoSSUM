@@ -9,7 +9,7 @@ import time
 import numpy as np
 from scipy.special import softmax
 
-from possum.checkpoints import save_json, save_scores
+from possum.checkpoints import atomic_write, save_json, save_scores
 from possum.option_a import MODELS, PARTS, data, digest, guard, update
 
 
@@ -104,6 +104,58 @@ def evaluate(root):
         mask = np.array([r['source'] == source for r in parts['validation']])
         report['by_source'][source] = {k: metrics(labels[mask], p[mask]) for k, p in pred.items()}
     save_json(root / 'frozen-adapter-comparison.json', report)
+    # Preserve a reloadable reference recipe without replacing the original router export.
+    import joblib
+    export = root / 'frozen-export'
+    export.mkdir(exist_ok=True)
+    atomic_write(export / 'bert_probe.joblib', lambda stream: joblib.dump(probe, stream))
+    config = json.loads((root / 'export/config.json').read_text())
+    baseline_config = dict(version=root.name+'-frozen-reference', experts=config['experts'],
+                           temperatures={**config['temperatures'], **temps}, selected='equal_frozen', router_mode=None,
+                           backbones=config['backbones'], bert_mode='frozen_probe', bert_probe='bert_probe.joblib',
+                           mistral_adapter=None, status='Research reference baseline; no fresh test or validated abstention')
+    save_json(export / 'config.json', baseline_config)
+    save_json(export / 'validation.json', report)
+    print(json.dumps(report, indent=2), flush=True)
+
+
+def evaluate_diagnostic(root):
+    """Apply the same fitted probe and calibration to the established IBC diagnostic."""
+    from sklearn.linear_model import LogisticRegression
+    from possum.learning import metrics
+    parts = data(root)
+    diagnostic = root / 'ibc-diagnostic'
+    rows = data(diagnostic)['validation']
+    if len(rows) != 97 or any(r['source'] != 'ibc_official_sample' for r in rows):
+        raise ValueError('Expected the established IBC diagnostic')
+    def load(folder, name, ids):
+        path = folder / f'{name}.npz'
+        if not json.loads(path.with_suffix('.json').read_text())['complete']:
+            raise ValueError('Incomplete diagnostic baseline cache')
+        with np.load(path, allow_pickle=False) as z:
+            if z['ids'].tolist() != ids:
+                raise ValueError('Diagnostic baseline alignment mismatch')
+            return z['values']
+    ids = [r['id'] for r in rows]
+    development = sum([parts[p] for p in PARTS], [])
+    features = load(root, 'bert_frozen', [r['id'] for r in development])
+    probe = LogisticRegression(C=1., class_weight='balanced', max_iter=1000, random_state=42)
+    probe.fit(features[:len(parts['fit'])], [r['label'] for r in parts['fit']])
+    raw = {'bert': np.log(np.clip(probe.predict_proba(load(diagnostic, 'bert_frozen', ids)), 1e-7, 1)),
+           'mistral': load(diagnostic, 'mistral_frozen', ids)}
+    comparison = json.loads((root / 'frozen-adapter-comparison.json').read_text())
+    adapted = json.loads((root / 'report.json').read_text())
+    pred = {f'{n}_frozen': softmax(z/comparison['temperatures'][n], axis=1)[:, 1] for n, z in raw.items()}
+    for name in ('bert', 'gliner', 'mistral', 'qwen'):
+        z = load(diagnostic, f'{name}_scores', ids)
+        pred[name] = softmax(z/adapted['temperatures'][name], axis=1)[:, 1]
+    pred['equal_frozen'] = np.column_stack([pred[n] for n in ('bert_frozen', 'gliner', 'mistral_frozen', 'qwen')]).mean(1)
+    pred['equal_adapted'] = np.column_stack([pred[n] for n in ('bert', 'gliner', 'mistral', 'qwen')]).mean(1)
+    report = dict(scope='Previously inspected 97-example human-labeled IBC diagnostic; not a fresh test',
+                  fitting='Same development-fit BERT probe recipe, development-only calibration; no IBC fitting or selection',
+                  metrics={k: metrics(np.array([r['label'] for r in rows]), p) for k, p in pred.items()},
+                  limitations=comparison['limitations'][:2] + ['Original book/author groups are unavailable; no group-bootstrap interval is asserted.'])
+    save_json(diagnostic / 'frozen-adapter-comparison.json', report)
     print(json.dumps(report, indent=2), flush=True)
 
 
@@ -111,18 +163,19 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run', type=Path, required=True)
     parser.add_argument('--worker', choices=['bert', 'mistral'])
+    parser.add_argument('--diagnostic', action='store_true', help='Use fixed development recipes on the existing IBC diagnostic')
     args = parser.parse_args()
     root = args.run.resolve()
     meta = json.loads((root / 'run.json').read_text())
     if meta['status'] != 'complete' or time.time() >= meta['deadline']:
         raise ValueError('Requires completed main evaluation and remaining original budget')
     if args.worker:
-        cache(root, args.worker)
+        cache(root / 'ibc-diagnostic' if args.diagnostic else root, args.worker)
     else:
         import fcntl
         with (root / 'baseline-process.lock').open('w') as lock:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
             for name in ('bert', 'mistral'):
-                subprocess.run([sys.executable, '-u', __file__, '--run', str(root), '--worker', name],
+                subprocess.run([sys.executable, '-u', __file__, '--run', str(root), '--worker', name] + (['--diagnostic'] if args.diagnostic else []),
                                check=True, timeout=max(1, meta['deadline'] - time.time() + 30))
-            evaluate(root)
+            evaluate_diagnostic(root) if args.diagnostic else evaluate(root)

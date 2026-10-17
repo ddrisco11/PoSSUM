@@ -1,0 +1,275 @@
+{
+  "scope": "Matched development partitions; no reserved-test scoring",
+  "counts": {
+    "fit": 7652,
+    "calibration": 1967,
+    "gate": 2195,
+    "validation": 1899
+  },
+  "temperatures": {
+    "bert": 0.7281340235951117,
+    "mistral": 0.6334919427856275
+  },
+  "metrics": {
+    "bert_frozen": {
+      "macro_f1": 0.7904145554737206,
+      "balanced_accuracy": 0.7926185334042113,
+      "log_loss": 0.46282534208116904,
+      "brier": 0.1483574147449588,
+      "ece": 0.021394301385747955
+    },
+    "mistral_frozen": {
+      "macro_f1": 0.7964856369325973,
+      "balanced_accuracy": 0.8075540648444502,
+      "log_loss": 0.4665639656437398,
+      "brier": 0.14547389095934327,
+      "ece": 0.10060286550380672
+    },
+    "bert": {
+      "macro_f1": 0.8156699281150159,
+      "balanced_accuracy": 0.8183926120832119,
+      "log_loss": 0.39623125538788984,
+      "brier": 0.12594423990533585,
+      "ece": 0.05665626435824032
+    },
+    "gliner": {
+      "macro_f1": 0.6694962889312471,
+      "balanced_accuracy": 0.6731965596008889,
+      "log_loss": 0.6278879788261449,
+      "brier": 0.21667369693076358,
+      "ece": 0.06156361961351655
+    },
+    "mistral": {
+      "macro_f1": 0.8374682379304136,
+      "balanced_accuracy": 0.8423472916977128,
+      "log_loss": 0.38112100798475157,
+      "brier": 0.11618285291467298,
+      "ece": 0.07220157069380273
+    },
+    "qwen": {
+      "macro_f1": 0.7785932963960487,
+      "balanced_accuracy": 0.7780138523439777,
+      "log_loss": 0.44493808342271024,
+      "brier": 0.14528786427623247,
+      "ece": 0.030879838350555758
+    },
+    "equal_frozen": {
+      "macro_f1": 0.8362555824805239,
+      "balanced_accuracy": 0.8417767833113508,
+      "log_loss": 0.41464018717125495,
+      "brier": 0.12687599287518767,
+      "ece": 0.11084545855913415
+    },
+    "equal_adapted": {
+      "macro_f1": 0.8509318682550122,
+      "balanced_accuracy": 0.8540632875073121,
+      "log_loss": 0.38509832972372177,
+      "brier": 0.114228725572981,
+      "ece": 0.12379589918971415
+    }
+  },
+  "paired_group_bootstrap": {
+    "bert": {
+      "interval": [
+        -0.10918698912164382,
+        -0.022194290294737205
+      ],
+      "mean": -0.06659408669327915
+    },
+    "mistral": {
+      "interval": [
+        -0.19167188935201668,
+        -0.007216679474735307
+      ],
+      "mean": -0.08544295765898827
+    },
+    "equal_adapted": {
+      "interval": [
+        -0.05894061097791708,
+        -0.005160766442951587
+      ],
+      "mean": -0.029541857447533185
+    }
+  },
+  "by_source": {
+    "Jacobvs/PoliticalTweets": {
+      "bert_frozen": {
+        "macro_f1": 0.7722906841117704,
+        "balanced_accuracy": 0.7803228939996258,
+        "log_loss": 0.4938907046784371,
+        "brier": 0.1603944676211938,
+        "ece": 0.04273643146521142
+      },
+      "mistral_frozen": {
+        "macro_f1": 0.7634799061909717,
+        "balanced_accuracy": 0.7872674986351718,
+        "log_loss": 0.5159115776382184,
+        "brier": 0.16554058189022944,
+        "ece": 0.1213396963060792
+      },
+      "bert": {
+        "macro_f1": 0.8152697617332914,
+        "balanced_accuracy": 0.8251148890580506,
+        "log_loss": 0.395828709850439,
+        "brier": 0.1256486688852474,
+        "ece": 0.06081559459013695
+      },
+      "gliner": {
+        "macro_f1": 0.658237826229644,
+        "balanced_accuracy": 0.6595990352651099,
+        "log_loss": 0.662588508175686,
+        "brier": 0.2304117886450729,
+        "ece": 0.08903489172920537
+      },
+      "mistral": {
+        "macro_f1": 0.8367659523750655,
+        "balanced_accuracy": 0.8469277909775246,
+        "log_loss": 0.3858859329485346,
+        "brier": 0.11715929603584173,
+        "ece": 0.07903062585515784
+      },
+      "qwen": {
+        "macro_f1": 0.7517931961859299,
+        "balanced_accuracy": 0.7508438867231052,
+        "log_loss": 0.47909581525079725,
+        "brier": 0.15817907351222255,
+        "ece": 0.039445902699058656
+      },
+      "equal_frozen": {
+        "macro_f1": 0.8205157029706366,
+        "balanced_accuracy": 0.8343303627495458,
+        "log_loss": 0.4462318008491825,
+        "brier": 0.13951741765823847,
+        "ece": 0.11246461878164675
+      },
+      "equal_adapted": {
+        "macro_f1": 0.8463257925149692,
+        "balanced_accuracy": 0.8545862071616956,
+        "log_loss": 0.39773278408709867,
+        "brier": 0.11874052056994747,
+        "ece": 0.1325974360969954
+      }
+    },
+    "JyotiNayak/political_ideologies": {
+      "bert_frozen": {
+        "macro_f1": 0.9624941397093296,
+        "balanced_accuracy": 0.9624999999999999,
+        "log_loss": 0.19221438536967553,
+        "brier": 0.04435548331319783,
+        "ece": 0.11770911598298942
+      },
+      "mistral_frozen": {
+        "macro_f1": 1.0,
+        "balanced_accuracy": 1.0,
+        "log_loss": 0.026326297622727236,
+        "brier": 0.003481135222689993,
+        "ece": 0.024130136358489224
+      },
+      "bert": {
+        "macro_f1": 0.9348027784046742,
+        "balanced_accuracy": 0.935,
+        "log_loss": 0.1955556940587119,
+        "brier": 0.04944721631460172,
+        "ece": 0.07792689967500242
+      },
+      "gliner": {
+        "macro_f1": 0.7118834608989506,
+        "balanced_accuracy": 0.7325,
+        "log_loss": 0.5146710962112908,
+        "brier": 0.16987951679887217,
+        "ece": 0.09029881064577643
+      },
+      "mistral": {
+        "macro_f1": 0.9924995781012682,
+        "balanced_accuracy": 0.9924999999999999,
+        "log_loss": 0.04999515711144392,
+        "brier": 0.008973288560512951,
+        "ece": 0.04129144489575089
+      },
+      "qwen": {
+        "macro_f1": 0.9924995781012682,
+        "balanced_accuracy": 0.9924999999999999,
+        "log_loss": 0.13660332886613602,
+        "brier": 0.024581590159032336,
+        "ece": 0.10779081565910897
+      },
+      "equal_frozen": {
+        "macro_f1": 0.9974999843749024,
+        "balanced_accuracy": 0.9975,
+        "log_loss": 0.19092732788263242,
+        "brier": 0.03342867664094898,
+        "ece": 0.16874889222125786
+      },
+      "equal_adapted": {
+        "macro_f1": 0.9949998749968749,
+        "balanced_accuracy": 0.995,
+        "log_loss": 0.19399675697483032,
+        "brier": 0.03457587244595692,
+        "ece": 0.17325184218056253
+      }
+    },
+    "manifesto_us_2026_1": {
+      "bert_frozen": {
+        "macro_f1": 0.5994936536795066,
+        "balanced_accuracy": 0.6041407867494824,
+        "log_loss": 0.7477071826672951,
+        "brier": 0.25733780223530156,
+        "ece": 0.15749729681633823
+      },
+      "mistral_frozen": {
+        "macro_f1": 0.5950613543402515,
+        "balanced_accuracy": 0.6048654244306418,
+        "log_loss": 0.936170823846785,
+        "brier": 0.27548762958266926,
+        "ece": 0.21237219223776135
+      },
+      "bert": {
+        "macro_f1": 0.6151356562456962,
+        "balanced_accuracy": 0.615424430641822,
+        "log_loss": 0.7286420443866946,
+        "brier": 0.253392991500088,
+        "ece": 0.16584945418590408
+      },
+      "gliner": {
+        "macro_f1": 0.6043107523681124,
+        "balanced_accuracy": 0.6038302277432712,
+        "log_loss": 0.6348957491262186,
+        "brier": 0.22269274573563597,
+        "ece": 0.07985918666831505
+      },
+      "mistral": {
+        "macro_f1": 0.5425451807228916,
+        "balanced_accuracy": 0.5556935817805383,
+        "log_loss": 0.9015555536424122,
+        "brier": 0.28761253678905996,
+        "ece": 0.24199526425910556
+      },
+      "qwen": {
+        "macro_f1": 0.5542798913043478,
+        "balanced_accuracy": 0.558592132505176,
+        "log_loss": 0.7759331066595517,
+        "brier": 0.2773502134386871,
+        "ece": 0.1512721040418269
+      },
+      "equal_frozen": {
+        "macro_f1": 0.6383928571428572,
+        "balanced_accuracy": 0.6375776397515528,
+        "log_loss": 0.6196034667431566,
+        "brier": 0.2153586964397296,
+        "ece": 0.029606342529616532
+      },
+      "equal_adapted": {
+        "macro_f1": 0.625,
+        "balanced_accuracy": 0.6242236024844721,
+        "log_loss": 0.6343648088148955,
+        "brier": 0.22202430884302088,
+        "ece": 0.05429869263922213
+      }
+    }
+  },
+  "limitations": [
+    "Frozen BERT uses a mean-pooled logistic probe; adapted BERT uses its trained sequence classifier, so this compares complete recipes.",
+    "Mistral uses identical prompts and base revision with versus without LoRA, each independently calibrated on the same calibration partition.",
+    "Group bootstrap is descriptive on 21 development groups, not an independent test or a multiple-selection correction."
+  ]
+}

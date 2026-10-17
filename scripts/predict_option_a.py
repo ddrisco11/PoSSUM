@@ -25,14 +25,23 @@ def predict(export, text):
     probabilities = []
     for name in names:
         if name == 'bert':
-            model, tok = bert_model(export / config['bert_adapter'])
-            model.eval()
-            encoded = tok(text, return_tensors='pt').to('mps')
-            if encoded['input_ids'].shape[1] > 256:
-                raise ValueError('Passage exceeds the BERT token limit')
-            with torch.inference_mode():
-                scores = model(**encoded).logits.cpu().numpy()
-            del encoded, tok
+            if config.get('bert_mode') == 'frozen_probe':
+                from possum.components.bert import BERT
+                model = BERT(device='mps')
+                if len(model.tokenizer.encode(text)) > 256:
+                    raise ValueError('Passage exceeds the BERT token limit')
+                probe = joblib.load(export / config['bert_probe'])
+                scores = np.log(np.clip(probe.predict_proba(model.encode([text])), 1e-7, 1))
+                del probe
+            else:
+                model, tok = bert_model(export / config['bert_adapter'])
+                model.eval()
+                encoded = tok(text, return_tensors='pt').to('mps')
+                if encoded['input_ids'].shape[1] > 256:
+                    raise ValueError('Passage exceeds the BERT token limit')
+                with torch.inference_mode():
+                    scores = model(**encoded).logits.cpu().numpy()
+                del encoded, tok
         elif name == 'gliner':
             torch.set_num_threads(4)
             model = GLiNER()
@@ -40,7 +49,7 @@ def predict(export, text):
         else:
             repo, revision = config['backbones'][name]
             model = MLXCausal.__new__(MLXCausal)
-            adapter = str(export / config['mistral_adapter']) if name == 'mistral' else None
+            adapter = str(export / config['mistral_adapter']) if name == 'mistral' and config.get('mistral_adapter') else None
             model.model, model.tokenizer = load(snapshot_download(repo, revision=revision, local_files_only=True), adapter_path=adapter)
             model.model.eval()
             scores = model.score([text])

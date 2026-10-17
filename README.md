@@ -13,7 +13,7 @@ PoSSUM studies the political viewpoint expressed in short English passages about
 | Task | Binary political slant classification |
 | Labels | `0 = Left`, `1 = Right` |
 | Input | Approximately 20–150 words; English, U.S. politics |
-| Evaluated experts | BERT + fitted classification probe, GLiNER 2.5 base, Mistral 7B v0.3, Qwen3.5 9B |
+| Evaluated experts | BERT and Mistral 7B LoRA; frozen GLiNER 2.5 and Qwen3.5 9B; matched frozen baselines |
 | Routing input | BGE-small, 384-dimensional embeddings |
 | Development selection | Router + capped self contribution, selected by validation log loss |
 | Training status | Completed BERT and Mistral LoRA; frozen GLiNER, Qwen and BGE |
@@ -44,7 +44,9 @@ The paired whole-group bootstrap interval for selected-router minus equal-averag
 
 The admitted split has a substantial coverage gap: Manifesto contributes only **54 fit examples in one group**, no calibration or router-fit examples, and 243 validation examples in one group. Tweets supply 83.6% of adapter-fit data. This is a plausible contributor to weak policy-text transfer, not a causal finding. See the [domain coverage audit](reports/adapter-domain-coverage.json) and [development findings](docs/development-findings.md).
 
-Source differences matter: selected-router macro-F1 is **0.837 on tweets**, **0.995 on synthetic statements**, and **0.561 on Manifesto**. Equal averaging scores 0.625 on Manifesto and has lower Manifesto log loss. The latest scores cannot be treated as direct improvements over the earlier pilot because the data and partitions changed. A matched frozen-versus-adapted comparison is in progress. On the previously inspected 97-example human-labeled IBC sample, transfer remains weak: the selected router scores **0.580 macro-F1 / 0.739 log loss**, versus **0.603 / 0.627** for equal averaging. Frozen Qwen has the highest individual macro-F1, 0.649. The selected router is worse than a constant 0.5 prediction on log loss (0.693), reinforcing that this export is not production-ready. These 97 examples are a diagnostic, not a fresh final test.
+Source differences matter: selected-router macro-F1 is **0.837 on tweets**, **0.995 on synthetic statements**, and **0.561 on Manifesto**. Equal averaging scores 0.625 on Manifesto and has lower Manifesto log loss. The latest scores cannot be treated as direct improvements over the earlier pilot because the data and partitions changed. The matched frozen comparison is complete: BERT improves from **0.790 to 0.816 macro-F1**, and Mistral from **0.796 to 0.837** on the same validation split. Four-expert equal averaging improves from **0.836 / 0.415 log loss** with frozen BERT/Mistral to **0.851 / 0.385** with adapters. Gains are concentrated in tweets; the adapted ensemble is slightly worse on Manifesto. BERT compares a frozen mean-pooled logistic probe against its adapted sequence classifier, so that comparison includes the head recipe. [Matched comparison](reports/frozen-adapter-comparison.json). On the previously inspected 97-example human-labeled IBC sample, transfer remains weak: the selected router scores **0.580 macro-F1 / 0.739 log loss**, versus **0.603 / 0.627** for equal averaging. Frozen Qwen has the highest individual macro-F1, 0.649. The selected router is worse than a constant 0.5 prediction on log loss (0.693), reinforcing that this export is not production-ready. These 97 examples are a diagnostic, not a fresh final test.
+
+The matched IBC comparison exposes a regression: frozen Mistral scores **0.711 macro-F1 / 0.719 log loss**, versus **0.585 / 0.816** after adaptation. The full frozen equal average scores **0.751 / 0.581**, versus **0.603 / 0.627** for the adapted equal average. BERT improves from 0.423 to 0.495 macro-F1 but remains weak. This small, previously inspected diagnostic shows a domain tradeoff, not a basis for declaring either recipe generally superior. [Matched IBC comparison](reports/frozen-adapter-ibc-comparison.json).
 
 A post-hoc subset audit finds that **BERT + Mistral equal averaging** gives 0.848 validation macro-F1 and 0.330 log loss, close to the full router with about 57% less measured scoring compute. Its IBC macro-F1 falls to 0.557, while **GLiNER + Qwen** reaches 0.701 on that small diagnostic. These contrasting results are exploratory and do not justify a universal subset choice. Timing excludes model loading and swapping. [Subset audit](reports/adapter-expert-subsets.json).
 
@@ -116,7 +118,7 @@ Short M2 backward-pass probes confirmed narrow rank-8 QLoRA compatibility for Mi
 
 ## Next development milestones
 
-The next release candidate will be evaluated against the equal-average baseline. Planned work includes:
+Further development will use the completed equal-average, router and frozen-baseline comparisons. Priorities include:
 
 - Expand Manifesto development coverage while preserving held-out documents and existing test boundaries.
 - Evaluate final ensemble calibration and an uncertainty-based abstention policy on separate data.
@@ -169,6 +171,21 @@ Once evaluation completes, use the selected local export:
 
 ```bash
 python scripts/predict_option_a.py --export runs/option-a-20261017/export --text "A political passage of approximately twenty to one hundred and fifty words goes here, expressing the viewpoint to be classified."
+```
+
+An inference-only bundle can be assembled locally:
+
+```bash
+python scripts/package_adapter_export.py --run runs/option-a-20261017
+python scripts/predict_option_a.py --export runs/option-a-20261017/bundle/export --text "A political passage of approximately twenty to one hundred and fifty words goes here, expressing the viewpoint to be classified."
+```
+
+The approximately 3 MB bundle includes adapter weights, calibration, saved heads, aggregate validation and a SHA-256 manifest. It omits optimizer checkpoints, base weights and raw data. It requires the source checkout, dependencies and separately cached pinned base models.
+
+The matched frozen reference is independently reloadable after running the comparison:
+
+```bash
+python scripts/predict_option_a.py --export runs/option-a-20261017/frozen-export --text "A political passage of approximately twenty to one hundred and fifty words goes here, expressing the viewpoint to be classified."
 ```
 
 Adapter weights and score caches remain local. The exported configuration requires its sibling adapter directories and the pinned base models. The end-to-end smoke test verified checkpoint recovery, all four expert scoring paths, router export reloads and fresh-text inference; it is a functionality test, not an accuracy benchmark.

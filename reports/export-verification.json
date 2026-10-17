@@ -1,0 +1,35 @@
+{
+  "scope": "Serialization and inference equivalence checks, not a quality benchmark",
+  "router_reload": {
+    "passed": true,
+    "router_count": 9,
+    "sample_count": 1899
+  },
+  "adapted_raw_text": {
+    "passed": true,
+    "sample_count": 1,
+    "selected": "router_self_43",
+    "max_probability_difference": 1.7775582783485788e-08,
+    "scope": "Reload all backbones and adapters; compare raw-text prediction against cached validation export"
+  },
+  "relocated_bundle": {
+    "passed": true,
+    "sample_count": 1,
+    "selected": "router_self_43",
+    "max_probability_difference": 1.7775582783485788e-08,
+    "scope": "Raw text through relocated inference-only bundle matches original validation export"
+  },
+  "frozen_raw_text": {
+    "passed": true,
+    "sample_count": 1,
+    "max_probability_difference": 1.7564210086362664e-09,
+    "scope": "Raw-text frozen export reproduces cached matched-baseline probability"
+  },
+  "bundle": {
+    "files": 18,
+    "bytes": 3003490,
+    "base_weights_included": false,
+    "optimizer_state_included": false,
+    "raw_data_included": false
+  }
+}

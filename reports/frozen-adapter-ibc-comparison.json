@@ -1,0 +1,67 @@
+{
+  "scope": "Previously inspected 97-example human-labeled IBC diagnostic; not a fresh test",
+  "fitting": "Same development-fit BERT probe recipe, development-only calibration; no IBC fitting or selection",
+  "metrics": {
+    "bert_frozen": {
+      "macro_f1": 0.4226190476190476,
+      "balanced_accuracy": 0.530187074829932,
+      "log_loss": 0.9880887642854366,
+      "brier": 0.32701259504986635,
+      "ece": 0.3056826971250877
+    },
+    "mistral_frozen": {
+      "macro_f1": 0.7105711849957375,
+      "balanced_accuracy": 0.7108843537414966,
+      "log_loss": 0.7189899088417169,
+      "brier": 0.20941262559673002,
+      "ece": 0.1731845195713555
+    },
+    "bert": {
+      "macro_f1": 0.4946080213255786,
+      "balanced_accuracy": 0.560374149659864,
+      "log_loss": 0.8822972468840459,
+      "brier": 0.30661405403919856,
+      "ece": 0.27759552552783706
+    },
+    "gliner": {
+      "macro_f1": 0.5658567774936061,
+      "balanced_accuracy": 0.5676020408163265,
+      "log_loss": 0.6910342289208297,
+      "brier": 0.24682806482097502,
+      "ece": 0.10031850776632545
+    },
+    "mistral": {
+      "macro_f1": 0.58490990990991,
+      "balanced_accuracy": 0.6107568027210885,
+      "log_loss": 0.8156493592019965,
+      "brier": 0.26982104060878637,
+      "ece": 0.23509771457272244
+    },
+    "qwen": {
+      "macro_f1": 0.6485507246376812,
+      "balanced_accuracy": 0.6490221088435374,
+      "log_loss": 0.681764683532741,
+      "brier": 0.23545855188936202,
+      "ece": 0.14171202959022722
+    },
+    "equal_frozen": {
+      "macro_f1": 0.7512820512820513,
+      "balanced_accuracy": 0.7534013605442177,
+      "log_loss": 0.5809337205633093,
+      "brier": 0.19628393597344124,
+      "ece": 0.10346371714294995
+    },
+    "equal_adapted": {
+      "macro_f1": 0.6024590163934427,
+      "balanced_accuracy": 0.6315901360544218,
+      "log_loss": 0.6267291174095091,
+      "brier": 0.21843124411334394,
+      "ece": 0.11527305158859526
+    }
+  },
+  "limitations": [
+    "Frozen BERT uses a mean-pooled logistic probe; adapted BERT uses its trained sequence classifier, so this compares complete recipes.",
+    "Mistral uses identical prompts and base revision with versus without LoRA, each independently calibrated on the same calibration partition.",
+    "Original book/author groups are unavailable; no group-bootstrap interval is asserted."
+  ]
+}
