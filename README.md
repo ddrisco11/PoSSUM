@@ -10,6 +10,8 @@ PoSSUM studies the political viewpoint expressed in short English passages about
 
 **Data revision (October 17):** Manifesto policy-category labels are excluded from new development because isolated passages can lack a self-contained ideological stance. The derived `assembled-v2-no-manifesto` corpus contains 13,416 development passages: 7,598 fit, 1,967 calibration, 2,195 router-fit and 1,656 validation. No model has yet been trained on this revision. Historical results below retain their original Manifesto-containing inputs and are not evidence that Manifesto caused the observed transfer regression. [Exclusion verification](reports/manifesto-exclusion.json) · [Dataset review guide](docs/dataset-review.md).
 
+**Curated dataset v1.0:** A new local unified CSV contains **3,250 reviewed passages**: 1,106 MITweet examples mapped from human ideology facets, 2,113 synthetic examples and 31 previously seen IBC diagnostic sentences. Manifesto and party-only proxy labels are excluded. All records retain source provenance, original labels, review reasons and permitted-use roles. MITweet still needs a group-aware split; IBC must never enter training. This collection is 65% synthetic and its MITweet subset is heavily abortion-focused, so it is not a broad human gold benchmark. No model has been trained on this assembled version. [Dataset documentation](docs/possum-dataset-v1.md) · [Validation manifest](reports/possum-dataset-v1.json).
+
 | Property | Specification |
 |---|---|
 | Task | Binary political slant classification |
@@ -25,7 +27,7 @@ Every enabled expert runs on every passage. This is a dense prediction ensemble,
 
 ## Latest adapted-model evaluation
 
-The expanded run completed one pass over **7,652 expert-fit examples**, followed by calibration on 1,967, router fitting on 2,195 and validation on **1,899 examples across 21 groups**. Validation comprises 1,256 party-labeled tweets, 400 synthetic statements and 243 policy-mapped Manifesto passages. All labels are weak or synthetic. Locked test data remain untouched.
+The expanded run completed one pass over **7,652 expert-fit examples**, followed by calibration on 1,967, router fitting on 2,195 and validation on **1,899 examples across 21 groups**. Validation comprises 1,256 party-labeled tweets, 400 synthetic statements and 243 policy-mapped Manifesto passages. All labels are weak or synthetic. Locked test data were not used for fitting or model selection. Subsequent source auditing exposed 13 reserved synthetic passages; they remain excluded and are not an unseen benchmark.
 
 | Configuration | Validation macro-F1 ↑ | Log loss ↓ |
 |---|---:|---:|
@@ -108,7 +110,7 @@ Candidate counts are not final training sizes. See the [corpus status](docs/corp
 
 An earlier synthetic-trained pilot achieved 0.987 BERT macro-F1 on one synthetic validation topic, but transferred poorly to external text. On 97 human-labeled IBC sentences, BERT scored 0.514, GLiNER 0.566 and the hybrid gate 0.514–0.531 macro-F1. On 300 party-labeled platform passages, the corresponding scores were 0.483, 0.602 and 0.495–0.499. All evaluated models had external log loss worse than a constant 0.5 predictor.
 
-These results belong to the earlier synthetic-trained models, **not the latest four-expert Manifesto configuration**. They demonstrate why synthetic validation alone is insufficient. The public IBC sample lacks original document IDs and is now a previously inspected diagnostic set, not a fresh final benchmark. The separate synthetic test partition remains untouched; its group-constrained split is 75/25.
+These results belong to the earlier synthetic-trained models, **not the latest four-expert Manifesto configuration**. They demonstrate why synthetic validation alone is insufficient. The public IBC sample lacks original document IDs and is now a previously inspected diagnostic set, not a fresh final benchmark. The separate synthetic test partition was not used for these reported scores; its group-constrained split is 75/25. Later source auditing exposed 13 reserved passages, which remain excluded from the new dataset and cannot be treated as unseen.
 
 [External evaluation report](reports/external-evaluation.md) · [Initial synthetic pilot](reports/initial-pilot.md) · [External evaluation protocol](docs/external-evaluation.md)
 
