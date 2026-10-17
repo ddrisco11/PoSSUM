@@ -6,7 +6,7 @@
 
 PoSSUM studies the political viewpoint expressed in short English passages about U.S. politics. It combines calibrated predictions from multiple models and compares equal averaging with learned mixture weights. Neural routing uses 384-dimensional BGE-small embeddings; an optional self-prediction branch lets the routing head contribute its own answer.
 
-**Current status:** BERT and Mistral LoRA adapters have completed one full pass over 7,652 fit examples from the assembled multi-source development corpus. Expert scoring and validation are in progress; new quality results are pending. The frozen four-expert pilot is complete. Equal averaging is the strongest evaluated four-expert configuration. Learned routing has not demonstrated an advantage, and the self-prediction branch shows signs of overfitting. There is no validated production release.
+**Current status:** BERT and Mistral LoRA training, four-expert scoring and routing evaluation are complete on the expanded development corpus. The router with a bounded self contribution has the lowest validation log loss, while simpler averaging has higher macro-F1. Group-level uncertainty and poor Manifesto transfer prevent a general claim that learned routing is better. A reloadable local research export is available; there is no validated production release.
 
 | Property | Specification |
 |---|---|
@@ -15,13 +15,38 @@ PoSSUM studies the political viewpoint expressed in short English passages about
 | Input | Approximately 20–150 words; English, U.S. politics |
 | Evaluated experts | BERT + fitted classification probe, GLiNER 2.5 base, Mistral 7B v0.3, Qwen3.5 9B |
 | Routing input | BGE-small, 384-dimensional embeddings |
-| Best current baseline | Equal average of the four experts' temperature-calibrated probabilities |
-| Training status | Previous pilot: frozen backbones. Current run: BERT and Mistral LoRA; frozen GLiNER and Qwen |
-| Deployment status | Development code and aggregate evaluation reports; no validated release checkpoint |
+| Development selection | Router + capped self contribution, selected by validation log loss |
+| Training status | Completed BERT and Mistral LoRA; frozen GLiNER, Qwen and BGE |
+| Deployment status | Reloadable local adapters and mixture export; fresh human evaluation and abstention remain incomplete |
 
 Every enabled expert runs on every passage. This is a dense prediction ensemble, not sparse routing that avoids expert computation. Component weights and source datasets are downloaded separately.
 
-## Latest evaluation
+## Latest adapted-model evaluation
+
+The expanded run completed one pass over **7,652 expert-fit examples**, followed by calibration on 1,967, router fitting on 2,195 and validation on **1,899 examples across 21 groups**. Validation comprises 1,256 party-labeled tweets, 400 synthetic statements and 243 policy-mapped Manifesto passages. All labels are weak or synthetic. Locked test data remain untouched.
+
+| Configuration | Validation macro-F1 ↑ | Log loss ↓ |
+|---|---:|---:|
+| BERT LoRA | 0.816 | 0.396 |
+| GLiNER, frozen | 0.669 | 0.628 |
+| Mistral LoRA | 0.837 | 0.381 |
+| Qwen, frozen | 0.779 | 0.445 |
+| Four-expert equal average | 0.851 | 0.385 |
+| Learned fixed mixture | 0.852 | 0.353 |
+| Neural router | 0.840 | 0.331 |
+| **Router + capped self contribution** | **0.839** | **0.329** |
+| Equal average without GLiNER, exploratory ablation | 0.857 | 0.336 |
+| BERT/GLiNER equal average | 0.819 | 0.461 |
+
+The predeclared selection metric is validation log loss, so `router_self_43` is the local export. It assigns average weights of 80.6% to Mistral, 9.9% to BERT, 4.6% to self prediction, 3.0% to Qwen and 1.9% to GLiNER. Self weight is capped at 25%; its classifier is fitted on expert-fit data and frozen during routing. Three router seeds give nearly identical results on the same split, not independent replications.
+
+The paired whole-group bootstrap interval for selected-router minus equal-average log loss is **−0.148 to +0.039**, crossing zero. This is a descriptive development interval without selection correction. The small aggregate self-branch gain is also uncertain. These results support further testing, not a statistically established routing advantage or a decision to drop an expert.
+
+Source differences matter: selected-router macro-F1 is **0.837 on tweets**, **0.995 on synthetic statements**, and **0.561 on Manifesto**. Equal averaging scores 0.625 on Manifesto and has lower Manifesto log loss. The latest scores cannot be treated as direct improvements over the earlier pilot because the data and partitions changed. A matched frozen-versus-adapted comparison and public IBC transfer diagnostic are in progress.
+
+[Full adapted evaluation](reports/adapter-development-evaluation.json) · [Group uncertainty](reports/adapter-validation-uncertainty.json) · [Adapter training record](reports/adapter-training.json)
+
+## Earlier frozen four-expert evaluation
 
 The U.S. Manifesto pilot sampled 1,200 candidate passages; filtering and deduplication retained 1,171. Document groups stay separate across probe fitting, temperature calibration, routing-head training, validation and the reserved test partition.
 
@@ -56,7 +81,7 @@ On an M2 Mac with 16 GB unified memory, sequential 4-bit MLX scoring of the 797 
 
 ## Data coverage
 
-Multi-source adapter training is complete; scoring and evaluation are in progress. The table below describes source availability before conservative admission; final assembled counts follow below.
+Multi-source adapter training, scoring and development evaluation are complete. The table below describes source availability before conservative admission; final assembled counts follow below.
 
 | Source | Available eligible candidates | Label / access status |
 |---|---:|---|
@@ -81,7 +106,7 @@ These results belong to the earlier synthetic-trained models, **not the latest f
 
 ## Expanded data preparation and local adaptation
 
-A conservative multi-source assembly is now available locally: **13,713 development passages**, partitioned into 7,652 expert-fit, 1,967 calibration, 2,195 router-fit and 1,899 validation examples. They consist of 11,016 heuristic-screened party-labeled tweets, 2,400 synthetic statements and 297 policy-mapped Manifesto passages. This is a weak/synthetic research dataset, not new human ground truth. Original test identities remain protected; conflicts, missing provenance and unverified candidates are quarantined. The larger model-training run started on October 17, 2026. Both rank-8 adapters completed the full fit partition, while GLiNER and Qwen remain frozen. Measured training compute was 137.2 minutes for Mistral and 2.9 minutes for BERT, excluding loading and checkpoint writes. Mistral peaked at 4.20 GiB of MLX memory. See the [adapter training record](reports/adapter-training.json). New quality measurements are pending.
+A conservative multi-source assembly is now available locally: **13,713 development passages**, partitioned into 7,652 expert-fit, 1,967 calibration, 2,195 router-fit and 1,899 validation examples. They consist of 11,016 heuristic-screened party-labeled tweets, 2,400 synthetic statements and 297 policy-mapped Manifesto passages. This is a weak/synthetic research dataset, not new human ground truth. Original test identities remain protected; conflicts, missing provenance and unverified candidates are quarantined. The larger model-training run started on October 17, 2026. Both rank-8 adapters completed the full fit partition, while GLiNER and Qwen remain frozen. Measured training compute was 137.2 minutes for Mistral and 2.9 minutes for BERT, excluding loading and checkpoint writes. Mistral peaked at 4.20 GiB of MLX memory. See the [adapter training record](reports/adapter-training.json). Development validation is reported above; it does not establish performance on new human-authored text.
 
 Short M2 backward-pass probes confirmed narrow rank-8 QLoRA compatibility for Mistral and Qwen. Their updates were discarded; no quality claim follows. See the [ten-hour training options report](docs/overnight-training-options.md), [assembled corpus report](reports/assembled-corpus.json), and [independent provenance audit](docs/dataset-admission-audit.md) for counts, measured speed/memory, limitations and overnight choices.
 

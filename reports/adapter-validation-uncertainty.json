@@ -1,0 +1,42 @@
+{
+  "selected": "router_self_43",
+  "export_metrics_reproduced": true,
+  "rows": 1899,
+  "groups": 21,
+  "by_source": {
+    "manifesto_us_2026_1": 243,
+    "JyotiNayak/political_ideologies": 400,
+    "Jacobvs/PoliticalTweets": 1256
+  },
+  "comparisons": {
+    "router_self_43_versus_equal": {
+      "interval": [
+        -0.14800385026586194,
+        0.03896802887630897
+      ],
+      "mean": -0.055990328287159434
+    },
+    "router_self_43_versus_mistral": {
+      "interval": [
+        -0.1240363798562717,
+        0.018814796039700665
+      ],
+      "mean": -0.052013006548189245
+    },
+    "router_self_43_versus_router_43": {
+      "interval": [
+        -0.009214079449808784,
+        0.00424093772619302
+      ],
+      "mean": -0.0020789927786075695
+    },
+    "router_43_versus_equal": {
+      "interval": [
+        -0.1515745166923023,
+        0.046604838666832994
+      ],
+      "mean": -0.053911335508551865
+    }
+  },
+  "scope": "Descriptive paired whole-group bootstrap on the same validation set used for model selection; not an independent test or selection-adjusted confidence interval."
+}
