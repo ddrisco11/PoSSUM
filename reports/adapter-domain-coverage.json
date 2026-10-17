@@ -1,0 +1,90 @@
+{
+  "fit": {
+    "Jacobvs/PoliticalTweets": {
+      "examples": 6398,
+      "groups": 58,
+      "labels": {
+        "0": 4313,
+        "1": 2085
+      }
+    },
+    "JyotiNayak/political_ideologies": {
+      "examples": 1200,
+      "groups": 3,
+      "labels": {
+        "1": 600,
+        "0": 600
+      }
+    },
+    "manifesto_us_2026_1": {
+      "examples": 54,
+      "groups": 1,
+      "labels": {
+        "1": 41,
+        "0": 13
+      }
+    }
+  },
+  "calibration": {
+    "Jacobvs/PoliticalTweets": {
+      "examples": 1567,
+      "groups": 21,
+      "labels": {
+        "0": 1206,
+        "1": 361
+      }
+    },
+    "JyotiNayak/political_ideologies": {
+      "examples": 400,
+      "groups": 1,
+      "labels": {
+        "0": 200,
+        "1": 200
+      }
+    }
+  },
+  "gate": {
+    "Jacobvs/PoliticalTweets": {
+      "examples": 1795,
+      "groups": 20,
+      "labels": {
+        "0": 730,
+        "1": 1065
+      }
+    },
+    "JyotiNayak/political_ideologies": {
+      "examples": 400,
+      "groups": 1,
+      "labels": {
+        "1": 200,
+        "0": 200
+      }
+    }
+  },
+  "validation": {
+    "Jacobvs/PoliticalTweets": {
+      "examples": 1256,
+      "groups": 19,
+      "labels": {
+        "1": 693,
+        "0": 563
+      }
+    },
+    "JyotiNayak/political_ideologies": {
+      "examples": 400,
+      "groups": 1,
+      "labels": {
+        "1": 200,
+        "0": 200
+      }
+    },
+    "manifesto_us_2026_1": {
+      "examples": 243,
+      "groups": 1,
+      "labels": {
+        "1": 105,
+        "0": 138
+      }
+    }
+  }
+}
