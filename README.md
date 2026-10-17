@@ -6,7 +6,7 @@
 
 PoSSUM studies the political viewpoint expressed in short English passages about U.S. politics. It combines calibrated predictions from multiple models and compares equal averaging with learned mixture weights. Neural routing uses 384-dimensional BGE-small embeddings; an optional self-prediction branch lets the routing head contribute its own answer.
 
-**Current status:** the frozen four-expert pilot is complete. Equal averaging is the strongest evaluated four-expert configuration. Learned routing has not demonstrated an advantage, and the self-prediction branch shows signs of overfitting. There is no validated production release.
+**Current status:** a larger BERT/Mistral LoRA training run is in progress on the assembled multi-source development corpus. New validation results are pending. The frozen four-expert pilot is complete. Equal averaging is the strongest evaluated four-expert configuration. Learned routing has not demonstrated an advantage, and the self-prediction branch shows signs of overfitting. There is no validated production release.
 
 | Property | Specification |
 |---|---|
@@ -16,7 +16,7 @@ PoSSUM studies the political viewpoint expressed in short English passages about
 | Evaluated experts | BERT + fitted classification probe, GLiNER 2.5 base, Mistral 7B v0.3, Qwen3.5 9B |
 | Routing input | BGE-small, 384-dimensional embeddings |
 | Best current baseline | Equal average of the four experts' temperature-calibrated probabilities |
-| Training status | All expert backbones frozen; classification probe, temperatures and mixture heads fitted separately |
+| Training status | Previous pilot: frozen backbones. Current run: BERT and Mistral LoRA; frozen GLiNER and Qwen |
 | Deployment status | Development code and aggregate evaluation reports; no validated release checkpoint |
 
 Every enabled expert runs on every passage. This is a dense prediction ensemble, not sparse routing that avoids expert computation. Component weights and source datasets are downloaded separately.
@@ -56,7 +56,7 @@ On an M2 Mac with 16 GB unified memory, sequential 4-bit MLX scoring of the 797 
 
 ## Data coverage
 
-The complete multi-source training run has not been performed. Downloaded candidates still require source-specific admission checks and cross-source leakage controls.
+The complete multi-source training run is in progress. The table below describes source availability before conservative admission; final assembled counts follow below.
 
 | Source | Available eligible candidates | Label / access status |
 |---|---:|---|
@@ -64,7 +64,7 @@ The complete multi-source training run has not been performed. Downloaded candid
 | U.S. Manifesto | 4,289 | Human policy codes mapped to weak binary labels across 12 documents; only a subset used in the latest pilot. |
 | Party Platform Topics | 8,535 | Party-derived labels; original document provenance needs recovery or conservative whole-source placement. |
 | GPT-4 Political Ideologies | 3,200 | Synthetic; retained as a separately identifiable source. |
-| Political Tweets | 114,183 | Party-derived candidates across 481 author identities; politicalness filtering remains outstanding. |
+| Political Tweets | 114,183 | Party-derived candidates across 481 author identities; 11,850 pass a conservative politicalness/stance heuristic before assembly. |
 | GPT-4 Political Bias | 0 under the current length rule | Non-neutral examples fall below the 20-word minimum. |
 | Qbias | Pending | Raw source acquisition remains outstanding. |
 | SCCC | Pending text access | Public metadata and partisan scores do not supply the full message text. |
@@ -81,7 +81,7 @@ These results belong to the earlier synthetic-trained models, **not the latest f
 
 ## Expanded data preparation and local adaptation
 
-A conservative multi-source assembly is now available locally: **13,713 development passages**, partitioned into 7,652 expert-fit, 1,967 calibration, 2,195 router-fit and 1,899 validation examples. They consist of 11,016 heuristic-screened party-labeled tweets, 2,400 synthetic statements and 297 policy-mapped Manifesto passages. This is a weak/synthetic research dataset, not new human ground truth. Original test identities remain protected; conflicts, missing provenance and unverified candidates are quarantined. The larger model-training run has not started.
+A conservative multi-source assembly is now available locally: **13,713 development passages**, partitioned into 7,652 expert-fit, 1,967 calibration, 2,195 router-fit and 1,899 validation examples. They consist of 11,016 heuristic-screened party-labeled tweets, 2,400 synthetic statements and 297 policy-mapped Manifesto passages. This is a weak/synthetic research dataset, not new human ground truth. Original test identities remain protected; conflicts, missing provenance and unverified candidates are quarantined. The larger model-training run started on October 17, 2026. It fits rank-8 adapters for BERT and Mistral while keeping GLiNER and Qwen frozen. New quality measurements are pending.
 
 Short M2 backward-pass probes confirmed narrow rank-8 QLoRA compatibility for Mistral and Qwen. Their updates were discarded; no quality claim follows. See the [ten-hour training options report](docs/overnight-training-options.md), [assembled corpus report](reports/assembled-corpus.json), and [independent provenance audit](docs/dataset-admission-audit.md) for counts, measured speed/memory, limitations and overnight choices.
 
@@ -93,7 +93,7 @@ The next release candidate will be evaluated against the equal-average baseline.
 - Evaluate final ensemble calibration and an uncertainty-based abstention policy on separate data.
 - Compare cheaper expert subsets to quantify the accuracy–latency tradeoff.
 - Evaluate on fresh human-labeled political, neutral, ambiguous and nonpolitical passages.
-- Revisit regularized routing and backbone fine-tuning only with stronger baselines and broader evaluation.
+- Compare the adapted experts and regularized routing against fixed and equal-weight baselines on the expanded development split.
 
 These milestones are not established release capabilities. A confidence threshold alone does not detect neutrality or nonpolitical content.
 
@@ -108,7 +108,7 @@ Representative human-text evaluation, robust abstention and broader domain testi
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-pip install -e '.[dev,gliner,mlx,data]'
+pip install -e '.[dev,gliner,mlx,data,adapters]'
 pytest
 possum --help
 ```
@@ -125,6 +125,24 @@ python -u scripts/run_frozen_four.py >> runs/frozen-four-42/pipeline.log 2>&1
 The pipeline first produces compact-model diagnostics, then scores Mistral and Qwen. Its **final** report, `runs/frozen-four-42/four-expert-report.json`, compares exactly BERT, GLiNER, Mistral and Qwen, with an optional self-prediction branch. Intermediate compact-model results use a different set of components.
 
 Use the same command to resume only after the previous process has stopped. Expert scoring checkpoints save every ten passages using atomic replacement and disk synchronization. Completed expert caches are reused before loading weights. Interrupted routing fits restart; their cached expert scores remain available. Checkpoints live in ignored `runs/`, not on GitHub.
+
+## Adapter training and inference
+
+The [local adaptation protocol](docs/local-adaptation.md) describes immutable partitions, recoverable checkpoints and export selection. After assembling `data/assembled-v1`, run:
+
+```bash
+python -u scripts/run_option_a.py --run runs/option-a-20261017 --hours 8
+```
+
+The pipeline trains Mistral and BERT sequentially, caches the five components, then calibrates and compares nine mixture fits plus equal averaging and ablations. The self-prediction branch is fitted only on the expert-fit partition and frozen during router training, with its mixture weight capped at 25%. A fixed absolute cutoff can be supplied with `--deadline` as a timezone-qualified ISO timestamp. Resuming preserves the original cutoff.
+
+Once evaluation completes, use the selected local export:
+
+```bash
+python scripts/predict_option_a.py --export runs/option-a-20261017/export --text "A political passage of approximately twenty to one hundred and fifty words goes here, expressing the viewpoint to be classified."
+```
+
+Adapter weights and score caches remain local. The exported configuration requires its sibling adapter directories and the pinned base models. The end-to-end smoke test verified checkpoint recovery, all four expert scoring paths, router export reloads and fresh-text inference; it is a functionality test, not an accuracy benchmark.
 
 ## Live training monitor
 

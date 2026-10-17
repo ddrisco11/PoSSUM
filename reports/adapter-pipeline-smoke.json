@@ -1,0 +1,32 @@
+{
+  "scope": "Functionality check only; no accuracy benchmark",
+  "counts": {
+    "fit": 8,
+    "calibration": 4,
+    "gate": 4,
+    "validation": 4
+  },
+  "mistral_checkpoint_replay": {
+    "passed": true,
+    "max_parameter_difference": 0.0,
+    "scope": "One update after optimizer+adapter reload with deterministic order and zero dropout on identical next example"
+  },
+  "router_reload": {
+    "passed": true,
+    "router_count": 9,
+    "sample_count": 4
+  },
+  "completed_stages": [
+    "mistral_train",
+    "bert_train",
+    "bge_score",
+    "bert_score",
+    "gliner_score",
+    "mistral_score",
+    "qwen_score",
+    "evaluate"
+  ],
+  "fresh_text_export_inference": "passed",
+  "tkinter_monitor_open": "passed",
+  "tests_passed": 21
+}

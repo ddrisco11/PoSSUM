@@ -39,6 +39,21 @@ def snapshot(run):
     except OSError:
         text, age = '', None
     text = re.sub(r'\x1b\[[0-9;]*[A-Za-z]', '', text).replace('\r', '\n')
+    meta = read_json(run / 'run.json')
+    if 'input_sha256' in meta:
+        rows = []
+        for name in ('mistral_train', 'bert_train', 'bge_score', 'bert_score', 'gliner_score', 'mistral_score', 'qwen_score', 'evaluate'):
+            progress = read_json(run / f'{name}_progress.json')
+            count, n = progress.get('completed', 0), progress.get('total', 0)
+            state = progress.get('status', 'loading' if meta.get('stage') == name else 'queued')
+            elapsed = progress.get('seconds')
+            speed = elapsed / count if elapsed and count else None
+            eta = (n-count)*speed if n and speed else None
+            rows.append((name.replace('_', ' ').upper(), state.title(), f'{count:,} / {n:,}' if n else '—',
+                         f'{count/n:.0%}' if n else '—', duration(elapsed), f'{speed:.2f} s' if speed else '—', duration(eta)))
+        deadline = dt.datetime.fromtimestamp(meta['deadline']).astimezone().strftime('%H:%M %Z') if meta.get('deadline') else 'pending'
+        stage = f"{meta.get('status', 'preparing')} · {meta.get('stage', '')} · Deadline {deadline}"
+        return rows, stage, text, age, read_json(run / 'report.json')
     split = read_json(run / 'split.json').get('pilot', {})
     total = sum(len(ids) for ids in split.values())
     compact = read_json(run / 'report.json')
@@ -94,18 +109,18 @@ class Monitor:
         main = ttk.Frame(window, padding=20)
         main.pack(fill='both', expand=True)
         ttk.Label(main, text='PoSSUM', style='Title.TLabel').pack(anchor='w')
-        ttk.Label(main, text='Frozen experts · neural routing + self prediction').pack(anchor='w', pady=(2, 12))
+        ttk.Label(main, text='Sequential experts · adapter training and neural routing').pack(anchor='w', pady=(2, 12))
         self.stage = ttk.Label(main, style='Stage.TLabel')
         self.stage.pack(anchor='w')
         self.updated = ttk.Label(main)
         self.updated.pack(anchor='w', pady=(5, 12))
         columns = ('component', 'state', 'passages', 'percent', 'elapsed', 'speed', 'eta')
-        self.table = ttk.Treeview(main, columns=columns, show='headings', height=6, selectmode='none')
-        for key, title, width in zip(columns, ('Component', 'State', 'Scored', 'Progress', 'Scoring time', 'Per passage', 'Stage ETA'), (155, 170, 130, 85, 110, 100, 110)):
+        self.table = ttk.Treeview(main, columns=columns, show='headings', height=8, selectmode='none')
+        for key, title, width in zip(columns, ('Component', 'State', 'Passages', 'Progress', 'Compute time', 'Per passage', 'Stage ETA'), (155, 170, 130, 85, 110, 100, 110)):
             self.table.heading(key, text=title)
             self.table.column(key, width=width, minwidth=70)
         self.table.pack(fill='x')
-        for i in range(6):
+        for i in range(8):
             self.table.insert('', 'end', iid=str(i))
         ttk.Label(main, text='ETA covers the current scoring stage only; downloads, loading and queued models are excluded.').pack(anchor='w', pady=(8, 2))
         ttk.Label(main, text='Refreshes every 2 seconds. No recent log output can mean a download or model load is still running.').pack(anchor='w')
@@ -140,7 +155,7 @@ class Monitor:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--run', type=Path, default=ROOT / 'runs/frozen-four-42')
+    parser.add_argument('--run', type=Path, default=ROOT / ('runs/option-a-20261017' if (ROOT / 'runs/option-a-20261017/run.json').exists() else 'runs/frozen-four-42'))
     parser.add_argument('--smoke-test', action='store_true', help=argparse.SUPPRESS)
     args = parser.parse_args()
     window = tk.Tk()
