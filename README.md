@@ -180,7 +180,7 @@ python scripts/package_adapter_export.py --run runs/option-a-20261017
 python scripts/predict_option_a.py --export runs/option-a-20261017/bundle/export --text "A political passage of approximately twenty to one hundred and fifty words goes here, expressing the viewpoint to be classified."
 ```
 
-The approximately 3 MB bundle includes adapter weights, calibration, saved heads, aggregate validation and a SHA-256 manifest. It omits optimizer checkpoints, base weights and raw data. It requires the source checkout, dependencies and separately cached pinned base models.
+The approximately 3 MB bundle includes adapter weights, calibration, saved heads, aggregate validation and a SHA-256 manifest. It omits optimizer checkpoints, base weights and raw data. It requires the source checkout, dependencies and separately cached pinned base models. Both the relocated adapter bundle and the frozen reference passed raw-text prediction equivalence checks; both adapter optimizer-recovery checks passed. [Verification record](reports/export-verification.json).
 
 The matched frozen reference is independently reloadable after running the comparison:
 

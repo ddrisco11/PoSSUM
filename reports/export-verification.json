@@ -31,5 +31,29 @@
     "base_weights_included": false,
     "optimizer_state_included": false,
     "raw_data_included": false
+  },
+  "bert_optimizer_rng_recovery": {
+    "passed": true,
+    "checkpoint_examples": 7652,
+    "max_parameter_difference": 0.0,
+    "original_artifacts_unchanged": true,
+    "scope": "Replay one discarded fit-data update after restoring adapter, AdamW state and CPU/MPS RNG from the final checkpoint"
+  },
+  "mistral_optimizer_recovery": {
+    "passed": true,
+    "max_parameter_difference": 0.0,
+    "scope": "One update after optimizer+adapter reload with deterministic order and zero dropout on identical next example"
+  },
+  "final_integrity": {
+    "input_hashes_match": true,
+    "development_ids_and_groups_disjoint": true,
+    "score_caches_complete_aligned_finite": {
+      "bge": 13713,
+      "bert": 6061,
+      "gliner": 6061,
+      "mistral": 6061,
+      "qwen": 6061
+    },
+    "bundle_hashes_match": true
   }
 }
