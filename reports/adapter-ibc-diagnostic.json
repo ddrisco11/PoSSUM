@@ -1,0 +1,131 @@
+{
+  "scope": "Previously inspected human-labeled public IBC diagnostic; not a fresh final test",
+  "count": 97,
+  "selected_before_diagnostic": "router_self_43",
+  "calibration_and_heads": "Loaded unchanged from development export; no diagnostic fitting or selection",
+  "metrics": {
+    "bert": {
+      "macro_f1": 0.4946080213255786,
+      "balanced_accuracy": 0.560374149659864,
+      "log_loss": 0.8822972468840459,
+      "brier": 0.30661405403919856,
+      "ece": 0.27759552552783706
+    },
+    "gliner": {
+      "macro_f1": 0.5658567774936061,
+      "balanced_accuracy": 0.5676020408163265,
+      "log_loss": 0.6910342289208297,
+      "brier": 0.24682806482097502,
+      "ece": 0.10031850776632545
+    },
+    "mistral": {
+      "macro_f1": 0.58490990990991,
+      "balanced_accuracy": 0.6107568027210885,
+      "log_loss": 0.8156493592019965,
+      "brier": 0.26982104060878637,
+      "ece": 0.23509771457272244
+    },
+    "qwen": {
+      "macro_f1": 0.6485507246376812,
+      "balanced_accuracy": 0.6490221088435374,
+      "log_loss": 0.681764683532741,
+      "brier": 0.23545855188936202,
+      "ece": 0.14171202959022722
+    },
+    "equal": {
+      "macro_f1": 0.6024590163934427,
+      "balanced_accuracy": 0.6315901360544218,
+      "log_loss": 0.6267291174095091,
+      "brier": 0.21843124411334394,
+      "ece": 0.11527305158859526
+    },
+    "compact_equal": {
+      "macro_f1": 0.540719696969697,
+      "balanced_accuracy": 0.5909863945578231,
+      "log_loss": 0.6951889783865486,
+      "brier": 0.24725503026789142,
+      "ece": 0.11591085903251762
+    },
+    "self_only": {
+      "macro_f1": 0.4141501294219154,
+      "balanced_accuracy": 0.4987244897959184,
+      "log_loss": 1.2865917734430452,
+      "brier": 0.3760887114548811,
+      "ece": 0.37713784896363334
+    },
+    "fixed_42": {
+      "macro_f1": 0.5890301156532692,
+      "balanced_accuracy": 0.6213860544217688,
+      "log_loss": 0.6522812898701822,
+      "brier": 0.23024595950667093,
+      "ece": 0.1298103760010498
+    },
+    "fixed_43": {
+      "macro_f1": 0.5890301156532692,
+      "balanced_accuracy": 0.6213860544217688,
+      "log_loss": 0.6522812898701822,
+      "brier": 0.23024595950667093,
+      "ece": 0.1298103760010498
+    },
+    "fixed_44": {
+      "macro_f1": 0.5890301156532692,
+      "balanced_accuracy": 0.6213860544217688,
+      "log_loss": 0.6522812898701822,
+      "brier": 0.23024595950667093,
+      "ece": 0.1298103760010498
+    },
+    "router_42": {
+      "macro_f1": 0.5936827804822824,
+      "balanced_accuracy": 0.6211734693877551,
+      "log_loss": 0.727770313612519,
+      "brier": 0.2545582984549264,
+      "ece": 0.2011694473767936
+    },
+    "router_43": {
+      "macro_f1": 0.5936827804822824,
+      "balanced_accuracy": 0.6211734693877551,
+      "log_loss": 0.727773549201717,
+      "brier": 0.2545598955106109,
+      "ece": 0.2011778546054007
+    },
+    "router_44": {
+      "macro_f1": 0.5936827804822824,
+      "balanced_accuracy": 0.6211734693877551,
+      "log_loss": 0.727789754040824,
+      "brier": 0.2545597726441756,
+      "ece": 0.2011813900344897
+    },
+    "router_self_42": {
+      "macro_f1": 0.5803734061930783,
+      "balanced_accuracy": 0.610969387755102,
+      "log_loss": 0.7389668794802262,
+      "brier": 0.2584947342589247,
+      "ece": 0.21553504647822314
+    },
+    "router_self_43": {
+      "macro_f1": 0.5803734061930783,
+      "balanced_accuracy": 0.610969387755102,
+      "log_loss": 0.7389587653072849,
+      "brier": 0.25849478480346855,
+      "ece": 0.21553016635259037
+    },
+    "router_self_44": {
+      "macro_f1": 0.5803734061930783,
+      "balanced_accuracy": 0.610969387755102,
+      "log_loss": 0.7389595398856741,
+      "brier": 0.25849340933995046,
+      "ece": 0.21553162820093374
+    }
+  },
+  "constant_half": {
+    "macro_f1": 0.3310344827586207,
+    "balanced_accuracy": 0.5,
+    "log_loss": 0.6931471805599453,
+    "brier": 0.25,
+    "ece": 0.005154639175257714
+  },
+  "limitations": [
+    "Only 97 sentences; original book/author groups unavailable.",
+    "This sample has already been inspected during earlier development."
+  ]
+}
