@@ -1,0 +1,48 @@
+{
+  "source": "Jacobvs/PoliticalTweets",
+  "rule_version": "policy-stance-v1",
+  "input_sha256": "3d9bceb6a8563022acf2fcd99a178ccee146eeb8166acd5eae9b1d2cdcd085c2",
+  "counts": {
+    "input": 114183,
+    "ceremonial_prefix": 3068,
+    "no_explicit_policy_domain": 59978,
+    "eligible": 11850,
+    "no_explicit_stance_cue": 7692,
+    "truncated": 31234,
+    "service_or_promotion_template": 361
+  },
+  "eligible_labels": {
+    "0": 7495,
+    "1": 4355
+  },
+  "eligible_author_groups": 175,
+  "input_author_groups": 481,
+  "eligible_policy_domain_counts_nonexclusive": {
+    "government": 1265,
+    "immigration": 882,
+    "justice_rights": 1973,
+    "tax_budget": 3209,
+    "labor_economy": 733,
+    "healthcare": 2379,
+    "environment_energy": 1647,
+    "foreign_defense": 873,
+    "education": 64
+  },
+  "paths": {
+    "eligible": "data/tweet-admission-v1/eligible.jsonl",
+    "quarantine": "data/tweet-admission-v1/quarantine.jsonl"
+  },
+  "output_sha256": {
+    "eligible.jsonl": "2f6b526727e763f1595795a3c5f2da0932eca373bb5d3c9f2eba46f47d9418b4",
+    "quarantine.jsonl": "1eac9be982c80676c8c1b85d1a7224c331815cdfc41efd2b089318a1e6e26ae1"
+  },
+  "policy": "Require an explicit policy-domain match plus a stance cue; reject truncated endings, retweets, ceremonial prefixes, service/promotion templates, invalid metadata and out-of-range lengths. Preserve all author group IDs. No label is changed.",
+  "limitations": [
+    "Party affiliation remains a weak proxy for expressed ideology, including for eligible passages.",
+    "Politicalness and viewpoint are not human verified; admission precision and recall have not been measured.",
+    "A stance cue can occur in a quotation or unrelated clause; sarcasm, negation and topic-label confounding remain.",
+    "The English policy lexicon is selective and favors explicit vocabulary. Quarantine is not a nonpolitical ground-truth class.",
+    "All cross-source deduplication and author-separated split assignment must happen after this admission step.",
+    "Eligible data belongs only in an identifiable weak-supervision tier, not a human-verified evaluation set."
+  ]
+}

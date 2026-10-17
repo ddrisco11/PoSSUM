@@ -79,6 +79,12 @@ These results belong to the earlier synthetic-trained models, **not the latest f
 
 [External evaluation report](reports/external-evaluation.md) · [Initial synthetic pilot](reports/initial-pilot.md) · [External evaluation protocol](docs/external-evaluation.md)
 
+## Expanded data preparation and local adaptation
+
+A conservative multi-source assembly is now available locally: **13,713 development passages**, partitioned into 7,652 expert-fit, 1,967 calibration, 2,195 router-fit and 1,899 validation examples. They consist of 11,016 heuristic-screened party-labeled tweets, 2,400 synthetic statements and 297 policy-mapped Manifesto passages. This is a weak/synthetic research dataset, not new human ground truth. Original test identities remain protected; conflicts, missing provenance and unverified candidates are quarantined. The larger model-training run has not started.
+
+Short M2 backward-pass probes confirmed narrow rank-8 QLoRA compatibility for Mistral and Qwen. Their updates were discarded; no quality claim follows. See the [ten-hour training options report](docs/overnight-training-options.md), [assembled corpus report](reports/assembled-corpus.json), and [independent provenance audit](docs/dataset-admission-audit.md) for counts, measured speed/memory, limitations and overnight choices.
+
 ## Next development milestones
 
 The next release candidate will be evaluated against the equal-average baseline. Planned work includes:

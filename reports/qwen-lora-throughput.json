@@ -1,0 +1,51 @@
+{
+  "model": "mlx-community/Qwen3.5-9B-4bit",
+  "revision": "8b2b98c00a6b4d291155e4890773ca8f769aee53",
+  "method": "4-bit QLoRA, rank8, selected attention projections within last4layers",
+  "lora_config": {
+    "rank": 8,
+    "scale": 16.0,
+    "dropout": 0.0,
+    "keys": [
+      "self_attn.q_proj",
+      "self_attn.v_proj",
+      "linear_attn.in_proj_qkv",
+      "linear_attn.in_proj_z"
+    ]
+  },
+  "device": "Apple M2 16GB",
+  "trainable_parameters": 630784,
+  "batch_size": 1,
+  "gradient_checkpointing": true,
+  "max_input_tokens": 256,
+  "token_lengths": [
+    61,
+    65,
+    67,
+    70,
+    73,
+    77,
+    85,
+    114
+  ],
+  "step_seconds": [
+    2.7266409160001785,
+    3.0326910840012715,
+    2.5640876659963396,
+    2.05385324999952,
+    2.040732207999099,
+    2.6884728750010254,
+    3.462975334005023,
+    4.707854625004984
+  ],
+  "warmup_steps": 2,
+  "mean_seconds_per_example": 2.919662659667665,
+  "median_seconds_per_example": 2.6262802704986825,
+  "peak_mlx_gib": 6.730922779068351,
+  "limitations": [
+    "Bounded timing probe; adapter updates discarded. No accuracy claim.",
+    "No optimizer compilation; length-varied passages from existing fit partition only.",
+    "Excludes loading, data cleaning, evaluation, checkpoint I/O, long-run thermal throttling and competing workloads.",
+    "Training selected attention projections within the last four layers; not full-model fine-tuning or all-layer LoRA."
+  ]
+}

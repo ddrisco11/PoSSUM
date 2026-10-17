@@ -1,0 +1,148 @@
+{
+  "version": "assembled-v1",
+  "raw_counts": {
+    "manifesto_us_2026_1": 4289,
+    "JyotiNayak/political_ideologies": 3200,
+    "mlburnham/dem_rep_party_platform_topics": 8535,
+    "Jacobvs/PoliticalTweets": 114183,
+    "ibc_official_sample": 97
+  },
+  "input_rows": 130304,
+  "unique_candidates": 129351,
+  "exact_duplicate_occurrences": 953,
+  "initial_exclusions": {},
+  "partitions": {
+    "quarantine": 111558,
+    "validation": 1899,
+    "calibration": 1967,
+    "gate": 2195,
+    "protected_test": 3983,
+    "fit": 7652,
+    "external_diagnostic": 97
+  },
+  "admitted_development": 13713,
+  "development_by_tier": {
+    "synthetic": 2400,
+    "heuristic_weak": 11016,
+    "policy_mapping": 297
+  },
+  "development_by_partition_and_label": {
+    "fit": {
+      "1": 2726,
+      "0": 4926
+    },
+    "calibration": {
+      "0": 1406,
+      "1": 561
+    },
+    "gate": {
+      "1": 1265,
+      "0": 930
+    },
+    "validation": {
+      "1": 998,
+      "0": 901
+    }
+  },
+  "quarantine_reasons": {
+    "legacy_partition_collision": 1084,
+    "tweet_politicalness_or_stance_unverified": 102333,
+    "platform_document_ids_missing": 8044,
+    "previously_seen_external_diagnostic": 397,
+    "exact_duplicate_label_conflict": 158,
+    "near_duplicate_label_conflict": 18
+  },
+  "legacy_partition_collision_components": 1,
+  "source_summary": {
+    "Jacobvs/PoliticalTweets": {
+      "unique_rows": 114183,
+      "splits": {
+        "quarantine": 102335,
+        "fit": 6398,
+        "protected_test": 832,
+        "gate": 1795,
+        "calibration": 1567,
+        "validation": 1256
+      },
+      "development_groups": 118
+    },
+    "JyotiNayak/political_ideologies": {
+      "unique_rows": 3200,
+      "splits": {
+        "fit": 1200,
+        "gate": 400,
+        "calibration": 400,
+        "protected_test": 800,
+        "validation": 400
+      },
+      "development_groups": 6
+    },
+    "ibc_official_sample": {
+      "unique_rows": 97,
+      "splits": {
+        "external_diagnostic": 97
+      },
+      "development_groups": 0
+    },
+    "manifesto_us_2026_1": {
+      "unique_rows": 3827,
+      "splits": {
+        "quarantine": 1179,
+        "protected_test": 2351,
+        "validation": 243,
+        "fit": 54
+      },
+      "development_groups": 2
+    },
+    "mlburnham/dem_rep_party_platform_topics": {
+      "unique_rows": 8044,
+      "splits": {
+        "quarantine": 8044
+      },
+      "development_groups": 0
+    }
+  },
+  "near_duplicates": {
+    "candidate_pairs_verified": 2375,
+    "verified_edges": 118,
+    "conflicting_edges": 9,
+    "crowded_bucket_events": 0,
+    "method": "64-permutation MinHash, 16 bands of 4; exact hashed word-trigram Jaccard >= 0.85",
+    "limitations": "Probabilistic candidate recall; not semantic paraphrase detection. Crowded buckets quarantine rather than silently skip. Existing Manifesto char-TFIDF 0.93 closure is additionally retained."
+  },
+  "protected": {
+    "original_reserved_ids": 1174,
+    "closure_ids": 21198,
+    "closure_group_ids": 133,
+    "invariant": "No protected ID or source group admitted to development"
+  },
+  "test_inventory": {
+    "original_test_eligible": 1159,
+    "original_test_quarantined": 15,
+    "duplicate_closure_buffer": 1992,
+    "new_author_group_weak_holdout": 832,
+    "warning": "protected_test.jsonl is a protection inventory, not a replacement final test. Keep original IDs and report quarantined original IDs explicitly. Closure buffers must not be scored as fresh final examples; new weak tweet holdout is not human-verified."
+  },
+  "input_sha256": {
+    "data/frozen-four-pilot.jsonl": "1951287e350176c5ab7a196f4faaf9a448aea75ac22bf80517691c11ebd2fa5a",
+    "runs/frozen-four-42/split.json": "9c74342883cd1163086e3fd26537631ba467b36efb0d3df66f0cf471edf3c4d2",
+    "data/synthetic.jsonl": "149ff799474036143b349805141667b925f3d8818c50e1e73952b39fe0f7468b",
+    "runs/synthetic-42/split.json": "73656e3436fba6d795d92a1b173389b9f21646f03244810fb5218b19335d66a9",
+    "data/tweet-admission-v1/eligible.jsonl": "2f6b526727e763f1595795a3c5f2da0932eca373bb5d3c9f2eba46f47d9418b4",
+    "data/manifesto/candidates.jsonl": "eb1d6470f437660fb8dfb1e3e6c8b4e391843264afd25f4dc7848d9a62a16b23",
+    "data/available/mlburnham_dem_rep_party_platform_topics/candidates.jsonl": "0dc8ee66331ee7201540f8effec5889308210484117b5b449c197dd47284f4c9",
+    "data/available/Jacobvs_PoliticalTweets/candidates.jsonl": "3d9bceb6a8563022acf2fcd99a178ccee146eeb8166acd5eae9b1d2cdcd085c2",
+    "data/external/external.jsonl": "c8f389a32974bb5ead37a4d3114e3b71d814b10931c48d075a4f663bd4305ebf"
+  },
+  "elapsed_seconds": 14.81813907623291,
+  "interpretation": [
+    "Policy labels are weak mappings of human policy annotations, not human binary ideology judgments.",
+    "Tweets remain author-party weak supervision even after heuristic policy/stance filtering; neither politicalness nor viewpoint labels are human verified.",
+    "Synthetic issue groups are proxies; missing generation-batch provenance limits independence.",
+    "Prior test/document closures and all unambiguous legacy development partitions are retained. Joined legacy development partitions are quarantined.",
+    "IBC is previously seen diagnostic-only; platform rows lack document IDs and are quarantined.",
+    "Group holdouts target 80/20 for new groups; row ratios differ. No reserved test scores or labels are summarized.",
+    "Use explicit split files: only fit is for backbone adaptation; calibration, gate and validation are separate. Do not re-split development.jsonl.",
+    "Research admission does not establish permission to redistribute source text or commercial model weights."
+  ]
+}
