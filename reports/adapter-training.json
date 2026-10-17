@@ -1,0 +1,34 @@
+{
+  "status": "adapter_training_complete_evaluation_pending",
+  "run": "option-a-20261017",
+  "training": {
+    "bert": {
+      "model_id": "google-bert/bert-base-uncased",
+      "revision": "86b5e0934494bd15c9632b12f734a8a67f723594",
+      "input_sha256": "5604455198db5fd878a11fd1cc418b3bda79372447a1c30a8bf56eb63e87c33a",
+      "examples_seen": 7652,
+      "total_fit": 7652,
+      "full_pass": true,
+      "partial": false,
+      "seconds": 172.05977234005695,
+      "adapter_sha256": "48d1bb2023c0582d65a72ecbf1abe7a43d72845d38cc3873b3a063aadfa5696e",
+      "trainable_parameters": 296450
+    },
+    "mistral": {
+      "model_id": "mlx-community/Mistral-7B-v0.3-4bit",
+      "revision": "5e8b40756eaa1cb5131715937c77107b4421c3a5",
+      "input_sha256": "5604455198db5fd878a11fd1cc418b3bda79372447a1c30a8bf56eb63e87c33a",
+      "examples_seen": 7652,
+      "total_fit": 7652,
+      "full_pass": true,
+      "partial": false,
+      "seconds": 8232.536073681018,
+      "resume_verified": true,
+      "adapter_sha256": "3cef41b970a599fa705fbe5d3bcb7314173f031b8635b6b05c19e186f2ffdfaf",
+      "trainable_parameters": 425984
+    }
+  },
+  "mistral_peak_mlx_gib": 4.203992124646902,
+  "timing_scope": "Measured training compute; excludes loading, checkpoint writes and evaluation",
+  "quality_claim": "None; full development evaluation is pending."
+}

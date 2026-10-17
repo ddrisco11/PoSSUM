@@ -251,7 +251,9 @@ def score(root,name):
     else:
         from .components.bge import BGE
         model=BGE(device='mps');predict=model.encode
-    size=8 if name in ('bert','bge') else 10
+    # BGE.encode retains microbatches of eight; checkpoint larger embedding blocks
+    # to avoid repeatedly compressing the full 384-dimensional cache per microbatch.
+    size=128 if name=='bge' else 8 if name=='bert' else 10
     for start in range(len(values),len(rows),size):
         guard(root);t=time.perf_counter();result=predict([r['text'] for r in rows[start:start+size]])
         if not np.isfinite(result).all():raise ValueError('Nonfinite scores')

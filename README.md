@@ -6,7 +6,7 @@
 
 PoSSUM studies the political viewpoint expressed in short English passages about U.S. politics. It combines calibrated predictions from multiple models and compares equal averaging with learned mixture weights. Neural routing uses 384-dimensional BGE-small embeddings; an optional self-prediction branch lets the routing head contribute its own answer.
 
-**Current status:** a larger BERT/Mistral LoRA training run is in progress on the assembled multi-source development corpus. New validation results are pending. The frozen four-expert pilot is complete. Equal averaging is the strongest evaluated four-expert configuration. Learned routing has not demonstrated an advantage, and the self-prediction branch shows signs of overfitting. There is no validated production release.
+**Current status:** BERT and Mistral LoRA adapters have completed one full pass over 7,652 fit examples from the assembled multi-source development corpus. Expert scoring and validation are in progress; new quality results are pending. The frozen four-expert pilot is complete. Equal averaging is the strongest evaluated four-expert configuration. Learned routing has not demonstrated an advantage, and the self-prediction branch shows signs of overfitting. There is no validated production release.
 
 | Property | Specification |
 |---|---|
@@ -56,7 +56,7 @@ On an M2 Mac with 16 GB unified memory, sequential 4-bit MLX scoring of the 797 
 
 ## Data coverage
 
-The complete multi-source training run is in progress. The table below describes source availability before conservative admission; final assembled counts follow below.
+Multi-source adapter training is complete; scoring and evaluation are in progress. The table below describes source availability before conservative admission; final assembled counts follow below.
 
 | Source | Available eligible candidates | Label / access status |
 |---|---:|---|
@@ -81,7 +81,7 @@ These results belong to the earlier synthetic-trained models, **not the latest f
 
 ## Expanded data preparation and local adaptation
 
-A conservative multi-source assembly is now available locally: **13,713 development passages**, partitioned into 7,652 expert-fit, 1,967 calibration, 2,195 router-fit and 1,899 validation examples. They consist of 11,016 heuristic-screened party-labeled tweets, 2,400 synthetic statements and 297 policy-mapped Manifesto passages. This is a weak/synthetic research dataset, not new human ground truth. Original test identities remain protected; conflicts, missing provenance and unverified candidates are quarantined. The larger model-training run started on October 17, 2026. It fits rank-8 adapters for BERT and Mistral while keeping GLiNER and Qwen frozen. New quality measurements are pending.
+A conservative multi-source assembly is now available locally: **13,713 development passages**, partitioned into 7,652 expert-fit, 1,967 calibration, 2,195 router-fit and 1,899 validation examples. They consist of 11,016 heuristic-screened party-labeled tweets, 2,400 synthetic statements and 297 policy-mapped Manifesto passages. This is a weak/synthetic research dataset, not new human ground truth. Original test identities remain protected; conflicts, missing provenance and unverified candidates are quarantined. The larger model-training run started on October 17, 2026. Both rank-8 adapters completed the full fit partition, while GLiNER and Qwen remain frozen. Measured training compute was 137.2 minutes for Mistral and 2.9 minutes for BERT, excluding loading and checkpoint writes. Mistral peaked at 4.20 GiB of MLX memory. See the [adapter training record](reports/adapter-training.json). New quality measurements are pending.
 
 Short M2 backward-pass probes confirmed narrow rank-8 QLoRA compatibility for Mistral and Qwen. Their updates were discarded; no quality claim follows. See the [ten-hour training options report](docs/overnight-training-options.md), [assembled corpus report](reports/assembled-corpus.json), and [independent provenance audit](docs/dataset-admission-audit.md) for counts, measured speed/memory, limitations and overnight choices.
 
