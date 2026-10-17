@@ -5,22 +5,25 @@ from pathlib import Path
 from possum.checkpoints import save_json
 from possum.data import read_jsonl
 
-p=argparse.ArgumentParser();p.add_argument('--run',default='runs/option-a-20261017');p.add_argument('--hours',type=float,default=10);p.add_argument('--smoke',action='store_true');p.add_argument('--deadline',help='Absolute ISO-8601 deadline with time zone');p.add_argument('--allow-battery',action='store_true');a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--run',default='runs/option-a-no-manifesto');p.add_argument('--dataset',type=Path,default=Path('data/assembled-v2-no-manifesto'));p.add_argument('--hours',type=float,default=10);p.add_argument('--smoke',action='store_true');p.add_argument('--deadline',help='Absolute ISO-8601 deadline with time zone');p.add_argument('--allow-battery',action='store_true');a=p.parse_args()
 root=Path(a.run).resolve();root.mkdir(parents=True,exist_ok=True)
 lock=(root/'process.lock').open('w');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB);lock.write(str(os.getpid()));lock.flush()
 parts=('fit','calibration','gate','validation')
 if not (root/'run.json').exists():
- subprocess.run([sys.executable,'scripts/check_assembled_corpus.py','data/assembled-v1'],check=True)
+ subprocess.run([sys.executable,'scripts/check_assembled_corpus.py',str(a.dataset)],check=True)
+ for part in parts:
+  if any('manifesto' in s.lower() for row in read_jsonl(a.dataset/f'{part}.jsonl') for s in row.get('sources',[row['source']])):
+   raise ValueError('New runs exclude Manifesto policy-mapped supervision; derive the no-Manifesto dataset first')
  (root/'input').mkdir(exist_ok=True)
  for part in parts:
-  source=Path('data/assembled-v1')/f'{part}.jsonl'
+  source=a.dataset/f'{part}.jsonl'
   if a.smoke:
    rows=read_jsonl(source);n=4 if part=='fit' else 2
    chosen=sum([[r for r in rows if r['label']==y][:n] for y in (0,1)],[])
    (root/'input'/source.name).write_text(''.join(json.dumps(r)+'\n' for r in chosen))
   else:shutil.copyfile(source,root/'input'/source.name)
  hashes={p:hashlib.sha256((root/'input'/f'{p}.jsonl').read_bytes()).hexdigest() for p in parts}
- save_json(root/'run.json',dict(created_at=time.time(),smoke=a.smoke,hours=a.hours,input_sha256=hashes,status='preparing'))
+ save_json(root/'run.json',dict(created_at=time.time(),smoke=a.smoke,hours=a.hours,dataset=str(a.dataset.resolve()),input_sha256=hashes,status='preparing'))
 meta=json.loads((root/'run.json').read_text())
 if meta['smoke']!=a.smoke:raise ValueError('Cannot change run mode')
 for part,expected in meta['input_sha256'].items():

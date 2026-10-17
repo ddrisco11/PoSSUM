@@ -1,6 +1,8 @@
 # Local adapter training protocol
 
-The assembled development corpus contains 7,652 expert-fit, 1,967 calibration, 2,195 router-fit and 1,899 validation examples. Historical test identities and their leakage closure are excluded. Run inputs are copied once and checked against SHA-256 hashes on every resume. The development union must not be repartitioned with the pilot splitter.
+New runs default to `data/assembled-v2-no-manifesto`, excluding policy-mapped Manifesto passages: 7,598 expert-fit, 1,967 calibration, 2,195 router-fit and 1,656 validation examples. Derive it once with `scripts/exclude_manifesto.py`. This revision has not yet been trained; see [passage-level review](dataset-review.md).
+
+The completed historical run used 7,652 expert-fit, 1,967 calibration, 2,195 router-fit and 1,899 validation examples. Historical test identities and their leakage closure are excluded. Run inputs are copied once and checked against SHA-256 hashes on every resume. The development union must not be repartitioned with the pilot splitter.
 
 Mistral uses a pinned 4-bit MLX base checkpoint and rank-8 query/value LoRA in its last four layers (425,984 trainable parameters). Training minimizes class-balanced binary cross entropy over the exact left/right next-token scores, with Adam at 5e-5, one deterministic shuffled pass, zero adapter dropout and activation checkpointing. This objective trains discrimination between the two candidates, rather than full-vocabulary language modeling.
 

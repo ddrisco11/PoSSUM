@@ -1,5 +1,7 @@
 # Dataset manifest and admission rules
 
+Current revision: Manifesto policy-category supervision is excluded from new development. Use `data/assembled-v2-no-manifesto`; historical reports retain their original inputs. See [passage-level review](dataset-review.md) for the rationale, local samples, and unused-source inventory.
+
 Dataset size estimates must be checked after filtering and deduplication. A normalized record is JSON with `text`, `label` (0 left / 1 right), `source`, `label_kind` (`human`, `weak`, `synthetic`), and nonempty `group_ids` (globally namespaced original document and author identities). Optional `excluded: true` removes neutral/ambiguous/nonpolitical rows. Never map unknown labels silently.
 
 | Dataset | Supervision / action | Source |

@@ -1,0 +1,27 @@
+{
+  "seed": "review-20261017",
+  "method": "Smallest SHA-256 ranks of seed, pool name and normalized content ID; unique texts, no label balancing or hand selection",
+  "main_sample_count": 300,
+  "main_sample_counts": {
+    "IBC public sample": 50,
+    "Manifesto U.S.": 50,
+    "Party Platform Topics": 50,
+    "GPT-4 Political Ideologies": 50,
+    "Political Tweets": 50,
+    "GPT-4 Political Bias": 50
+  },
+  "safe_pool_counts": {
+    "IBC public sample": 97,
+    "Manifesto U.S.": 297,
+    "Party Platform Topics": 6765,
+    "GPT-4 Political Ideologies": 2400,
+    "Political Tweets": 97765,
+    "GPT-4 Political Bias": 612
+  },
+  "supplementary_counts": {
+    "admitted_fit_tweets": 50,
+    "raw_manifesto": 50
+  },
+  "protected_ids_and_known_document_author_groups_excluded": true,
+  "limitations": "Sample pools exclude protected IDs and known document/author groups. The platform:entire_source placeholder is not a document identity: platform audit samples exclude known protected content and linked real documents, but unknown document provenance remains a limitation. Main Manifesto pool is historical admitted development; raw fragments are separate. Bias samples include neutral and short records. Samples are for label review, not new test evidence. Cross-source near-duplicate recall is limited to the prior assembly audit."
+}

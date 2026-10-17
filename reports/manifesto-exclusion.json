@@ -1,0 +1,42 @@
+{
+  "version": "assembled-v2-no-manifesto",
+  "excluded_from_development": {
+    "validation": 243,
+    "fit": 54
+  },
+  "development_partitions": {
+    "fit": 7598,
+    "calibration": 1967,
+    "gate": 2195,
+    "validation": 1656
+  },
+  "admitted_development": 13416,
+  "protected_inventories_byte_identical": true,
+  "verification": {
+    "passed": true,
+    "failures": [],
+    "candidates_checked": 129351,
+    "development_checked": 13416,
+    "development_provenance_groups": 141,
+    "development_components": 124,
+    "original_reserved_ids": 1174,
+    "original_reserved_by_current_partition": {
+      "protected_test": 1159,
+      "quarantine": 15
+    },
+    "protected_closure_ids": 21198,
+    "test_inventory_roles": {
+      "original-test-eligible": 1159,
+      "original-test-quarantined": 15,
+      "new-weak-holdout": 832,
+      "test-closure-buffer": 1992
+    },
+    "protected_test_file_by_source": {
+      "manifesto_us_2026_1": 2351,
+      "JyotiNayak/political_ideologies": 800,
+      "Jacobvs/PoliticalTweets": 832
+    },
+    "scope": "Structural/provenance invariants only; no reserved-test scores, label accuracy claim, or independent duplicate-index recall guarantee."
+  },
+  "training_started": false
+}

@@ -8,6 +8,8 @@ PoSSUM studies the political viewpoint expressed in short English passages about
 
 **Current status:** BERT and Mistral LoRA training, four-expert scoring and routing evaluation are complete on the expanded development corpus. The router with a bounded self contribution has the lowest validation log loss, while simpler averaging has higher macro-F1. Group-level uncertainty and poor Manifesto transfer prevent a general claim that learned routing is better. A reloadable local research export is available; there is no validated production release.
 
+**Data revision (October 17):** Manifesto policy-category labels are excluded from new development because isolated passages can lack a self-contained ideological stance. The derived `assembled-v2-no-manifesto` corpus contains 13,416 development passages: 7,598 fit, 1,967 calibration, 2,195 router-fit and 1,656 validation. No model has yet been trained on this revision. Historical results below retain their original Manifesto-containing inputs and are not evidence that Manifesto caused the observed transfer regression. [Exclusion verification](reports/manifesto-exclusion.json) · [Dataset review guide](docs/dataset-review.md).
+
 | Property | Specification |
 |---|---|
 | Task | Binary political slant classification |
@@ -120,7 +122,7 @@ Short M2 backward-pass probes confirmed narrow rank-8 QLoRA compatibility for Mi
 
 Further development will use the completed equal-average, router and frozen-baseline comparisons. Priorities include:
 
-- Expand Manifesto development coverage while preserving held-out documents and existing test boundaries.
+- Acquire and audit self-contained human-labeled viewpoint passages; exclude context-dependent Manifesto policy mappings from new development.
 - Evaluate final ensemble calibration and an uncertainty-based abstention policy on separate data.
 - Compare cheaper expert subsets to quantify the accuracy–latency tradeoff.
 - Evaluate on fresh human-labeled political, neutral, ambiguous and nonpolitical passages.
@@ -159,10 +161,11 @@ Use the same command to resume only after the previous process has stopped. Expe
 
 ## Adapter training and inference
 
-The [local adaptation protocol](docs/local-adaptation.md) describes immutable partitions, recoverable checkpoints and export selection. After assembling `data/assembled-v1`, run:
+The [local adaptation protocol](docs/local-adaptation.md) describes immutable partitions, recoverable checkpoints and export selection. Derive the new corpus once from the historical assembly, then use a new run directory:
 
 ```bash
-python -u scripts/run_option_a.py --run runs/option-a-20261017 --hours 8
+python scripts/exclude_manifesto.py
+python -u scripts/run_option_a.py --dataset data/assembled-v2-no-manifesto --run runs/option-a-no-manifesto --hours 8
 ```
 
 The pipeline trains Mistral and BERT sequentially, caches the five components, then calibrates and compares nine mixture fits plus equal averaging and ablations. The self-prediction branch is fitted only on the expert-fit partition and frozen during router training, with its mixture weight capped at 25%. A fixed absolute cutoff can be supplied with `--deadline` as a timezone-qualified ISO timestamp. Resuming preserves the original cutoff.
