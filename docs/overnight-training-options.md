@@ -39,6 +39,8 @@ Reasons for the reduction:
 
 All **1,174 originally reserved IDs** remain outside development: 1,159 appear in the assembled protected file and 15 in quarantine. The protected file also contains additional document-connected buffer examples and 832 new author-held-out tweets. These must be reported separately; the buffer is not a newly selected final test. Full provenance protection also applies to quarantined rows.
 
+Preserving every historical *development* role is a conservative versioning choice, not a requirement to discard those passages forever. A separately versioned development re-partition can recover some of the 1,084 collision-quarantined Manifesto rows while keeping all original test-connected groups protected. Earlier validation scores would remain historical diagnostics, and the new development split would not be described as previously unseen. Such a change requires rebuilding grouped fit/calibration/router/validation assignments jointly, not moving individual sentences between them. It cannot recover the 2,417 test-connected Manifesto texts for training. This is an alternative to investigate before expanding a long training run.
+
 This is a deliberately conservative research dataset. A future broader version could recover original platform documents and review excluded tweets. That would be a new audited dataset version, not a reason to erase current test protection or silently train on all 129,351 candidates.
 
 Artifacts: [assembly counts](../reports/assembled-corpus.json), [tweet filter audit](../reports/tweet-admission.json), [provenance audit](dataset-admission-audit.md). Raw text remains under ignored `data/assembled-v1/`.
