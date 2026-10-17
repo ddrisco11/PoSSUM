@@ -46,6 +46,8 @@ The admitted split has a substantial coverage gap: Manifesto contributes only **
 
 Source differences matter: selected-router macro-F1 is **0.837 on tweets**, **0.995 on synthetic statements**, and **0.561 on Manifesto**. Equal averaging scores 0.625 on Manifesto and has lower Manifesto log loss. The latest scores cannot be treated as direct improvements over the earlier pilot because the data and partitions changed. A matched frozen-versus-adapted comparison is in progress. On the previously inspected 97-example human-labeled IBC sample, transfer remains weak: the selected router scores **0.580 macro-F1 / 0.739 log loss**, versus **0.603 / 0.627** for equal averaging. Frozen Qwen has the highest individual macro-F1, 0.649. The selected router is worse than a constant 0.5 prediction on log loss (0.693), reinforcing that this export is not production-ready. These 97 examples are a diagnostic, not a fresh final test.
 
+A post-hoc subset audit finds that **BERT + Mistral equal averaging** gives 0.848 validation macro-F1 and 0.330 log loss, close to the full router with about 57% less measured scoring compute. Its IBC macro-F1 falls to 0.557, while **GLiNER + Qwen** reaches 0.701 on that small diagnostic. These contrasting results are exploratory and do not justify a universal subset choice. Timing excludes model loading and swapping. [Subset audit](reports/adapter-expert-subsets.json).
+
 [Full adapted evaluation](reports/adapter-development-evaluation.json) · [Group uncertainty](reports/adapter-validation-uncertainty.json) · [Human-text diagnostic](reports/adapter-ibc-diagnostic.json) · [Adapter training record](reports/adapter-training.json)
 
 ## Earlier frozen four-expert evaluation

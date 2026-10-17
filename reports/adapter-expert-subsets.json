@@ -1,0 +1,940 @@
+{
+  "scope": "Post-hoc equal-weight subset audit; original selected export unchanged",
+  "fitting": "None; reuse original calibration temperatures",
+  "timing_scope": "Sum of measured per-example scoring compute; excludes model loading, swapping and checkpoint writes",
+  "component_compute_seconds": {
+    "bert": 0.009251608789635584,
+    "gliner": 0.07492280338691387,
+    "mistral": 0.8444698445457917,
+    "qwen": 1.0680596334472725
+  },
+  "datasets": {
+    "development_validation": {
+      "count": 1899,
+      "results": {
+        "bert": {
+          "experts": [
+            "bert"
+          ],
+          "metrics": {
+            "macro_f1": 0.8156699281150159,
+            "balanced_accuracy": 0.8183926120832119,
+            "log_loss": 0.39623125538788984,
+            "brier": 0.12594423990533585,
+            "ece": 0.05665626435824032
+          },
+          "estimated_compute_seconds": 0.009251608789635584,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.8152697617332914,
+              "balanced_accuracy": 0.8251148890580506,
+              "log_loss": 0.395828709850439,
+              "brier": 0.1256486688852474,
+              "ece": 0.06081559459013695
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.9348027784046742,
+              "balanced_accuracy": 0.935,
+              "log_loss": 0.1955556940587119,
+              "brier": 0.04944721631460172,
+              "ece": 0.07792689967500242
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.6151356562456962,
+              "balanced_accuracy": 0.615424430641822,
+              "log_loss": 0.7286420443866946,
+              "brier": 0.253392991500088,
+              "ece": 0.16584945418590408
+            }
+          }
+        },
+        "gliner": {
+          "experts": [
+            "gliner"
+          ],
+          "metrics": {
+            "macro_f1": 0.6694962889312471,
+            "balanced_accuracy": 0.6731965596008889,
+            "log_loss": 0.6278879788261449,
+            "brier": 0.21667369693076358,
+            "ece": 0.06156361961351655
+          },
+          "estimated_compute_seconds": 0.07492280338691387,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.658237826229644,
+              "balanced_accuracy": 0.6595990352651099,
+              "log_loss": 0.662588508175686,
+              "brier": 0.2304117886450729,
+              "ece": 0.08903489172920537
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.7118834608989506,
+              "balanced_accuracy": 0.7325,
+              "log_loss": 0.5146710962112908,
+              "brier": 0.16987951679887217,
+              "ece": 0.09029881064577643
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.6043107523681124,
+              "balanced_accuracy": 0.6038302277432712,
+              "log_loss": 0.6348957491262186,
+              "brier": 0.22269274573563597,
+              "ece": 0.07985918666831505
+            }
+          }
+        },
+        "mistral": {
+          "experts": [
+            "mistral"
+          ],
+          "metrics": {
+            "macro_f1": 0.8374682379304136,
+            "balanced_accuracy": 0.8423472916977128,
+            "log_loss": 0.38112100798475157,
+            "brier": 0.11618285291467298,
+            "ece": 0.07220157069380273
+          },
+          "estimated_compute_seconds": 0.8444698445457917,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.8367659523750655,
+              "balanced_accuracy": 0.8469277909775246,
+              "log_loss": 0.3858859329485346,
+              "brier": 0.11715929603584173,
+              "ece": 0.07903062585515784
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.9924995781012682,
+              "balanced_accuracy": 0.9924999999999999,
+              "log_loss": 0.04999515711144392,
+              "brier": 0.008973288560512951,
+              "ece": 0.04129144489575089
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.5425451807228916,
+              "balanced_accuracy": 0.5556935817805383,
+              "log_loss": 0.9015555536424122,
+              "brier": 0.28761253678905996,
+              "ece": 0.24199526425910556
+            }
+          }
+        },
+        "qwen": {
+          "experts": [
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.7785932963960487,
+            "balanced_accuracy": 0.7780138523439777,
+            "log_loss": 0.44493808342271024,
+            "brier": 0.14528786427623247,
+            "ece": 0.030879838350555758
+          },
+          "estimated_compute_seconds": 1.0680596334472725,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.7517931961859299,
+              "balanced_accuracy": 0.7508438867231052,
+              "log_loss": 0.47909581525079725,
+              "brier": 0.15817907351222255,
+              "ece": 0.039445902699058656
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.9924995781012682,
+              "balanced_accuracy": 0.9924999999999999,
+              "log_loss": 0.13660332886613602,
+              "brier": 0.024581590159032336,
+              "ece": 0.10779081565910897
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.5542798913043478,
+              "balanced_accuracy": 0.558592132505176,
+              "log_loss": 0.7759331066595517,
+              "brier": 0.2773502134386871,
+              "ece": 0.1512721040418269
+            }
+          }
+        },
+        "bert+gliner": {
+          "experts": [
+            "bert",
+            "gliner"
+          ],
+          "metrics": {
+            "macro_f1": 0.8193714076067017,
+            "balanced_accuracy": 0.8218456891585613,
+            "log_loss": 0.4613397859088299,
+            "brier": 0.14388025642946373,
+            "ece": 0.12253871519481598
+          },
+          "estimated_compute_seconds": 0.08417441217654946,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.8025157232704403,
+              "balanced_accuracy": 0.8099057051099681,
+              "log_loss": 0.4749690486323957,
+              "brier": 0.15010288824878326,
+              "ece": 0.11400897033853856
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.9724957024535084,
+              "balanced_accuracy": 0.9724999999999999,
+              "log_loss": 0.31690745503687856,
+              "brier": 0.07888244181882176,
+              "ece": 0.23410049561885715
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.6478260869565218,
+              "balanced_accuracy": 0.6478260869565218,
+              "log_loss": 0.6286425775466157,
+              "brier": 0.21870947568539567,
+              "ece": 0.0882236800719463
+            }
+          }
+        },
+        "bert+mistral": {
+          "experts": [
+            "bert",
+            "mistral"
+          ],
+          "metrics": {
+            "macro_f1": 0.8476625637976563,
+            "balanced_accuracy": 0.8516505819630382,
+            "log_loss": 0.33014182245640705,
+            "brier": 0.10435393619908287,
+            "ece": 0.03882021112378289
+          },
+          "estimated_compute_seconds": 0.8537214533354273,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.8487199772801038,
+              "balanced_accuracy": 0.8585832955282333,
+              "log_loss": 0.33190392630230425,
+              "brier": 0.10476825106250577,
+              "ece": 0.04882552610515685
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.987499296835447,
+              "balanced_accuracy": 0.9875,
+              "log_loss": 0.11077707475134113,
+              "brier": 0.020724089836017364,
+              "ece": 0.0853307184408563
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.5922818791946309,
+              "balanced_accuracy": 0.5933747412008281,
+              "log_loss": 0.6821282284299851,
+              "brier": 0.2398747554450378,
+              "ece": 0.1299315310590984
+            }
+          }
+        },
+        "bert+qwen": {
+          "experts": [
+            "bert",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.8451661748718745,
+            "balanced_accuracy": 0.8468802199293148,
+            "log_loss": 0.37514686853424944,
+            "brier": 0.11495123739610243,
+            "ece": 0.08744673867654687
+          },
+          "estimated_compute_seconds": 1.077311242236908,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.8461572634666656,
+              "balanced_accuracy": 0.8519206272314621,
+              "log_loss": 0.38977056577298247,
+              "brier": 0.1190796581503769,
+              "ece": 0.09581877141825412
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.987499296835447,
+              "balanced_accuracy": 0.9875,
+              "log_loss": 0.15373114132112187,
+              "brier": 0.029413603161227427,
+              "ece": 0.12075572589502509
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.6000000000000001,
+              "balanced_accuracy": 0.6009316770186335,
+              "log_loss": 0.6640313424165637,
+              "brier": 0.23441525890466725,
+              "ece": 0.1156919696989382
+            }
+          }
+        },
+        "gliner+mistral": {
+          "experts": [
+            "gliner",
+            "mistral"
+          ],
+          "metrics": {
+            "macro_f1": 0.8359236633544262,
+            "balanced_accuracy": 0.8406285378748619,
+            "log_loss": 0.4169298641199252,
+            "brier": 0.12728134305426028,
+            "ece": 0.10904620443571278
+          },
+          "estimated_compute_seconds": 0.9193926479327055,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.8288033159055566,
+              "balanced_accuracy": 0.8388797900343193,
+              "log_loss": 0.42698789219621225,
+              "brier": 0.13175463659170683,
+              "ece": 0.1055798628624978
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.9974999843749024,
+              "balanced_accuracy": 0.9975,
+              "log_loss": 0.24357281579629333,
+              "brier": 0.05136281482540683,
+              "ece": 0.20969263439532207
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.5736763375131582,
+              "balanced_accuracy": 0.5806418219461698,
+              "log_loss": 0.6503040866122552,
+              "brier": 0.22912889288351343,
+              "ece": 0.07198673270657512
+            }
+          }
+        },
+        "gliner+qwen": {
+          "experts": [
+            "gliner",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.7941908466300263,
+            "balanced_accuracy": 0.7937295234197586,
+            "log_loss": 0.49860412717370806,
+            "brier": 0.16079450385513055,
+            "ece": 0.12759145583684658
+          },
+          "estimated_compute_seconds": 1.1429824368341863,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.7639675123244649,
+              "balanced_accuracy": 0.7629991875107327,
+              "log_loss": 0.5328223824632828,
+              "brier": 0.1755377043750445,
+              "ece": 0.11866621720525629
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.985,
+              "balanced_accuracy": 0.985,
+              "log_loss": 0.29614550645455906,
+              "brier": 0.07144769400518386,
+              "ece": 0.2312528787493336
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.6218254579036477,
+              "balanced_accuracy": 0.6236024844720497,
+              "log_loss": 0.6550046195356573,
+              "brier": 0.23166390338997306,
+              "ece": 0.03147372962299955
+            }
+          }
+        },
+        "mistral+qwen": {
+          "experts": [
+            "mistral",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.8429791187105854,
+            "balanced_accuracy": 0.8465482574471919,
+            "log_loss": 0.34426044465855465,
+            "brier": 0.1076979523713865,
+            "ece": 0.04366161902780742
+          },
+          "estimated_compute_seconds": 1.9125294779930642,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.8431448123718268,
+              "balanced_accuracy": 0.8515336055300531,
+              "log_loss": 0.3526096428386095,
+              "brier": 0.10941835739056499,
+              "ece": 0.05540676007306823
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.9949998749968749,
+              "balanced_accuracy": 0.995,
+              "log_loss": 0.08983705955860972,
+              "brier": 0.01291365205368002,
+              "ece": 0.07829970018791568
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.5679806051899075,
+              "balanced_accuracy": 0.570703933747412,
+              "log_loss": 0.7199096673985921,
+              "brier": 0.25482919279523175,
+              "ece": 0.12611865900922667
+            }
+          }
+        },
+        "bert+gliner+mistral": {
+          "experts": [
+            "bert",
+            "gliner",
+            "mistral"
+          ],
+          "metrics": {
+            "macro_f1": 0.8513761192903151,
+            "balanced_accuracy": 0.855211532943801,
+            "log_loss": 0.38796993709694555,
+            "brier": 0.11591792810893946,
+            "ece": 0.09877347128922248
+          },
+          "estimated_compute_seconds": 0.9286442567223411,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.8463367029534201,
+              "balanced_accuracy": 0.8557523983811728,
+              "log_loss": 0.3951977142548888,
+              "brier": 0.11925370556064682,
+              "ece": 0.09622663521312952
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.992499953124707,
+              "balanced_accuracy": 0.9924999999999999,
+              "log_loss": 0.21670154539153708,
+              "brier": 0.041730818249666325,
+              "ece": 0.19126290550635344
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.6284139402560456,
+              "balanced_accuracy": 0.6280538302277433,
+              "log_loss": 0.6325348283388661,
+              "brier": 0.2207949135590004,
+              "ece": 0.07820013188783967
+            }
+          }
+        },
+        "bert+gliner+qwen": {
+          "experts": [
+            "bert",
+            "gliner",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.8451627396166135,
+            "balanced_accuracy": 0.846826282976608,
+            "log_loss": 0.4335345189922046,
+            "brier": 0.13228868773449498,
+            "ece": 0.14451526018665262
+          },
+          "estimated_compute_seconds": 1.152234045623822,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.8357857324193958,
+              "balanced_accuracy": 0.8413749266324755,
+              "log_loss": 0.45362940178964456,
+              "brier": 0.14051571911714178,
+              "ece": 0.14880354197579457
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.995,
+              "balanced_accuracy": 0.995,
+              "log_loss": 0.24922954190149404,
+              "brier": 0.05278518140760289,
+              "ece": 0.21047634793417494
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.6428913192071086,
+              "balanced_accuracy": 0.6451345755693582,
+              "log_loss": 0.6330522887152481,
+              "brier": 0.2206354001384148,
+              "ece": 0.049071446957984786
+            }
+          }
+        },
+        "bert+mistral+qwen": {
+          "experts": [
+            "bert",
+            "mistral",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.85725768805434,
+            "balanced_accuracy": 0.860344996318942,
+            "log_loss": 0.3358846442380308,
+            "brier": 0.10228861630778288,
+            "ece": 0.06678962535967127
+          },
+          "estimated_compute_seconds": 1.9217810867826997,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.8590656231873033,
+              "balanced_accuracy": 0.8674630086708239,
+              "log_loss": 0.3437113124816785,
+              "brier": 0.10356422533116434,
+              "ece": 0.0789394511936537
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.9949998749968749,
+              "balanced_accuracy": 0.995,
+              "log_loss": 0.11600114654975108,
+              "brier": 0.018800365018839135,
+              "ece": 0.1019321564648936
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.6091608391608392,
+              "balanced_accuracy": 0.608592132505176,
+              "log_loss": 0.6573788983997201,
+              "brier": 0.23312456520576805,
+              "ece": 0.08274524687652092
+            }
+          }
+        },
+        "gliner+mistral+qwen": {
+          "experts": [
+            "gliner",
+            "mistral",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.8445638768231049,
+            "balanced_accuracy": 0.8481052004119226,
+            "log_loss": 0.40625652871187706,
+            "brier": 0.12277230922238228,
+            "ece": 0.11868858742041037
+          },
+          "estimated_compute_seconds": 1.987452281379978,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.839955877178802,
+              "balanced_accuracy": 0.8481478064071315,
+              "log_loss": 0.4229873450347854,
+              "brier": 0.12901029280401424,
+              "ece": 0.1290590511734072
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.9949998749968749,
+              "balanced_accuracy": 0.995,
+              "log_loss": 0.2038571231849603,
+              "brier": 0.037718027557629485,
+              "ece": 0.17573097873175703
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.597682119205298,
+              "balanced_accuracy": 0.5994824016563147,
+              "log_loss": 0.6529472978855136,
+              "brier": 0.23053694003461,
+              "ece": 0.039451724198588625
+            }
+          }
+        },
+        "bert+gliner+mistral+qwen": {
+          "experts": [
+            "bert",
+            "gliner",
+            "mistral",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.8509318682550122,
+            "balanced_accuracy": 0.8540632875073121,
+            "log_loss": 0.38509832972372177,
+            "brier": 0.114228725572981,
+            "ece": 0.12379589918971415
+          },
+          "estimated_compute_seconds": 1.9967038901696137,
+          "by_source": {
+            "Jacobvs/PoliticalTweets": {
+              "macro_f1": 0.8463257925149692,
+              "balanced_accuracy": 0.8545862071616956,
+              "log_loss": 0.39773278408709867,
+              "brier": 0.11874052056994747,
+              "ece": 0.1325974360969954
+            },
+            "JyotiNayak/political_ideologies": {
+              "macro_f1": 0.9949998749968749,
+              "balanced_accuracy": 0.995,
+              "log_loss": 0.19399675697483032,
+              "brier": 0.03457587244595692,
+              "ece": 0.17325184218056253
+            },
+            "manifesto_us_2026_1": {
+              "macro_f1": 0.625,
+              "balanced_accuracy": 0.6242236024844721,
+              "log_loss": 0.6343648088148955,
+              "brier": 0.22202430884302088,
+              "ece": 0.05429869263922213
+            }
+          }
+        }
+      }
+    },
+    "previously_seen_ibc": {
+      "count": 97,
+      "results": {
+        "bert": {
+          "experts": [
+            "bert"
+          ],
+          "metrics": {
+            "macro_f1": 0.4946080213255786,
+            "balanced_accuracy": 0.560374149659864,
+            "log_loss": 0.8822972468840459,
+            "brier": 0.30661405403919856,
+            "ece": 0.27759552552783706
+          },
+          "estimated_compute_seconds": 0.009251608789635584,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.4946080213255786,
+              "balanced_accuracy": 0.560374149659864,
+              "log_loss": 0.8822972468840459,
+              "brier": 0.30661405403919856,
+              "ece": 0.27759552552783706
+            }
+          }
+        },
+        "gliner": {
+          "experts": [
+            "gliner"
+          ],
+          "metrics": {
+            "macro_f1": 0.5658567774936061,
+            "balanced_accuracy": 0.5676020408163265,
+            "log_loss": 0.6910342289208297,
+            "brier": 0.24682806482097502,
+            "ece": 0.10031850776632545
+          },
+          "estimated_compute_seconds": 0.07492280338691387,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.5658567774936061,
+              "balanced_accuracy": 0.5676020408163265,
+              "log_loss": 0.6910342289208297,
+              "brier": 0.24682806482097502,
+              "ece": 0.10031850776632545
+            }
+          }
+        },
+        "mistral": {
+          "experts": [
+            "mistral"
+          ],
+          "metrics": {
+            "macro_f1": 0.58490990990991,
+            "balanced_accuracy": 0.6107568027210885,
+            "log_loss": 0.8156493592019965,
+            "brier": 0.26982104060878637,
+            "ece": 0.23509771457272244
+          },
+          "estimated_compute_seconds": 0.8444698445457917,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.58490990990991,
+              "balanced_accuracy": 0.6107568027210885,
+              "log_loss": 0.8156493592019965,
+              "brier": 0.26982104060878637,
+              "ece": 0.23509771457272244
+            }
+          }
+        },
+        "qwen": {
+          "experts": [
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.6485507246376812,
+            "balanced_accuracy": 0.6490221088435374,
+            "log_loss": 0.681764683532741,
+            "brier": 0.23545855188936202,
+            "ece": 0.14171202959022722
+          },
+          "estimated_compute_seconds": 1.0680596334472725,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.6485507246376812,
+              "balanced_accuracy": 0.6490221088435374,
+              "log_loss": 0.681764683532741,
+              "brier": 0.23545855188936202,
+              "ece": 0.14171202959022722
+            }
+          }
+        },
+        "bert+gliner": {
+          "experts": [
+            "bert",
+            "gliner"
+          ],
+          "metrics": {
+            "macro_f1": 0.540719696969697,
+            "balanced_accuracy": 0.5909863945578231,
+            "log_loss": 0.6951889783865486,
+            "brier": 0.24725503026789142,
+            "ece": 0.11591085903251762
+          },
+          "estimated_compute_seconds": 0.08417441217654946,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.540719696969697,
+              "balanced_accuracy": 0.5909863945578231,
+              "log_loss": 0.6951889783865486,
+              "brier": 0.24725503026789142,
+              "ece": 0.11591085903251762
+            }
+          }
+        },
+        "bert+mistral": {
+          "experts": [
+            "bert",
+            "mistral"
+          ],
+          "metrics": {
+            "macro_f1": 0.5569711538461539,
+            "balanced_accuracy": 0.6118197278911565,
+            "log_loss": 0.7663821614959883,
+            "brier": 0.2677263589480366,
+            "ece": 0.23299188575201976
+          },
+          "estimated_compute_seconds": 0.8537214533354273,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.5569711538461539,
+              "balanced_accuracy": 0.6118197278911565,
+              "log_loss": 0.7663821614959883,
+              "brier": 0.2677263589480366,
+              "ece": 0.23299188575201976
+            }
+          }
+        },
+        "bert+qwen": {
+          "experts": [
+            "bert",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.6196078431372549,
+            "balanced_accuracy": 0.6415816326530612,
+            "log_loss": 0.6363601740116451,
+            "brier": 0.22251755438506096,
+            "ece": 0.07996517518250486
+          },
+          "estimated_compute_seconds": 1.077311242236908,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.6196078431372549,
+              "balanced_accuracy": 0.6415816326530612,
+              "log_loss": 0.6363601740116451,
+              "brier": 0.22251755438506096,
+              "ece": 0.07996517518250486
+            }
+          }
+        },
+        "gliner+mistral": {
+          "experts": [
+            "gliner",
+            "mistral"
+          ],
+          "metrics": {
+            "macro_f1": 0.6067567567567567,
+            "balanced_accuracy": 0.6313775510204082,
+            "log_loss": 0.6502563062913945,
+            "brier": 0.22584276956237329,
+            "ece": 0.08977831407724876
+          },
+          "estimated_compute_seconds": 0.9193926479327055,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.6067567567567567,
+              "balanced_accuracy": 0.6313775510204082,
+              "log_loss": 0.6502563062913945,
+              "brier": 0.22584276956237329,
+              "ece": 0.08977831407724876
+            }
+          }
+        },
+        "gliner+qwen": {
+          "experts": [
+            "gliner",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.7009037745879851,
+            "balanced_accuracy": 0.7008928571428572,
+            "log_loss": 0.6285736350056522,
+            "brier": 0.21826558153635375,
+            "ece": 0.11740289832376304
+          },
+          "estimated_compute_seconds": 1.1429824368341863,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.7009037745879851,
+              "balanced_accuracy": 0.7008928571428572,
+              "log_loss": 0.6285736350056522,
+              "brier": 0.21826558153635375,
+              "ece": 0.11740289832376304
+            }
+          }
+        },
+        "mistral+qwen": {
+          "experts": [
+            "mistral",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.6383771929824561,
+            "balanced_accuracy": 0.6513605442176871,
+            "log_loss": 0.6337656274884794,
+            "brier": 0.2214785374328207,
+            "ece": 0.10176770449559164
+          },
+          "estimated_compute_seconds": 1.9125294779930642,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.6383771929824561,
+              "balanced_accuracy": 0.6513605442176871,
+              "log_loss": 0.6337656274884794,
+              "brier": 0.2214785374328207,
+              "ece": 0.10176770449559164
+            }
+          }
+        },
+        "bert+gliner+mistral": {
+          "experts": [
+            "bert",
+            "gliner",
+            "mistral"
+          ],
+          "metrics": {
+            "macro_f1": 0.5636837121212122,
+            "balanced_accuracy": 0.6116071428571428,
+            "log_loss": 0.6730195378161409,
+            "brier": 0.23778149729380502,
+            "ece": 0.14255529961411872
+          },
+          "estimated_compute_seconds": 0.9286442567223411,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.5636837121212122,
+              "balanced_accuracy": 0.6116071428571428,
+              "log_loss": 0.6730195378161409,
+              "brier": 0.23778149729380502,
+              "ece": 0.14255529961411872
+            }
+          }
+        },
+        "bert+gliner+qwen": {
+          "experts": [
+            "bert",
+            "gliner",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.6446886446886446,
+            "balanced_accuracy": 0.6619897959183674,
+            "log_loss": 0.6273890672291512,
+            "brier": 0.21813911044529874,
+            "ece": 0.10667766370177217
+          },
+          "estimated_compute_seconds": 1.152234045623822,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.6446886446886446,
+              "balanced_accuracy": 0.6619897959183674,
+              "log_loss": 0.6273890672291512,
+              "brier": 0.21813911044529874,
+              "ece": 0.10667766370177217
+            }
+          }
+        },
+        "bert+mistral+qwen": {
+          "experts": [
+            "bert",
+            "mistral",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.5717196875353787,
+            "balanced_accuracy": 0.6005527210884354,
+            "log_loss": 0.6433145636962911,
+            "brier": 0.22611068405848073,
+            "ece": 0.12514732355710628
+          },
+          "estimated_compute_seconds": 1.9217810867826997,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.5717196875353787,
+              "balanced_accuracy": 0.6005527210884354,
+              "log_loss": 0.6433145636962911,
+              "brier": 0.22611068405848073,
+              "ece": 0.12514732355710628
+            }
+          }
+        },
+        "gliner+mistral+qwen": {
+          "experts": [
+            "gliner",
+            "mistral",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.6383771929824561,
+            "balanced_accuracy": 0.6513605442176871,
+            "log_loss": 0.6157354591223637,
+            "brier": 0.21224887742300755,
+            "ece": 0.0917289713032418
+          },
+          "estimated_compute_seconds": 1.987452281379978,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.6383771929824561,
+              "balanced_accuracy": 0.6513605442176871,
+              "log_loss": 0.6157354591223637,
+              "brier": 0.21224887742300755,
+              "ece": 0.0917289713032418
+            }
+          }
+        },
+        "bert+gliner+mistral+qwen": {
+          "experts": [
+            "bert",
+            "gliner",
+            "mistral",
+            "qwen"
+          ],
+          "metrics": {
+            "macro_f1": 0.6024590163934427,
+            "balanced_accuracy": 0.6315901360544218,
+            "log_loss": 0.6267291174095091,
+            "brier": 0.21843124411334394,
+            "ece": 0.11527305158859526
+          },
+          "estimated_compute_seconds": 1.9967038901696137,
+          "by_source": {
+            "ibc_official_sample": {
+              "macro_f1": 0.6024590163934427,
+              "balanced_accuracy": 0.6315901360544218,
+              "log_loss": 0.6267291174095091,
+              "brier": 0.21843124411334394,
+              "ece": 0.11527305158859526
+            }
+          }
+        }
+      }
+    }
+  },
+  "pair_versus_original_export": {
+    "interval": [
+      -0.034119122217204874,
+      0.03214230419273189
+    ],
+    "mean": 0.0010338210198447112
+  },
+  "limitations": [
+    "Subset analysis is exploratory and follows inspection of development and IBC results.",
+    "No choice here is validated on fresh human data; IBC has only 97 previously inspected examples.",
+    "The paired group-bootstrap interval is descriptive and not adjusted for model selection.",
+    "Removing an expert can affect domains differently; aggregate ranking alone is insufficient."
+  ]
+}

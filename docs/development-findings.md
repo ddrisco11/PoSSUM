@@ -26,7 +26,9 @@ Human-text transfer remains weak on the previously inspected public IBC sample: 
 1. Construct a separately versioned development split with adequate source and class coverage in fit, calibration and router-fit partitions, preserving the locked test closure. Require a coverage audit before spending compute. Reassigning eligible development groups would invalidate direct comparisons with earlier validation scores and must be recorded as a new protocol.
 2. Add passage-level human labels across political topics and domains, including ambiguous and nonpolitical passages. Keep a newly collected, author/document-disjoint evaluation set untouched by tuning.
 3. Compare the adapted recipes against frozen baselines on the same current split before attributing gains to LoRA. Report domain-level effects and uncertainty alongside aggregate scores.
-4. Evaluate cheaper expert subsets using development-only fitting. Preserve the original export and describe any later subset search as exploratory. Validate the chosen cost/quality tradeoff on new human data.
+4. Validate the exploratory subset tradeoff on new human data. BERT + Mistral equal averaging nearly matches the full router's development log loss with about 57% less scoring compute, but transfers poorly to IBC. GLiNER + Qwen is stronger on that diagnostic. The original export remains fixed; neither post-hoc result establishes a general deployment choice.
 5. Validate abstention and an explicit neutrality/politicalness policy before deployment. A left/right confidence threshold alone has not been shown to handle these cases.
 
 [Development evaluation](../reports/adapter-development-evaluation.json) · [Group uncertainty](../reports/adapter-validation-uncertainty.json) · [IBC diagnostic](../reports/adapter-ibc-diagnostic.json) · [Coverage audit](../reports/adapter-domain-coverage.json)
+
+The cached-only subset analysis is reproducible with `python scripts/audit_expert_subsets.py --run runs/option-a-20261017`. It fits no models, changes no export, and reports all nonempty equal-weight subsets rather than only the strongest outcome. [Subset results](../reports/adapter-expert-subsets.json).
