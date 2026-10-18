@@ -85,6 +85,8 @@ def freeze(root, compact_bundle=None, allow_incomplete=False, reason=None):
         raise TimeoutError('Development deadline reached')
     dependencies = ['modernbert-finished.json', 'replication-finished.json', 'distillation-finished.json',
                     'experts/qwen_chat.json', 'experts/mistral_human_lora_e2.json']
+    if (root / 'deberta-plan.json').exists():
+        dependencies.append('deberta-finished.json')
     unfinished = [p for p in dependencies if not (root / p).exists() or not json.loads((root / p).read_text()).get('complete')]
     if unfinished and (not allow_incomplete or not reason):
         raise ValueError('Planned comparisons incomplete; a documented partial-run freeze is required')

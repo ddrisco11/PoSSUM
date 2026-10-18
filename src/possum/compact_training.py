@@ -16,6 +16,23 @@ MODERN_TRIALS=[
  dict(name='modernbert_full_human',model_id='answerdotai/ModernBERT-base',mode='full',regime='human',lr=2e-5,epochs=4,seed=42),
  dict(name='modernbert_full_mixed',model_id='answerdotai/ModernBERT-base',mode='full',regime='mixed',lr=2e-5,epochs=4,seed=42),
 ]
+DEBERTA_TRIALS=[
+ dict(name='deberta_full_mixed',model_id='microsoft/deberta-v3-base',mode='full',regime='mixed',lr=2e-5,epochs=4,seed=42),
+ dict(name='deberta_full_human',model_id='microsoft/deberta-v3-base',mode='full',regime='human',lr=2e-5,epochs=4,seed=42),
+]
+
+def deberta_plan(root):
+ signature=json.loads((root/'dataset.json').read_text())['manifest_sha256']
+ deadline=datetime.datetime.fromisoformat(json.loads((root/'state.json').read_text())['deadline']).timestamp()
+ expected={'input_sha256':signature,'trials':DEBERTA_TRIALS,'model_revision':resolve('microsoft/deberta-v3-base'),
+           'compute_until':deadline-3600,'selection':'Same human validation log-loss criterion; four epochs per source regime.',
+           'scope':'Pretrained encoder comparison; frozen development inputs and no holdout access.'}
+ path=root/'deberta-plan.json'
+ if path.exists():
+  plan=json.loads(path.read_text());assert plan==expected,'DeBERTa plan changed'
+  return plan
+ save_json(path,expected)
+ return expected
 
 def replication_plan(root):
  signature=json.loads((root/'dataset.json').read_text())['manifest_sha256']
@@ -51,6 +68,8 @@ def run(root, family='bert'):
  if family=='distillation':
   from .distillation import plan
   trials=plan(root)['trials']
+ elif family=='deberta':
+  plan=deberta_plan(root);trials=plan['trials'];deadline=min(deadline,plan['compute_until'])
  else:trials=TRIALS if family=='bert' else MODERN_TRIALS if family=='modernbert' else replication_plan(root)['trials']
  directory=root/'compact';directory.mkdir(exist_ok=True)
  registry_path=directory/'report.json';registry=json.loads(registry_path.read_text()) if registry_path.exists() else {}
@@ -134,8 +153,8 @@ def run(root, family='bert'):
   if not stop:save_json(out/'complete.json',dict(best=best,best_epoch=best_epoch,completed_at=time.time(),input_sha256=signature))
   del model,opt;gc.collect();torch.mps.empty_cache()
   if stop:break
- finished={'bert':'compact-finished.json','modernbert':'modernbert-finished.json','replication':'replication-finished.json','distillation':'distillation-finished.json'}[family]
+ finished={'bert':'compact-finished.json','modernbert':'modernbert-finished.json','replication':'replication-finished.json','distillation':'distillation-finished.json','deberta':'deberta-finished.json'}[family]
  save_json(root/finished,dict(complete=all((directory/t['name']/'complete.json').exists() for t in trials),updated_at=time.time()))
 
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('run',type=Path);p.add_argument('--family',choices=['bert','modernbert','replication','distillation'],default='bert');a=p.parse_args();run(a.run,a.family)
+ p=argparse.ArgumentParser();p.add_argument('run',type=Path);p.add_argument('--family',choices=['bert','modernbert','replication','distillation','deberta'],default='bert');a=p.parse_args();run(a.run,a.family)

@@ -562,3 +562,19 @@ def test_pruning_uses_total_predictor_mass_and_keeps_one_predictor():
     np.testing.assert_allclose(prune_predictors([.01, .99], np.eye(2)), [.01, .99])
     with pytest.raises(AssertionError):
         prune_predictors([-.1, 1.1], np.eye(2))
+
+
+def test_deberta_plan_pins_data_recipe_revision_and_reserves_final_hour(tmp_path):
+    from possum.compact_training import deberta_plan
+    import datetime
+    (tmp_path / 'dataset.json').write_text(json.dumps({'manifest_sha256': 'fixed'}))
+    (tmp_path / 'state.json').write_text(json.dumps({'deadline': '2099-01-01T14:00:00+00:00'}))
+    plan = deberta_plan(tmp_path)
+    assert [r['regime'] for r in plan['trials']] == ['mixed', 'human']
+    assert all(r['epochs'] == 4 for r in plan['trials'])
+    assert plan['model_revision'] == '8ccc9b6f36199bec6961081d44eb72fb3f7353f3'
+    assert plan['compute_until'] == datetime.datetime.fromisoformat('2099-01-01T13:00:00+00:00').timestamp()
+    assert deberta_plan(tmp_path) == plan
+    (tmp_path / 'dataset.json').write_text(json.dumps({'manifest_sha256': 'changed'}))
+    with pytest.raises(AssertionError, match='plan changed'):
+        deberta_plan(tmp_path)

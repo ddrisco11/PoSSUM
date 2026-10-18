@@ -98,3 +98,9 @@ The report separates the first request, later single-request latency, and batch 
 ## Runtime provenance
 
 The [runtime snapshot](../reports/human-development-runtime.json) records Python, macOS, architecture and installed versions of the libraries used for the development run. Compact models use PyTorch MPS and quantized causal models use MLX. Model revisions and dataset hashes are recorded separately in training and export metadata. This package snapshot documents the environment that produced the results; it is not a tested fresh-install recipe or a portable dependency lock.
+
+## Additional encoder comparison
+
+A queued comparison uses [Microsoft DeBERTa-v3-base](https://huggingface.co/microsoft/deberta-v3-base), pinned to revision `8ccc9b6f36199bec6961081d44eb72fb3f7353f3`. The MIT-licensed model has 12 layers, 768 hidden dimensions, an 86-million-parameter backbone and 98 million embedding parameters. Its different pretraining recipe makes it a useful encoder comparison; published general-language results do not establish political-slant performance.
+
+Two full fine-tunes use the same frozen partitions and calibrated evaluation as BERT: mixed-source and human-only fitting, four epochs, learning rate 0.00002 and seed 42. The plan records the dataset hash, model revision and recipes before training. Tokenizer-only preflight passed without truncation on all development partitions. Actual MPS training compatibility, accuracy and speed remain to be measured. Training shares the existing pipeline lock, keeps optimizer/RNG recovery checkpoints and has a bounded compute budget that reserves time for final evaluation. A planned incomplete comparison must be disclosed if the final selection is frozen before it finishes.
