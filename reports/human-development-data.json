@@ -1,0 +1,45 @@
+{
+  "version": "improvement-20261018",
+  "rows": 4312,
+  "human_rows": 2199,
+  "counts": {
+    "MITweet:fit:0": 1099,
+    "MITweet:validation:0": 366,
+    "MITweet:calibration:0": 183,
+    "MITweet:gate:0": 183,
+    "MITweet:validation:1": 42,
+    "MITweet:topic_holdout:0": 111,
+    "MITweet:topic_holdout:1": 48,
+    "MITweet:fit:1": 125,
+    "MITweet:gate:1": 21,
+    "MITweet:calibration:1": 21,
+    "GPT-4 Political Ideologies:calibration:0": 200,
+    "GPT-4 Political Ideologies:gate:0": 180,
+    "GPT-4 Political Ideologies:fit:0": 535,
+    "GPT-4 Political Ideologies:validation:0": 200,
+    "GPT-4 Political Ideologies:fit:1": 421,
+    "GPT-4 Political Ideologies:gate:1": 179,
+    "GPT-4 Political Ideologies:validation:1": 198,
+    "GPT-4 Political Ideologies:calibration:1": 200
+  },
+  "stress_topics": [
+    "Energy Crisis",
+    "Mass Shootings",
+    "Political Parties"
+  ],
+  "selection": "Choose development candidates by MITweet validation log loss, with macro-F1, balanced accuracy and calibration reported. Topic holdout is opened only after candidate selection is frozen.",
+  "grouping": "New MITweet partitions use transitive lexical duplicate components, not topic-as-author proxies. Author/thread identities are unavailable; no author-disjoint claim. Topic stress split contains entire preselected topics and linked duplicates.",
+  "limitations": [
+    "Automated screening of human facet annotations, not direct overall-US gold labels.",
+    "12\u2013150 words admitted to retain meaningful short tweets.",
+    "Historical synthetic roles preserved; no protected historical holdout or diagnostic enters fitting.",
+    "All original datasets and earlier metrics remain separate and unchanged."
+  ],
+  "split_hashes": {
+    "fit": "31596837e2bf780b8127e7943cd1fa0e4e44d9bdd34def724c7a69c4e5d2d5a9",
+    "calibration": "2cb5ba8972b153b7893d695b40cd05f42faeab184a750a6dcc077ca3283e67bd",
+    "gate": "337ce381b725b6a7b63f9284b26673a6e1512d606651e0e42babe9e86ff0c8d4",
+    "validation": "dfce3d37db144e6fb3e653f36c0acdc3d04a4a65a5a0fbb729060ac8b2d422dd",
+    "topic_holdout": "b0fcc71069dcd2c157c29a641a5db151861a667db33f91a9c7c02d84f1b72eac"
+  }
+}

@@ -1,0 +1,133 @@
+"""Compare calibrated experts and small mixtures without accessing the sealed holdout."""
+import argparse
+import json
+from pathlib import Path
+
+import joblib
+import numpy as np
+from scipy.optimize import minimize
+from scipy.special import softmax
+from sklearn.metrics import roc_auc_score
+
+from .checkpoints import atomic_write, save_json, save_scores
+from .improvement import PARTS, load_data, report_predictions
+
+
+def binary_loss(y, p):
+    p = np.clip(p, 1e-7, 1 - 1e-7)
+    return -(y * np.log(p) + (1 - y) * np.log1p(-p))
+
+
+def diagnostics(rows, probabilities):
+    mask = np.array([r['source'] == 'MITweet' for r in rows])
+    y = np.array([r['label'] for r in rows])[mask]
+    p = np.asarray(probabilities)[mask]
+    losses = binary_loss(y, p)
+    return {'human_roc_auc': float(roc_auc_score(y, p)),
+            'human_class_balanced_log_loss': float(np.mean([losses[y == c].mean() for c in [0, 1]])),
+            'human_left_recall': float((p[y == 0] < .5).mean()),
+            'human_right_recall': float((p[y == 1] >= .5).mean()),
+            'human_counts': {'left': int((y == 0).sum()), 'right': int((y == 1).sum())}}
+
+
+def candidates(root, ids):
+    entries = {}
+    baselines = json.loads((root / 'baselines/report.json').read_text())
+    for family in ['lexical', 'bge', 'bert']:
+        name = min([n for n in baselines if n.startswith(family + '_')],
+                   key=lambda n: baselines[n]['validation']['sources']['MITweet']['log_loss'])
+        entries[name] = {'kind': 'baseline', 'model': f'baselines/{name}.joblib', 'scores': f'baselines/{name}_scores.npz'}
+    for best_path in sorted((root / 'compact').glob('*/best.json')):
+        best = json.loads(best_path.read_text())
+        folder = best_path.parent / best['folder']
+        entries[best['trial']['name']] = {'kind': 'compact', 'model': str(folder.relative_to(root)),
+                                         'scores': str((folder / 'scores.npz').relative_to(root)), 'trial': best['trial']}
+    for name in ['gliner', 'mistral', 'qwen']:
+        meta_path = root / 'experts' / f'{name}.json'
+        if meta_path.exists() and json.loads(meta_path.read_text()).get('complete'):
+            entries[name] = {'kind': 'expert', 'model': name, 'scores': f'experts/{name}_scores.npz'}
+    columns = []
+    for spec in entries.values():
+        z = np.load(root / spec['scores'], allow_pickle=False)
+        assert z['ids'].tolist() == ids, 'Prediction order differs'
+        p = z['values']
+        assert p.shape == (len(ids),) and np.isfinite(p).all() and ((p >= 0) & (p <= 1)).all()
+        columns.append(p)
+    return entries, np.stack(columns, axis=1)
+
+
+def run(root):
+    import torch
+    torch.set_num_threads(4)
+    parts = load_data(root)
+    rows = sum([parts[p] for p in PARTS[1:]], [])
+    ids = [r['id'] for r in rows]
+    entries, probabilities = candidates(root, ids)
+    names = list(entries)
+    ncal, ngate = len(parts['calibration']), len(parts['gate'])
+    gs = slice(ncal, ncal + ngate)
+    vs = slice(ncal + ngate, len(rows))
+    human = np.array([r['source'] == 'MITweet' for r in parts['gate']])
+    y = np.array([r['label'] for r in parts['gate']])[human]
+    gate = probabilities[gs][human]
+    out = root / 'mixtures'
+    out.mkdir(exist_ok=True)
+    registry = {}
+
+    def record(name, predicted, spec):
+        report = report_predictions(parts['validation'], predicted[vs])
+        registry[name] = {'validation': report, 'diagnostics': diagnostics(parts['validation'], predicted[vs]), 'spec': spec}
+        save_scores(out / f'{name}_scores.npz', predicted, ids, [])
+        print(name, json.dumps(report['sources']['MITweet']), flush=True)
+
+    for i, name in enumerate(names):
+        record(name, probabilities[:, i], {'kind': 'single', 'index': i})
+    record('equal_average', probabilities.mean(axis=1), {'kind': 'fixed', 'weights': [1 / len(names)] * len(names)})
+    for penalty in [0., .01, .1]:
+        def objective(weights):
+            return binary_loss(y, gate @ weights).mean() + penalty * np.square(weights - 1 / len(names)).sum()
+        result = minimize(objective, np.full(len(names), 1 / len(names)), method='SLSQP',
+                          bounds=[(0., 1.)] * len(names), constraints={'type': 'eq', 'fun': lambda w: w.sum() - 1},
+                          options={'maxiter': 1000, 'ftol': 1e-10})
+        assert result.success, result.message
+        weights = np.maximum(0, result.x); weights /= weights.sum()
+        record(f'fixed_{penalty:g}', probabilities @ weights, {'kind': 'fixed', 'weights': weights.tolist(), 'penalty': penalty})
+    z = np.load(root / 'bge_features.npz', allow_pickle=False)
+    lookup = {k: i for i, k in enumerate(z['ids'].tolist())}
+    x = z['values'][[lookup[i] for i in ids]].astype(np.float32)
+    mean, std = x[gs][human].mean(axis=0), x[gs][human].std(axis=0).clip(.02)
+    xx = (x - mean) / std
+    for penalty in [.01, .1]:
+        torch.manual_seed(42)
+        router = torch.nn.Sequential(torch.nn.Linear(x.shape[1], 8), torch.nn.Tanh(), torch.nn.Linear(8, len(names)))
+        optimizer = torch.optim.AdamW(router.parameters(), lr=.005, weight_decay=.01)
+        xt = torch.tensor(xx[gs][human]); pt = torch.tensor(gate, dtype=torch.float32); yt = torch.tensor(y, dtype=torch.float32)
+        for _ in range(200):
+            optimizer.zero_grad()
+            logits = router(xt)
+            pred = (logits.softmax(dim=1) * pt).sum(dim=1).clamp(1e-7, 1 - 1e-7)
+            loss = torch.nn.functional.binary_cross_entropy(pred, yt) + penalty * logits.square().mean()
+            loss.backward(); optimizer.step()
+        with torch.no_grad():
+            weights = router(torch.tensor(xx)).softmax(dim=1).numpy()
+        payload = {'layers': [x.shape[1], 8, len(names)], 'state': {k: v.detach().numpy() for k, v in router.state_dict().items()}, 'mean': mean, 'std': std}
+        name = f'router_{penalty:g}'
+        atomic_write(out / f'{name}.joblib', lambda f: joblib.dump(payload, f))
+        record(name, (weights * probabilities).sum(axis=1), {'kind': 'router', 'model': f'mixtures/{name}.joblib',
+                'penalty': penalty, 'validation_mean_weights': weights[vs].mean(axis=0).tolist(),
+                'self_branch': 'BGE logistic classifier fitted only on fit partition'})
+    selected = min(registry, key=lambda n: registry[n]['validation']['sources']['MITweet']['log_loss'])
+    signature = json.loads((root / 'dataset.json').read_text())
+    report = {'candidates': entries, 'results': registry, 'selected': selected, 'selection_metric': 'MITweet validation log_loss',
+              'dataset': signature, 'topic_holdout_scored': False, 'fit_roles': {'calibrators': 'human calibration',
+              'mixture_weights': 'human gate', 'selection': 'human validation'},
+              'limitations': ['Development selection is not a final test.', 'Human labels map multiple ideology facets to one binary axis.',
+                              'Human validation is strongly left-skewed.', 'Author-disjointness is unavailable.']}
+    save_json(out / 'comparison.json', report)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('run', type=Path)
+    args = parser.parse_args()
+    run(args.run)
