@@ -32,6 +32,33 @@ def diagnostics(rows, probabilities):
             'human_counts': {'left': int((y == 0).sum()), 'right': int((y == 1).sum())}}
 
 
+def predictor_groups(entries):
+    """Calibration variants share one underlying predictor's penalty mass."""
+    groups = {}
+    for index, spec in enumerate(entries.values()):
+        key = (spec['kind'], spec.get('model', 'constant'))
+        groups.setdefault(key, []).append(index)
+    matrix = np.zeros((len(groups), len(entries)))
+    for row, indices in enumerate(groups.values()):
+        matrix[row, indices] = 1.
+    return matrix
+
+
+def fit_fixed(gate, labels, penalty, groups=None):
+    if groups is None:
+        groups = np.eye(gate.shape[1])
+    target = np.full(len(groups), 1 / len(groups))
+    initial = (groups / groups.sum(axis=1, keepdims=True)).T @ target
+    def objective(weights):
+        return binary_loss(labels, gate @ weights).mean() + penalty * np.square(groups @ weights - target).sum()
+    result = minimize(objective, initial, method='SLSQP', bounds=[(0., 1.)] * gate.shape[1],
+                      constraints={'type': 'eq', 'fun': lambda w: w.sum() - 1},
+                      options={'maxiter': 1000, 'ftol': 1e-10})
+    assert result.success, result.message
+    weights = np.maximum(0, result.x)
+    return weights / weights.sum()
+
+
 def candidates(root, ids, calibration_prior):
     entries = {}
     baselines = json.loads((root / 'baselines/report.json').read_text())
@@ -98,14 +125,15 @@ def run(root):
         record(name, probabilities[:, i], {'kind': 'single', 'index': i})
     record('equal_average', probabilities.mean(axis=1), {'kind': 'fixed', 'weights': [1 / len(names)] * len(names)})
     for penalty in [0., .01, .1]:
-        def objective(weights):
-            return binary_loss(y, gate @ weights).mean() + penalty * np.square(weights - 1 / len(names)).sum()
-        result = minimize(objective, np.full(len(names), 1 / len(names)), method='SLSQP',
-                          bounds=[(0., 1.)] * len(names), constraints={'type': 'eq', 'fun': lambda w: w.sum() - 1},
-                          options={'maxiter': 1000, 'ftol': 1e-10})
-        assert result.success, result.message
-        weights = np.maximum(0, result.x); weights /= weights.sum()
+        weights = fit_fixed(gate, y, penalty)
         record(f'fixed_{penalty:g}', probabilities @ weights, {'kind': 'fixed', 'weights': weights.tolist(), 'penalty': penalty})
+    groups = predictor_groups(entries)
+    for penalty in [.01, .1]:
+        weights = fit_fixed(gate, y, penalty, groups)
+        record(f'fixed_grouped_{penalty:g}', probabilities @ weights,
+               {'kind': 'fixed', 'weights': weights.tolist(), 'penalty': penalty,
+                'regularization': 'Equal total mass per underlying predictor; calibration variants share a group.',
+                'groups': [[names[i] for i in np.flatnonzero(row)] for row in groups]})
     z = np.load(root / 'bge_features.npz', allow_pickle=False)
     lookup = {k: i for i, k in enumerate(z['ids'].tolist())}
     x = z['values'][[lookup[i] for i in ids]].astype(np.float32)

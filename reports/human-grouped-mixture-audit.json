@@ -1,0 +1,373 @@
+{
+  "stage": "Partial Mistral and compact comparison; Qwen and ModernBERT pending.",
+  "dataset_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17",
+  "selected": "fixed_0.1",
+  "selection_metric": "MITweet validation log_loss",
+  "topic_holdout_scored": false,
+  "results": {
+    "fixed_0": {
+      "validation": {
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.9824030620945788,
+            "balanced_accuracy": 0.9823232323232323,
+            "log_loss": 0.07605415115786976,
+            "brier": 0.014736993411735457,
+            "ece": 0.05692262053686444
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.8725817321126251,
+            "balanced_accuracy": 0.8686572989851677,
+            "log_loss": 0.12809819426691563,
+            "brier": 0.037771488460674366,
+            "ece": 0.022133519661116485
+          }
+        }
+      },
+      "diagnostics": {
+        "human_roc_auc": 0.9722872755659641,
+        "human_class_balanced_log_loss": 0.3582175674682215,
+        "human_left_recall": 0.9754098360655737,
+        "human_right_recall": 0.7619047619047619,
+        "human_counts": {
+          "left": 366,
+          "right": 42
+        }
+      },
+      "spec": {
+        "kind": "fixed",
+        "weights": [
+          0.0,
+          0.0,
+          9.436859639842114e-18,
+          0.0,
+          0.1256904127057,
+          2.2598481090753055e-17,
+          0.0,
+          1.9696122696986198e-17,
+          0.4371389941182281,
+          0.0,
+          9.944244329245475e-18,
+          1.3666072889330937e-18,
+          0.0,
+          0.0,
+          0.43717059317607176
+        ],
+        "penalty": 0.0
+      }
+    },
+    "fixed_0.01": {
+      "validation": {
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.9824030620945788,
+            "balanced_accuracy": 0.9823232323232323,
+            "log_loss": 0.07724884377241274,
+            "brier": 0.014918877626377287,
+            "ece": 0.0575185032094196
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.8725817321126251,
+            "balanced_accuracy": 0.8686572989851677,
+            "log_loss": 0.12756788787921405,
+            "brier": 0.037504997528685746,
+            "ece": 0.023106943220636257
+          }
+        }
+      },
+      "diagnostics": {
+        "human_roc_auc": 0.9726125422846734,
+        "human_class_balanced_log_loss": 0.3579803872952078,
+        "human_left_recall": 0.9754098360655737,
+        "human_right_recall": 0.7619047619047619,
+        "human_counts": {
+          "left": 366,
+          "right": 42
+        }
+      },
+      "spec": {
+        "kind": "fixed",
+        "weights": [
+          0.0,
+          1.3208388591650062e-17,
+          0.0,
+          0.0,
+          0.1358167698036875,
+          1.176410139018289e-18,
+          0.0,
+          0.0,
+          0.43207536218744097,
+          0.0,
+          0.0,
+          0.0,
+          2.1926051684791318e-17,
+          2.053254353105244e-17,
+          0.4321078680088714
+        ],
+        "penalty": 0.01
+      }
+    },
+    "fixed_0.1": {
+      "validation": {
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.979886800080857,
+            "balanced_accuracy": 0.9797979797979798,
+            "log_loss": 0.0902652533994225,
+            "brier": 0.0178934080002091,
+            "ece": 0.06980227688374815
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.8725817321126251,
+            "balanced_accuracy": 0.8686572989851677,
+            "log_loss": 0.12384896516631964,
+            "brier": 0.035082174366515485,
+            "ece": 0.03401138005341921
+          }
+        }
+      },
+      "diagnostics": {
+        "human_roc_auc": 0.9774264897215716,
+        "human_class_balanced_log_loss": 0.35056366010913803,
+        "human_left_recall": 0.9754098360655737,
+        "human_right_recall": 0.7619047619047619,
+        "human_counts": {
+          "left": 366,
+          "right": 42
+        }
+      },
+      "spec": {
+        "kind": "fixed",
+        "weights": [
+          0.04089965352118754,
+          1.1018725891174014e-17,
+          0.0,
+          0.0,
+          0.15207334899013125,
+          9.819219004403781e-18,
+          0.0,
+          1.0689968874181202e-17,
+          0.3787977318494131,
+          6.082146296033934e-18,
+          0.04941630593814054,
+          8.524060610082731e-19,
+          0.0,
+          0.0,
+          0.3788129597011277
+        ],
+        "penalty": 0.1
+      }
+    },
+    "fixed_grouped_0.01": {
+      "validation": {
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.9824030620945788,
+            "balanced_accuracy": 0.9823232323232323,
+            "log_loss": 0.07909985741934374,
+            "brier": 0.015217033700906315,
+            "ece": 0.05747630553088058
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.8725817321126251,
+            "balanced_accuracy": 0.8686572989851677,
+            "log_loss": 0.1268731022288109,
+            "brier": 0.03711744059589657,
+            "ece": 0.021074833636469323
+          }
+        }
+      },
+      "diagnostics": {
+        "human_roc_auc": 0.9730679156908664,
+        "human_class_balanced_log_loss": 0.3578649588869376,
+        "human_left_recall": 0.9754098360655737,
+        "human_right_recall": 0.7619047619047619,
+        "human_counts": {
+          "left": 366,
+          "right": 42
+        }
+      },
+      "spec": {
+        "kind": "fixed",
+        "weights": [
+          7.584332504478919e-18,
+          0.0,
+          9.159241775985504e-18,
+          0.0,
+          0.1513700793224438,
+          5.0533980580830664e-18,
+          9.28460265217914e-18,
+          0.0,
+          0.4242999822633564,
+          2.915237916883007e-17,
+          2.182723824097488e-17,
+          2.1983320597415613e-17,
+          1.200866061054897e-17,
+          1.0202786367002802e-17,
+          0.42432993841419975
+        ],
+        "penalty": 0.01,
+        "regularization": "Equal total mass per underlying predictor; calibration variants share a group.",
+        "groups": [
+          [
+            "lexical_mixed_C10",
+            "lexical_mixed_C10_cvcal"
+          ],
+          [
+            "bge_human_C10"
+          ],
+          [
+            "bert_human_C10"
+          ],
+          [
+            "bert_full_human"
+          ],
+          [
+            "bert_full_mixed"
+          ],
+          [
+            "bert_lora_human",
+            "bert_lora_human_cvcal"
+          ],
+          [
+            "bert_lora_mixed",
+            "bert_lora_mixed_cvcal"
+          ],
+          [
+            "gliner",
+            "gliner_cvcal"
+          ],
+          [
+            "mistral",
+            "mistral_cvcal"
+          ],
+          [
+            "constant_calibration_prior"
+          ]
+        ]
+      }
+    },
+    "fixed_grouped_0.1": {
+      "validation": {
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.9899474641341686,
+            "balanced_accuracy": 0.9898989898989898,
+            "log_loss": 0.11819436098635669,
+            "brier": 0.024799036932395543,
+            "ece": 0.08800128361218143
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.8834971025447216,
+            "balanced_accuracy": 0.8713895394223263,
+            "log_loss": 0.12896127367040006,
+            "brier": 0.03448063015916678,
+            "ece": 0.04587247762645702
+          }
+        }
+      },
+      "diagnostics": {
+        "human_roc_auc": 0.9794431433775697,
+        "human_class_balanced_log_loss": 0.3749338391610312,
+        "human_left_recall": 0.9808743169398907,
+        "human_right_recall": 0.7619047619047619,
+        "human_counts": {
+          "left": 366,
+          "right": 42
+        }
+      },
+      "spec": {
+        "kind": "fixed",
+        "weights": [
+          0.0,
+          0.0,
+          0.005978655833310791,
+          0.024942782762352077,
+          0.21284024437249874,
+          1.3747736275940082e-17,
+          0.036245139785237836,
+          0.0,
+          0.3032103526153964,
+          2.4907309170873266e-18,
+          0.11332258208170068,
+          3.2593508065637077e-18,
+          0.0,
+          7.198072705931906e-19,
+          0.30346024254950354
+        ],
+        "penalty": 0.1,
+        "regularization": "Equal total mass per underlying predictor; calibration variants share a group.",
+        "groups": [
+          [
+            "lexical_mixed_C10",
+            "lexical_mixed_C10_cvcal"
+          ],
+          [
+            "bge_human_C10"
+          ],
+          [
+            "bert_human_C10"
+          ],
+          [
+            "bert_full_human"
+          ],
+          [
+            "bert_full_mixed"
+          ],
+          [
+            "bert_lora_human",
+            "bert_lora_human_cvcal"
+          ],
+          [
+            "bert_lora_mixed",
+            "bert_lora_mixed_cvcal"
+          ],
+          [
+            "gliner",
+            "gliner_cvcal"
+          ],
+          [
+            "mistral",
+            "mistral_cvcal"
+          ],
+          [
+            "constant_calibration_prior"
+          ]
+        ]
+      }
+    }
+  },
+  "candidate_order": [
+    "lexical_mixed_C10",
+    "bge_human_C10",
+    "bert_human_C10",
+    "bert_full_human",
+    "bert_full_mixed",
+    "bert_lora_human",
+    "bert_lora_mixed",
+    "gliner",
+    "mistral",
+    "constant_calibration_prior",
+    "lexical_mixed_C10_cvcal",
+    "bert_lora_human_cvcal",
+    "bert_lora_mixed_cvcal",
+    "gliner_cvcal",
+    "mistral_cvcal"
+  ],
+  "interpretation": [
+    "Grouped regularization assigns equal target mass per underlying predictor, summing its calibration variants.",
+    "Legacy regularization remains a comparison; the selected candidate is unchanged.",
+    "A higher macro-F1 does not override the predeclared log-loss selection criterion.",
+    "These are exploratory development results, not an independent final test."
+  ]
+}

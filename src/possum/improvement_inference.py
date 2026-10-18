@@ -40,10 +40,7 @@ def encoder_features(name, texts, device):
     return features
 
 
-def component(bundle, spec, texts, device, embeddings):
-    override = joblib.load(bundle / spec['calibration_override']) if 'calibration_override' in spec else None
-    if spec['kind'] == 'constant':
-        return np.full(len(texts), spec['probability'])
+def raw_component(bundle, spec, texts, device, embeddings):
     if spec['kind'] == 'baseline':
         saved = joblib.load(bundle / spec['model'])
         feature = saved['features']
@@ -54,7 +51,7 @@ def component(bundle, spec, texts, device, embeddings):
                 embeddings[feature] = encoder_features(feature, texts, device)
             x = embeddings[feature]
         raw = saved['head'].decision_function(x)
-        return (override if override is not None else saved['calibrator']).predict_proba(raw[:, None])[:, 1]
+        return np.asarray(raw), saved['calibrator']
     if spec['kind'] == 'compact':
         import torch
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
@@ -81,8 +78,7 @@ def component(bundle, spec, texts, device, embeddings):
                 raw.extend((z[:, 1] - z[:, 0]).tolist())
         del model
         release_memory()
-        calibrator = override if override is not None else joblib.load(folder / 'calibrator.joblib')
-        return calibrator.predict_proba(np.asarray(raw)[:, None])[:, 1]
+        return np.asarray(raw), joblib.load(folder / 'calibrator.joblib')
     name = spec['model']
     if name in MODELS:
         from .components.causal import MLXCausal
@@ -96,8 +92,20 @@ def component(bundle, spec, texts, device, embeddings):
     raw = model.score(texts)
     del model
     release_memory()
-    calibrator = override if override is not None else joblib.load(bundle / spec['calibrator'])
-    return calibrator.predict_proba((raw[:, 1] - raw[:, 0])[:, None])[:, 1]
+    return raw[:, 1] - raw[:, 0], joblib.load(bundle / spec['calibrator'])
+
+
+def component(bundle, spec, texts, device, embeddings, raw_cache=None):
+    if spec['kind'] == 'constant':
+        return np.full(len(texts), spec['probability'])
+    # Cache is scoped to one prediction call; never reuse scores for another batch.
+    cache = raw_cache if raw_cache is not None else {}
+    key = json.dumps({k: spec[k] for k in ['kind', 'model', 'backbone', 'calibrator', 'trial'] if k in spec}, sort_keys=True)
+    if key not in cache:
+        cache[key] = raw_component(bundle, spec, texts, device, embeddings)
+    raw, default_calibrator = cache[key]
+    calibrator = joblib.load(bundle / spec['calibration_override']) if 'calibration_override' in spec else default_calibrator
+    return calibrator.predict_proba(raw[:, None])[:, 1]
 
 
 def predict(bundle, texts, device='mps'):
@@ -114,9 +122,9 @@ def predict(bundle, texts, device='mps'):
     torch.set_num_threads(4)
     if device == 'mps' and not torch.backends.mps.is_available():
         raise RuntimeError('MPS unavailable; use --device cpu for compatible compact models.')
-    embeddings = {}
+    embeddings, raw_cache = {}, {}
     names = list(manifest['components'])
-    probabilities = np.stack([component(bundle, spec, texts, device, embeddings) for spec in manifest['components'].values()], axis=1)
+    probabilities = np.stack([component(bundle, spec, texts, device, embeddings, raw_cache) for spec in manifest['components'].values()], axis=1)
     selected = manifest['selection']
     if selected['kind'] == 'single':
         weights = np.ones((len(texts), 1))
@@ -190,7 +198,20 @@ def export(root, device='mps'):
     # Versions are immutable so interrupted copies cannot replace a verified bundle.
     bundle = root / 'exports' / f'{selected_name}-{time.time_ns()}'
     bundle.mkdir(parents=True)
-    components = {}
+    components, copied = {}, {}
+
+    def copy_once(source, destination):
+        source = Path(source)
+        key = str(source.resolve())
+        if key not in copied:
+            destination.parent.mkdir(exist_ok=True)
+            if source.is_dir():
+                shutil.copytree(source, destination, ignore=shutil.ignore_patterns('scores.npz', 'evaluation.json'))
+            else:
+                shutil.copy2(source, destination)
+            copied[key] = str(destination.relative_to(bundle))
+        return copied[key]
+
     for name, original in entries.items():
         spec = dict(original)
         spec.pop('scores', None)
@@ -205,19 +226,12 @@ def export(root, device='mps'):
             model_name = spec['model']
             source = root / 'experts' / f'{model_name}_calibrator.joblib'
             destination = bundle / 'components' / f'{name}_calibrator.joblib'
-            destination.parent.mkdir(exist_ok=True)
-            shutil.copy2(source, destination)
-            spec['calibrator'] = str(destination.relative_to(bundle))
+            spec['calibrator'] = copy_once(source, destination)
             spec['backbone'] = list(MODELS[model_name]) if model_name in MODELS else ['fastino/gliner2.5-base-v1', resolve('fastino/gliner2.5-base-v1')]
         else:
             source = root / spec['model']
             destination = bundle / 'components' / name
-            destination.parent.mkdir(exist_ok=True)
-            if source.is_dir():
-                shutil.copytree(source, destination, ignore=shutil.ignore_patterns('scores.npz', 'evaluation.json'))
-            else:
-                shutil.copy2(source, destination)
-            spec['model'] = str(destination.relative_to(bundle))
+            spec['model'] = copy_once(source, destination)
         components[name] = spec
     if selected['kind'] == 'router':
         shutil.copy2(root / selected['model'], bundle / 'router.joblib')

@@ -247,3 +247,80 @@ def test_distillation_targets_reject_role_order_and_integrity_changes(tmp_path):
     save_scores(path, [[-2., -1.], [-3., -1.]], ['fit-a', 'fit-b'], [])
     with pytest.raises(AssertionError, match='cache changed'):
         load_targets(tmp_path, rows, 'mistral')
+
+
+def test_grouped_mixture_penalty_is_invariant_to_duplicate_calibration_candidates():
+    from possum.improvement_mixtures import fit_fixed, predictor_groups
+    labels = np.array([0, 0, 0, 0, 1, 1, 1, 1])
+    scores = np.array([[.1, .2], [.3, .1], [.2, .4], [.7, .1], [.8, .6], [.9, .5], [.4, .8], [.6, .9]])
+    entries = {'a': {'kind': 'expert', 'model': 'a'}, 'b': {'kind': 'expert', 'model': 'b'}}
+    first = fit_fixed(scores, labels, .1, predictor_groups(entries))
+    duplicate = dict(entries, a_calibrated={'kind': 'expert', 'model': 'a', 'calibration_override': 'other'})
+    expanded = np.column_stack([scores, scores[:, 0]])
+    second = fit_fixed(expanded, labels, .1, predictor_groups(duplicate))
+    np.testing.assert_allclose(scores @ first, expanded @ second, atol=2e-5)
+    assert second[0] + second[2] == pytest.approx(first[0], abs=3e-5)
+
+
+def test_inference_reuses_raw_model_scores_across_calibrators_only_within_batch(tmp_path, monkeypatch):
+    import joblib
+    from possum import improvement_inference as module
+    from possum.calibration_cv import AffineCalibration
+    calls = []
+    def fake_raw(bundle, spec, texts, device, embeddings):
+        calls.append((spec['model'], list(texts)))
+        return np.arange(len(texts), dtype=float), AffineCalibration(1., 0., 'temperature')
+    monkeypatch.setattr(module, 'raw_component', fake_raw)
+    joblib.dump(AffineCalibration(0., np.log(3), 'monotone_platt'), tmp_path / 'override.joblib')
+    shared = {'kind': 'expert', 'model': 'mistral', 'backbone': ['model', 'revision'], 'calibrator': 'shared.joblib'}
+    manifest = {'artifact_hashes': {}, 'components': {'original': shared, 'alternative': dict(shared, calibration_override='override.joblib')},
+                'selection': {'kind': 'fixed', 'weights': [.5, .5]}}
+    (tmp_path / 'model.json').write_text(json.dumps(manifest))
+    result = module.predict(tmp_path, ['first passage', 'second passage'], device='cpu')
+    assert len(calls) == 1
+    assert result[0]['probability_right'] == pytest.approx(.625)
+    assert result[1]['components']['alternative']['probability_right'] == pytest.approx(.75)
+    module.predict(tmp_path, ['new passage'], device='cpu')
+    assert len(calls) == 2 and calls[-1][1] == ['new passage']
+
+
+def test_export_shares_predictor_artifacts_and_preserves_calibrated_parity(tmp_path, monkeypatch):
+    import joblib
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.linear_model import LogisticRegression
+    from possum import improvement_inference as module, improvement_audit
+    from possum.calibration_cv import AffineCalibration
+    from possum.checkpoints import save_scores
+    texts = ['support public services', 'expand social welfare', 'reduce income taxes', 'protect private markets']
+    vectorizer = TfidfVectorizer().fit(texts)
+    head = LogisticRegression().fit(vectorizer.transform(texts), [0, 0, 1, 1])
+    calibrator = AffineCalibration(1., 0., 'temperature')
+    alternate = AffineCalibration(.8, -.2, 'platt')
+    joblib.dump(dict(features='lexical', vectorizer=vectorizer, head=head, calibrator=calibrator), tmp_path / 'classifier.joblib')
+    joblib.dump(alternate, tmp_path / 'alternate.joblib')
+    ids = [str(i) for i in range(4)]
+    raw = head.decision_function(vectorizer.transform(texts))[:, None]
+    expected = .4 * calibrator.predict_proba(raw)[:, 1] + .6 * alternate.predict_proba(raw)[:, 1]
+    mixture = tmp_path / 'mixtures'
+    mixture.mkdir()
+    save_scores(mixture / 'fixed_scores.npz', expected, ids, [])
+    spec = {'kind': 'baseline', 'model': 'classifier.joblib'}
+    comparison = {'selected': 'fixed', 'candidates': {'original': spec, 'alternative': dict(spec, calibration_override='alternate.joblib')},
+                  'results': {'fixed': {'spec': {'kind': 'fixed', 'weights': [.4, .6]},
+                                        'validation': {'sources': {'MITweet': {'log_loss': .2}}}}},
+                  'dataset': {'manifest_sha256': 'test'}, 'limitations': []}
+    (mixture / 'comparison.json').write_text(json.dumps(comparison))
+    (tmp_path / 'dataset.json').write_text(json.dumps(comparison['dataset']))
+    (mixture / 'audit.json').write_text(json.dumps({'human_calibration_prior_right': .5,
+        'models': {'fixed': {'gate_selected_balanced_threshold': {'threshold': .5}}}}))
+    monkeypatch.setattr(improvement_audit, 'run', lambda root: None)
+    monkeypatch.setattr(module, 'resolve', lambda name: 'pinned')
+    monkeypatch.setattr(module, 'load_data', lambda root: {'calibration': [{'id': i, 'text': t} for i, t in zip(ids, texts)]})
+    module.export(tmp_path, device='cpu')
+    pointer = json.loads((tmp_path / 'export.json').read_text())
+    bundle = Path(pointer['path'])
+    manifest = json.loads((bundle / 'model.json').read_text())
+    assert manifest['components']['original']['model'] == manifest['components']['alternative']['model']
+    assert len(list((bundle / 'components').iterdir())) == 2  # one predictor, one alternative calibrator
+    np.testing.assert_allclose([r['probability_right'] for r in module.predict(bundle, texts, device='cpu')], expected)
+    assert json.loads((bundle / 'verification.json').read_text())['passed']

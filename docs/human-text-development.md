@@ -41,3 +41,10 @@ Frozen Mistral improves human development macro-F1 to 0.852 and log loss to 0.14
 After frozen expert and encoder comparisons, the lower-human-validation-log-loss frozen Mistral/Qwen model supplies soft left/right targets for the 2,180 fit passages only. These targets remain explicitly model-generated. The compact backbone is chosen from the initial BERT/ModernBERT recipe comparison and initialized from its pretrained base. Two four-epoch mixed-data trials use teacher-loss weights 0.25 and 0.50, temperature 2, learning rate 0.00002 and seed 42. Their objective combines labeled cross-entropy with temperature-scaled KL divergence; source–class weights apply to both terms. Raw teacher logits use the existing forced left/right prompt. Calibration, mixture fitting, validation and the sealed topic holdout retain their separate roles.
 
 The teacher plan, model revision, dataset hash, target identities and completed target-cache hash are recorded. Teacher scoring saves every ten passages; student checkpoints include optimizer/RNG state and the target-cache hash. The comparison is prospective: no distillation improvement is claimed before training and evaluation finish.
+
+
+## Calibration variants and mixture cost
+
+Calibration variants of one predictor share the same underlying forward pass. New exports copy each predictor artifact once, cache its raw scores within a prediction batch, and apply each calibrator separately. Batch caches cannot carry predictions into a different request. Aggregate prediction weights still identify each calibrated component.
+
+A grouped fixed-mixture comparison regularizes the total weight assigned to each underlying predictor, so creating an additional calibration variant does not independently change that predictor's regularization target. The legacy per-component penalty remains reported. In the partial Mistral/compact comparison, the stronger grouped penalty increases macro-F1 to 0.883 but worsens log loss to 0.129, versus 0.873 and 0.124 for the selected legacy mixture. The predeclared log-loss criterion therefore retains the incumbent. [Grouped comparison](../reports/human-grouped-mixture-audit.json).
