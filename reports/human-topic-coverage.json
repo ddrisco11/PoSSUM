@@ -1,0 +1,253 @@
+{
+  "dataset_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17",
+  "development_human_topic_counts": {
+    "fit": {
+      "Abortion": {
+        "n": 657,
+        "left": 593,
+        "right": 64
+      },
+      "Black Lives Matter": {
+        "n": 17,
+        "left": 17,
+        "right": 0
+      },
+      "CHIPS and Science Act": {
+        "n": 5,
+        "left": 3,
+        "right": 2
+      },
+      "Capitol Hill Riot": {
+        "n": 8,
+        "left": 6,
+        "right": 2
+      },
+      "Covid-19": {
+        "n": 59,
+        "left": 57,
+        "right": 2
+      },
+      "Democracy": {
+        "n": 15,
+        "left": 13,
+        "right": 2
+      },
+      "George Floyd": {
+        "n": 2,
+        "left": 1,
+        "right": 1
+      },
+      "Inflation Reduction Act": {
+        "n": 76,
+        "left": 52,
+        "right": 24
+      },
+      "Mexico\u2013US Border": {
+        "n": 19,
+        "left": 9,
+        "right": 10
+      },
+      "Russo-Ukrainian War": {
+        "n": 3,
+        "left": 2,
+        "right": 1
+      },
+      "Women\u2019s Right": {
+        "n": 363,
+        "left": 346,
+        "right": 17
+      }
+    },
+    "calibration": {
+      "Abortion": {
+        "n": 113,
+        "left": 102,
+        "right": 11
+      },
+      "Black Lives Matter": {
+        "n": 4,
+        "left": 4,
+        "right": 0
+      },
+      "CHIPS and Science Act": {
+        "n": 1,
+        "left": 1,
+        "right": 0
+      },
+      "Covid-19": {
+        "n": 11,
+        "left": 10,
+        "right": 1
+      },
+      "Democracy": {
+        "n": 3,
+        "left": 3,
+        "right": 0
+      },
+      "Inflation Reduction Act": {
+        "n": 6,
+        "left": 5,
+        "right": 1
+      },
+      "Mexico\u2013US Border": {
+        "n": 6,
+        "left": 2,
+        "right": 4
+      },
+      "Russo-Ukrainian War": {
+        "n": 1,
+        "left": 1,
+        "right": 0
+      },
+      "Women\u2019s Right": {
+        "n": 59,
+        "left": 55,
+        "right": 4
+      }
+    },
+    "gate": {
+      "Abortion": {
+        "n": 116,
+        "left": 106,
+        "right": 10
+      },
+      "Black Lives Matter": {
+        "n": 5,
+        "left": 5,
+        "right": 0
+      },
+      "CHIPS and Science Act": {
+        "n": 2,
+        "left": 2,
+        "right": 0
+      },
+      "Capitol Hill Riot": {
+        "n": 2,
+        "left": 1,
+        "right": 1
+      },
+      "Covid-19": {
+        "n": 9,
+        "left": 8,
+        "right": 1
+      },
+      "Democracy": {
+        "n": 1,
+        "left": 1,
+        "right": 0
+      },
+      "Inflation Reduction Act": {
+        "n": 12,
+        "left": 8,
+        "right": 4
+      },
+      "Mexico\u2013US Border": {
+        "n": 4,
+        "left": 2,
+        "right": 2
+      },
+      "Russo-Ukrainian War": {
+        "n": 2,
+        "left": 2,
+        "right": 0
+      },
+      "Women\u2019s Right": {
+        "n": 51,
+        "left": 48,
+        "right": 3
+      }
+    },
+    "validation": {
+      "Abortion": {
+        "n": 210,
+        "left": 187,
+        "right": 23
+      },
+      "Black Lives Matter": {
+        "n": 6,
+        "left": 5,
+        "right": 1
+      },
+      "CHIPS and Science Act": {
+        "n": 2,
+        "left": 2,
+        "right": 0
+      },
+      "Capitol Hill Riot": {
+        "n": 3,
+        "left": 2,
+        "right": 1
+      },
+      "Covid-19": {
+        "n": 18,
+        "left": 18,
+        "right": 0
+      },
+      "Democracy": {
+        "n": 4,
+        "left": 2,
+        "right": 2
+      },
+      "Inflation Reduction Act": {
+        "n": 22,
+        "left": 19,
+        "right": 3
+      },
+      "Mexico\u2013US Border": {
+        "n": 8,
+        "left": 2,
+        "right": 6
+      },
+      "Russo-Ukrainian War": {
+        "n": 3,
+        "left": 2,
+        "right": 1
+      },
+      "Women\u2019s Right": {
+        "n": 132,
+        "left": 127,
+        "right": 5
+      }
+    }
+  },
+  "two_largest_validation_topics": [
+    "Abortion",
+    "Women\u2019s Right"
+  ],
+  "share_of_human_validation": 0.8382352941176471,
+  "selected_model_validation_slices": {
+    "two_largest_topics": {
+      "n": 342,
+      "left": 314,
+      "right": 28,
+      "metrics": {
+        "macro_f1": 0.8608813559322034,
+        "balanced_accuracy": 0.87852593266606,
+        "log_loss": 0.12138235231862615,
+        "brier": 0.03425058363765084,
+        "ece": 0.022816965220993822
+      }
+    },
+    "remaining_topics": {
+      "n": 66,
+      "left": 52,
+      "right": 14,
+      "metrics": {
+        "macro_f1": 0.8981481481481481,
+        "balanced_accuracy": 0.8571428571428572,
+        "log_loss": 0.13064179364220835,
+        "brier": 0.039569175961251236,
+        "ece": 0.057743451988571545
+      }
+    }
+  },
+  "model_manifest_sha256": "7d56705c50fa86c57c89dbdced65619477a93c27b501c1bf1facb53aed6d78b6",
+  "topic_holdout_scored": false,
+  "selection_changed": false,
+  "limitations": [
+    "Exploratory coverage audit of the already-used development partitions; no independent test.",
+    "Largest topics defined by validation sample count, not by model error.",
+    "Remaining-topic subset is small and heterogeneous; it is not a broad political benchmark.",
+    "Topic imbalance and mapped human facet labels limit overall-US interpretation."
+  ]
+}
