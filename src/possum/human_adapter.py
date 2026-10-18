@@ -34,6 +34,8 @@ def update_indices(count, step, recipe=RECIPE):
 
 
 def train(root, target_epoch):
+    from .improvement import require_development_open
+    require_development_open(root)
     import mlx.core as mx
     import mlx.nn as nn
     import mlx.optimizers as optim

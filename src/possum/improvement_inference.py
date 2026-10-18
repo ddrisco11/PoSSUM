@@ -159,6 +159,8 @@ def predict(bundle, texts, device='mps'):
 
 
 def select_verified_export(root):
+    from .improvement import require_development_open
+    require_development_open(root)
     signature = json.loads((root / 'dataset.json').read_text())['manifest_sha256']
     eligible = []
     for verification in (root / 'exports').glob('*/verification.json'):
@@ -200,6 +202,8 @@ def best_comparison(root):
 
 
 def export(root, device='mps', candidate=None, comparison_dir=None):
+    from .improvement import require_development_open
+    require_development_open(root)
     directory = Path(comparison_dir) if comparison_dir is not None else best_comparison(root) if candidate is None else root / 'mixtures'
     comparison = json.loads((directory / 'comparison.json').read_text())
     assert comparison['dataset']['manifest_sha256'] == json.loads((root / 'dataset.json').read_text())['manifest_sha256'], 'Comparison dataset differs'

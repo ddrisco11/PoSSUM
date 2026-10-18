@@ -41,7 +41,11 @@ def report_predictions(rows,p):
    else:out[key][name]={'n':int(mask.sum()),'single_class':int(yy[0]),'accuracy':float(((p[mask]>=.5)==yy).mean())}
  return out
 
+def require_development_open(root):
+ if (root/'selection-freeze.json').exists():raise RuntimeError('Candidate selection is frozen; further development fitting is disabled for this run')
+
 def baseline(root):
+ require_development_open(root)
  parts=load_data(root);out=root/'baselines';out.mkdir(exist_ok=True)
  report_path=out/'report.json';results=json.loads(report_path.read_text()) if report_path.exists() else {}
  embeddings={}

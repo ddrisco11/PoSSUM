@@ -408,3 +408,59 @@ def test_adapter_scoring_rejects_changed_weights_before_model_load(tmp_path, mon
     (adapter / 'training.json').write_text(json.dumps({'complete': True, 'signature': {'manifest_sha256': 'frozen'}, 'adapter_sha256': 'wrong'}))
     with pytest.raises(AssertionError):
         improvement_experts.run(tmp_path, 'mistral_human_lora_e1')
+
+
+def final_fixture(tmp_path, holdout_text):
+    data = tmp_path / 'data'
+    data.mkdir()
+    (data / 'topic_holdout.jsonl').write_text(holdout_text)
+    (data / 'manifest.json').write_text(json.dumps({'split_hashes': {'topic_holdout': digest(data / 'topic_holdout.jsonl')}}))
+    dataset = {'path': str(data), 'manifest_sha256': digest(data / 'manifest.json')}
+    (tmp_path / 'dataset.json').write_text(json.dumps(dataset))
+    (tmp_path / 'state.json').write_text(json.dumps({'deadline': '2099-01-01T00:00:00+00:00'}))
+    bundle = tmp_path / 'bundle'
+    bundle.mkdir()
+    (bundle / 'model.json').write_text(json.dumps({'dataset': dataset, 'artifact_hashes': {}, 'selected_name': 'constant',
+        'selection': {'kind': 'single'}, 'components': {'prior': {'kind': 'constant', 'probability': .25}},
+        'validation': {'sources': {'MITweet': {'log_loss': .5}}},
+        'decision_rules': {'human_calibration_prior_right': .25, 'gate_balanced_threshold': .5}}))
+    (bundle / 'verification.json').write_text(json.dumps({'passed': True}))
+    (tmp_path / 'export.json').write_text(json.dumps({'path': str(bundle)}))
+    return data, bundle
+
+
+def test_selection_freeze_does_not_open_holdout_and_blocks_fitting(tmp_path):
+    from possum.final_evaluation import freeze
+    from possum.improvement import require_development_open
+    data, _ = final_fixture(tmp_path, 'INVALID JSON: selection freeze must not parse this')
+    with pytest.raises(ValueError, match='incomplete'):
+        freeze(tmp_path)
+    freeze(tmp_path, allow_incomplete=True, reason='Fixture with incomplete training')
+    assert not (tmp_path / 'final-evaluation/exposure.json').exists()
+    with pytest.raises(RuntimeError, match='frozen'):
+        require_development_open(tmp_path)
+    with pytest.raises(ValueError, match='already frozen'):
+        freeze(tmp_path, allow_incomplete=True, reason='Must not change frozen candidates')
+
+
+def test_final_evaluation_requires_freeze_rejects_tampering_and_runs_once(tmp_path, monkeypatch):
+    from possum.final_evaluation import freeze, evaluate
+    from possum import improvement_inference
+    rows = [{'id': str(i), 'text': f'Example passage number {i}', 'label': i % 2, 'source': 'MITweet', 'topic': 'topic'} for i in range(4)]
+    data, bundle = final_fixture(tmp_path, ''.join(json.dumps(r) + '\n' for r in rows))
+    with pytest.raises(ValueError, match='Freeze'):
+        evaluate(tmp_path, 'cpu')
+    freeze(tmp_path, allow_incomplete=True, reason='Fixture')
+    original = (bundle / 'model.json').read_text()
+    (bundle / 'model.json').write_text(original + '\n')
+    with pytest.raises(AssertionError, match='bundle changed'):
+        evaluate(tmp_path, 'cpu')
+    assert not (tmp_path / 'final-evaluation/exposure.json').exists()
+    (bundle / 'model.json').write_text(original)
+    report = evaluate(tmp_path, 'cpu')
+    assert report['rows'] == 4 and report['results']['selected']['class_counts'] == {'0': 2, '1': 2}
+    assert (tmp_path / 'final-evaluation/exposure.json').exists()
+    def forbidden(*args, **kwargs):
+        raise AssertionError('Completed holdout must not run predictions again')
+    monkeypatch.setattr(improvement_inference, 'predict', forbidden)
+    assert evaluate(tmp_path, 'cpu') == report

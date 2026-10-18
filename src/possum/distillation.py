@@ -68,6 +68,8 @@ def training_loss(logits, labels, weights, teacher_logits=None, alpha=0., temper
 
 
 def score_fit(root):
+    from .improvement import require_development_open
+    require_development_open(root)
     lock = (root / 'teacher-process.lock').open('a')
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     spec = plan(root)

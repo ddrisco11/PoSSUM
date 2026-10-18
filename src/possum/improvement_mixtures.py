@@ -91,6 +91,8 @@ def candidates(root, ids, calibration_prior):
 
 
 def run(root):
+    from .improvement import require_development_open
+    require_development_open(root)
     import torch
     torch.set_num_threads(4)
     parts = load_data(root)

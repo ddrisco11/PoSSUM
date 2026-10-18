@@ -38,6 +38,8 @@ def replication_plan(root):
  return plan
 
 def run(root, family='bert'):
+ from .improvement import require_development_open
+ require_development_open(root)
  import torch,joblib,fcntl
  from transformers import AutoTokenizer,AutoModelForSequenceClassification
  from peft import get_peft_model,LoraConfig,TaskType,get_peft_model_state_dict,set_peft_model_state_dict

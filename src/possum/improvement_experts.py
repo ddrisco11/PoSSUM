@@ -32,6 +32,8 @@ def expert_settings(name):
 
 
 def run(root, name):
+    from .improvement import require_development_open
+    require_development_open(root)
     lock = (root / 'expert-process.lock').open('w')
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     parts = load_data(root)
