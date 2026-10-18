@@ -87,7 +87,7 @@ Measured local inference on 12 calibration passages:
 
 Each request includes model loading, integrity checks and cleanup; these are not persistent warm-server measurements. The batch contains the same 12 passages, and all three exports passed single/batch prediction parity. The mixture's small validation-loss improvement over Mistral alone comes with substantially higher measured cost. [Timing protocol and complete measurements](reports/human-inference-latency.json).
 
-The output includes left/right probabilities, a default binary label, the gate-set decision threshold and a separate equal-prior score. These are probabilities under a binary task, not a measure of ideological intensity. Neutral, ambiguous or nonpolitical input can still receive a confident binary answer; a validated neutrality/abstention model remains outstanding. Inputs over the recorded token limit are rejected rather than truncated.
+The output includes left/right probabilities, a default binary label, the gate-set decision threshold and a separate equal-prior score. These are probabilities under a binary task, not a measure of ideological intensity. Neutral, ambiguous or nonpolitical input can still receive a confident binary answer; a validated neutrality/abstention model remains outstanding. Inputs over the recorded token limit are rejected rather than truncated. The Python batch API expects a list or tuple of strings; empty passages and invalid model probabilities produce explicit errors. Encoder resources are released on input-length errors.
 
 ## Historical adapted-model evaluation (October 17)
 

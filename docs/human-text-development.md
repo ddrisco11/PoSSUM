@@ -146,3 +146,8 @@ Only three topics are represented, and Mass Shootings contains just 14 passages 
 `python -m possum.export_validation RUN --device mps` copies each frozen bundle into a temporary directory and launches a fresh Python process from that directory. It compares three already-used calibration passages with their cached reference probabilities, verifies manifest/artifact hashes before and after, and removes the temporary copies. It does not load the topic holdout, fit models or change candidate selection.
 
 All three exports passed. Maximum absolute differences were 1.11e−16 for the selected mixture, 1.15e−8 for DeBERTa and zero for Mistral alone. The checks use the existing installed editable package and dependency environment; causal-model base weights remain in the separately cached pinned snapshots. They establish local relocation, not clean-machine installation or cross-platform support. [Aggregate verification](../reports/human-export-portability.json).
+
+
+## Inference input and error contract
+
+The Python `predict(bundle, texts, device)` interface accepts a list or tuple of passage strings. A bare string is rejected to prevent accidental character-by-character classification, and non-text or empty inputs fail before model loading. BOM removal and whitespace normalization preserve the existing valid-input preprocessing. Expert probabilities must be finite and within [0, 1]; mixture weights must be finite, nonnegative and sum to one. Invalid results raise errors rather than returning a misleading class label. Both encoder and causal inference release model resources when scoring fails, including token-limit rejection. These checks do not introduce a neutrality detector or alter the frozen decision rules.

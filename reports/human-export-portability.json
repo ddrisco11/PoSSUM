@@ -7,21 +7,21 @@
       "examples": 3,
       "max_absolute_error": 1.1102230246251565e-16,
       "passed": true,
-      "fresh_process_seconds": 15.30896600000051
+      "fresh_process_seconds": 14.865203667002788
     },
     "compact": {
       "manifest_sha256": "85b300588d3f07574e0c82183a7975018c99c1909c6e685bc868956cae3e6b56",
       "examples": 3,
       "max_absolute_error": 1.1469647120954107e-08,
       "passed": true,
-      "fresh_process_seconds": 5.472227750000457
+      "fresh_process_seconds": 5.448124624999764
     },
     "single_expert": {
       "manifest_sha256": "ce7ee4873e01fd9b54ac92ec0285fc1498ca9e2389ceed997c624a1dfe3d280d",
       "examples": 3,
       "max_absolute_error": 0.0,
       "passed": true,
-      "fresh_process_seconds": 6.9657799170017825
+      "fresh_process_seconds": 7.0032599170008325
     }
   },
   "device": "mps",
@@ -31,5 +31,5 @@
     "Causal models require the separately cached pinned base weights; these were not copied.",
     "This does not establish a clean-machine installation or cross-platform compatibility."
   ],
-  "completed_at": 1792326467.060711
+  "completed_at": 1792327401.748689
 }

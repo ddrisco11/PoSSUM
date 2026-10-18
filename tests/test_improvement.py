@@ -719,3 +719,48 @@ def test_relocated_export_score_check_rejects_incomplete_invalid_and_changed_res
             compare_scores(actual, [.1, .8])
     with pytest.raises(ValueError, match='Invalid'):
         compare_scores([.1, .8], [.1, float('nan')])
+
+
+def test_prediction_rejects_bad_inputs_before_loading_and_invalid_outputs(tmp_path):
+    from possum.improvement_inference import predict, normalize_passages
+    assert normalize_passages(('\ufeffSome  text\n here ',)) == ['Some text here']
+    for invalid in ['one passage', None, [None], [1], {'text': 'passage'}]:
+        with pytest.raises(TypeError, match='list or tuple'):
+            predict(tmp_path / 'missing', invalid, device='cpu')
+    for invalid in [[], ['\ufeff \n'], ['valid', '']]:
+        with pytest.raises(ValueError, match='nonempty'):
+            predict(tmp_path / 'missing', invalid, device='cpu')
+    manifest = {'artifact_hashes': {}, 'components': {'prior': {'kind': 'constant', 'probability': float('nan')}},
+                'selection': {'kind': 'single'}}
+    (tmp_path / 'model.json').write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match='invalid probabilities'):
+        predict(tmp_path, ['Some passage'], device='cpu')
+    manifest['components']['prior']['probability'] = .4
+    manifest['selection'] = {'kind': 'fixed', 'weights': [2.]}
+    (tmp_path / 'model.json').write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match='mixture weights'):
+        predict(tmp_path, ['Some passage'], device='cpu')
+
+
+def test_compact_overlength_error_releases_model_resources(tmp_path, monkeypatch):
+    import torch
+    from transformers import AutoModelForSequenceClassification, AutoTokenizer
+    from possum import improvement_inference as module
+    released = []
+    class Batch(dict):
+        def to(self, device): return self
+    class Tokenizer:
+        def __call__(self, *args, **kwargs):
+            return Batch(input_ids=torch.zeros((1, 257), dtype=torch.long))
+    class Model:
+        def to(self, device): return self
+        def eval(self): return self
+        def requires_grad_(self, value): return self
+        def __call__(self, **kwargs):
+            raise AssertionError('Overlength input must not reach the forward pass')
+    monkeypatch.setattr(AutoTokenizer, 'from_pretrained', lambda *a, **kw: Tokenizer())
+    monkeypatch.setattr(AutoModelForSequenceClassification, 'from_pretrained', lambda *a, **kw: Model())
+    monkeypatch.setattr(module, 'release_memory', lambda: released.append(True))
+    with pytest.raises(ValueError, match='256-token'):
+        module.raw_component(tmp_path, {'kind': 'compact', 'model': 'fixture', 'trial': {'mode': 'full'}}, ['long passage'], 'cpu', {})
+    assert released == [True]

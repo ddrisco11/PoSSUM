@@ -31,13 +31,14 @@ def encoder_features(name, texts, device):
     from .components.bge import BGE
     from .components.bert import BERT
     encoder = (BGE if name == 'bge' else BERT)(device=device)
-    lengths = [len(encoder.tokenizer.encode(t, add_special_tokens=True)) for t in texts]
-    if max(lengths) > 256:
-        raise ValueError('Input exceeds the validated 256-token encoder limit; segment it explicitly.')
-    features = encoder.encode(texts)
-    del encoder
-    release_memory()
-    return features
+    try:
+        lengths = [len(encoder.tokenizer.encode(t, add_special_tokens=True)) for t in texts]
+        if max(lengths) > 256:
+            raise ValueError('Input exceeds the validated 256-token encoder limit; segment it explicitly.')
+        return encoder.encode(texts)
+    finally:
+        del encoder
+        release_memory()
 
 
 def raw_component(bundle, spec, texts, device, embeddings):
@@ -67,17 +68,19 @@ def raw_component(bundle, spec, texts, device, embeddings):
             del base
         else:
             model = AutoModelForSequenceClassification.from_pretrained(folder, attn_implementation='eager', local_files_only=True)
-        model.to(device).eval(); model.requires_grad_(False)
-        raw = []
-        with torch.inference_mode():
-            for start in range(0, len(texts), 8):
-                batch = tokenizer(texts[start:start + 8], padding=True, truncation=False, return_tensors='pt').to(device)
-                if batch['input_ids'].shape[1] > 256:
-                    raise ValueError('Input exceeds the validated 256-token encoder limit; segment it explicitly.')
-                z = model(**batch).logits.detach().cpu().numpy()
-                raw.extend((z[:, 1] - z[:, 0]).tolist())
-        del model
-        release_memory()
+        try:
+            model.to(device).eval(); model.requires_grad_(False)
+            raw = []
+            with torch.inference_mode():
+                for start in range(0, len(texts), 8):
+                    batch = tokenizer(texts[start:start + 8], padding=True, truncation=False, return_tensors='pt').to(device)
+                    if batch['input_ids'].shape[1] > 256:
+                        raise ValueError('Input exceeds the validated 256-token encoder limit; segment it explicitly.')
+                    z = model(**batch).logits.detach().cpu().numpy()
+                    raw.extend((z[:, 1] - z[:, 0]).tolist())
+        finally:
+            del model
+            release_memory()
         return np.asarray(raw), joblib.load(folder / 'calibrator.joblib')
     name = spec['model']
     if spec.get('engine') == 'mlx' or name in MODELS:
@@ -112,16 +115,23 @@ def component(bundle, spec, texts, device, embeddings, raw_cache=None):
     return calibrator.predict_proba(raw[:, None])[:, 1]
 
 
+def normalize_passages(texts):
+    if not isinstance(texts, (list, tuple)) or any(not isinstance(t, str) for t in texts):
+        raise TypeError('Provide a list or tuple of passage strings, not a single string or non-text values.')
+    normalized = [' '.join(t.replace('\ufeff', '').split()) for t in texts]
+    if not normalized or any(not t for t in normalized):
+        raise ValueError('Provide nonempty passages.')
+    return normalized
+
+
 def predict(bundle, texts, device='mps'):
+    texts = normalize_passages(texts)
     bundle = Path(bundle)
     manifest = json.loads((bundle / 'model.json').read_text())
     for model_id, revision in manifest.get('encoder_revisions', {}).items():
         assert resolve(model_id) == revision, f'Encoder revision differs from export: {model_id}'
     for path, expected in manifest['artifact_hashes'].items():
         assert digest(bundle / path) == expected, f'Changed artifact: {path}'
-    texts = [' '.join(t.replace('\ufeff', '').split()) for t in texts]
-    if not texts or any(not t for t in texts):
-        raise ValueError('Provide nonempty passages.')
     import torch
     torch.set_num_threads(4)
     if device == 'mps' and not torch.backends.mps.is_available():
@@ -129,6 +139,8 @@ def predict(bundle, texts, device='mps'):
     embeddings, raw_cache = {}, {}
     names = list(manifest['components'])
     probabilities = np.stack([component(bundle, spec, texts, device, embeddings, raw_cache) for spec in manifest['components'].values()], axis=1)
+    if probabilities.shape != (len(texts), len(names)) or not np.isfinite(probabilities).all() or not ((probabilities >= 0) & (probabilities <= 1)).all():
+        raise ValueError('Expert returned invalid probabilities; no prediction produced.')
     selected = manifest['selection']
     if selected['kind'] == 'single':
         weights = np.ones((len(texts), 1))
@@ -142,6 +154,8 @@ def predict(bundle, texts, device='mps'):
         state = saved['state']
         hidden = np.tanh(x @ state['0.weight'].T + state['0.bias'])
         weights = softmax(hidden @ state['2.weight'].T + state['2.bias'], axis=1)
+    if weights.shape != probabilities.shape or not np.isfinite(weights).all() or (weights < 0).any() or not np.allclose(weights.sum(axis=1), 1., rtol=0, atol=1e-8):
+        raise ValueError('Invalid mixture weights; no prediction produced.')
     p = (weights * probabilities).sum(axis=1)
     decisions = manifest.get('decision_rules')
     output = [{'probability_right': float(p[i]), 'probability_left': float(1 - p[i]),
