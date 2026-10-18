@@ -155,4 +155,3 @@ Adapter weights and score caches remain local. The exported configuration requir
 ```
 
 The read-only Tkinter dashboard refreshes every two seconds with component progress, scoring speed, current-stage ETA and the live log. Use `--run /path/to/run` for another run directory. Closing the window leaves training running. Python must include Tkinter. Stage ETA excludes downloads and queued models; download file counts do not indicate byte-level progress.
-
