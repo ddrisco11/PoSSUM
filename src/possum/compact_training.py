@@ -38,8 +38,7 @@ def run(root, family='bert'):
   encoded={p:[tok(r['text'],truncation=False) for r in rr] for p,rr in parts.items()}
   assert max(len(e['input_ids']) for enc in encoded.values() for e in enc)<=256,'No silent truncation'
   torch.manual_seed(trial['seed']);torch.mps.manual_seed(trial['seed'])
-  extra={'reference_compile':False} if 'ModernBERT' in name else {}
-  model=AutoModelForSequenceClassification.from_pretrained(name,revision=revision,num_labels=2,attn_implementation='eager',local_files_only=True,**extra)
+  model=AutoModelForSequenceClassification.from_pretrained(name,revision=revision,num_labels=2,attn_implementation='eager',local_files_only=True)
   if trial['mode']=='lora':model=get_peft_model(model,LoraConfig(task_type=TaskType.SEQ_CLS,r=8,lora_alpha=16,lora_dropout=0.,target_modules=['query','value'],modules_to_save=['classifier']))
   model.to('mps');opt=torch.optim.AdamW([p for p in model.parameters() if p.requires_grad],lr=trial['lr'],weight_decay=.01)
   train_indices=np.array([i for i,r in enumerate(parts['fit']) if trial['regime']=='mixed' or r['source']=='MITweet'])

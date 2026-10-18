@@ -37,3 +37,27 @@ def test_loader_rejects_modified_partition_without_reading_topic_holdout(tmp_pat
     (data / 'fit.jsonl').write_text('{}\n')
     with pytest.raises(AssertionError):
         load_data(tmp_path)
+
+
+def test_reloadable_lexical_prediction_and_artifact_integrity(tmp_path):
+    import joblib
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.linear_model import LogisticRegression
+    from possum.improvement_inference import predict
+    texts = ['support public services', 'expand social welfare', 'reduce income taxes', 'protect private markets']
+    vectorizer = TfidfVectorizer().fit(texts)
+    head = LogisticRegression().fit(vectorizer.transform(texts), [0, 0, 1, 1])
+    raw = head.decision_function(vectorizer.transform(texts))
+    cal = calibration(raw, [{'source': 'MITweet', 'label': y} for y in [0, 0, 1, 1]])
+    artifact = tmp_path / 'classifier.joblib'
+    joblib.dump({'features': 'lexical', 'vectorizer': vectorizer, 'head': head, 'calibrator': cal}, artifact)
+    manifest = {'artifact_hashes': {'classifier.joblib': digest(artifact)}, 'selection': {'kind': 'single'},
+                'components': {'lexical': {'kind': 'baseline', 'model': 'classifier.joblib'}}}
+    (tmp_path / 'model.json').write_text(json.dumps(manifest))
+    actual = predict(tmp_path, ['\ufeffsupport  public\nservices', texts[-1]], device='cpu')
+    expected = cal.predict_proba(head.decision_function(vectorizer.transform([texts[0], texts[-1]]))[:, None])[:, 1]
+    np.testing.assert_allclose([r['probability_right'] for r in actual], expected)
+    assert all(r['components']['lexical']['weight'] == 1 for r in actual)
+    artifact.write_bytes(artifact.read_bytes() + b'changed')
+    with pytest.raises(AssertionError, match='Changed artifact'):
+        predict(tmp_path, [texts[0]], device='cpu')
