@@ -48,3 +48,9 @@ The teacher plan, model revision, dataset hash, target identities and completed 
 Calibration variants of one predictor share the same underlying forward pass. New exports copy each predictor artifact once, cache its raw scores within a prediction batch, and apply each calibrator separately. Batch caches cannot carry predictions into a different request. Aggregate prediction weights still identify each calibrated component.
 
 A grouped fixed-mixture comparison regularizes the total weight assigned to each underlying predictor, so creating an additional calibration variant does not independently change that predictor's regularization target. The legacy per-component penalty remains reported. In the partial Mistral/compact comparison, the stronger grouped penalty increases macro-F1 to 0.883 but worsens log loss to 0.129, versus 0.873 and 0.124 for the selected legacy mixture. The predeclared log-loss criterion therefore retains the incumbent. [Grouped comparison](../reports/human-grouped-mixture-audit.json).
+
+## Small mixtures and alternative exports
+
+A predefined small-mixture family checks whether two predictors can retain the full ensemble's performance at lower inference cost. It compares pairs from the original-calibration lexical model, a compact model, frozen Mistral and frozen Qwen. The lexical/compact representatives are selected by human gate log loss; each pair's nonnegative convex weights are fitted on the same gate partition. Human validation still selects among the resulting models. This adds exploratory comparisons and does not create an independent test.
+
+A named candidate can be exported with `python -m possum.improvement_inference export RUN --candidate NAME`. Each export must pass reload parity. Exporting a smaller alternative does not replace a better verified incumbent; the bundle ledger retains both for later accuracy/latency comparisons.

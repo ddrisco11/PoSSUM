@@ -324,3 +324,13 @@ def test_export_shares_predictor_artifacts_and_preserves_calibrated_parity(tmp_p
     assert len(list((bundle / 'components').iterdir())) == 2  # one predictor, one alternative calibrator
     np.testing.assert_allclose([r['probability_right'] for r in module.predict(bundle, texts, device='cpu')], expected)
     assert json.loads((bundle / 'verification.json').read_text())['passed']
+    # Exporting a cheaper named candidate must not replace a better incumbent.
+    comparison['results']['original'] = {'spec': {'kind': 'single', 'index': 0},
+                                       'validation': {'sources': {'MITweet': {'log_loss': .3}}}}
+    (mixture / 'comparison.json').write_text(json.dumps(comparison))
+    save_scores(mixture / 'original_scores.npz', calibrator.predict_proba(raw)[:, 1], ids, [])
+    (mixture / 'audit.json').write_text(json.dumps({'human_calibration_prior_right': .5,
+        'models': {name: {'gate_selected_balanced_threshold': {'threshold': .5}} for name in ['fixed', 'original']}}))
+    module.export(tmp_path, device='cpu', candidate='original')
+    assert json.loads((tmp_path / 'export.json').read_text())['selected'] == 'fixed'
+    assert len(json.loads((tmp_path / 'export-ledger.json').read_text())['candidates']) == 2

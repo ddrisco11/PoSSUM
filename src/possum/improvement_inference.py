@@ -178,12 +178,14 @@ def select_verified_export(root):
     return eligible[0]
 
 
-def export(root, device='mps'):
+def export(root, device='mps', candidate=None):
     comparison = json.loads((root / 'mixtures/comparison.json').read_text())
     from .improvement_audit import run as audit
     audit(root)
     audit_result = json.loads((root / 'mixtures/audit.json').read_text())
-    selected_name = comparison['selected']
+    selected_name = comparison['selected'] if candidate is None else candidate
+    if selected_name not in comparison['results']:
+        raise ValueError(f'Unknown comparison candidate: {selected_name}')
     selected = dict(comparison['results'][selected_name]['spec'])
     entries = comparison['candidates']
     if selected['kind'] == 'single':
@@ -264,10 +266,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest='command', required=True)
     make = sub.add_parser('export'); make.add_argument('run', type=Path); make.add_argument('--device', choices=['cpu', 'mps'], default='mps')
+    make.add_argument('--candidate', help='Export a named comparison candidate; incumbent selection remains unchanged.')
     infer = sub.add_parser('predict'); infer.add_argument('bundle', type=Path); infer.add_argument('--text', required=True)
     infer.add_argument('--device', choices=['cpu', 'mps'], default='mps')
     args = parser.parse_args()
     if args.command == 'export':
-        export(args.run, args.device)
+        export(args.run, args.device, args.candidate)
     else:
         print(json.dumps(predict(args.bundle, [args.text], args.device), indent=2))

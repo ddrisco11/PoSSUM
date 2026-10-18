@@ -134,6 +134,26 @@ def run(root):
                {'kind': 'fixed', 'weights': weights.tolist(), 'penalty': penalty,
                 'regularization': 'Equal total mass per underlying predictor; calibration variants share a group.',
                 'groups': [[names[i] for i in np.flatnonzero(row)] for row in groups]})
+    # A small, predefined family of two-predictor mixtures checks whether the
+    # full ensemble's deployment cost is necessary. Within each family the
+    # original-calibration representative is chosen using gate labels only.
+    from itertools import combinations
+    pool = []
+    for family in ['baseline', 'compact']:
+        eligible = [i for i, name in enumerate(names) if entries[name]['kind'] == family
+                    and 'calibration_override' not in entries[name]
+                    and (family != 'baseline' or name.startswith('lexical_'))]
+        if eligible:
+            pool.append(min(eligible, key=lambda i: binary_loss(y, gate[:, i]).mean()))
+    pool += [names.index(name) for name in ['mistral', 'qwen'] if name in entries]
+    for left, right in combinations(pool, 2):
+        active = [left, right]
+        weights = np.zeros(len(names))
+        weights[active] = fit_fixed(gate[:, active], y, 0.)
+        record(f'pair_{names[left]}__{names[right]}', probabilities @ weights,
+               {'kind': 'fixed', 'weights': weights.tolist(), 'penalty': 0.,
+                'family': 'two-predictor cost comparison',
+                'representative_selection': 'Original calibrators; lexical and compact representatives by human gate log loss.'})
     z = np.load(root / 'bge_features.npz', allow_pickle=False)
     lookup = {k: i for i, k in enumerate(z['ids'].tolist())}
     x = z['values'][[lookup[i] for i in ids]].astype(np.float32)
