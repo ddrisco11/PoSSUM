@@ -128,3 +128,14 @@ The final topic audit can freeze a verified single expert alongside the overall 
 
 
 After both DeBERTa recipes complete, `scripts/report_deberta.py RUN OUTPUT` produces an aggregate report with every planned epoch, selected checkpoints, source/topic metrics and paired uncertainty against the same BERT reference. It verifies dataset and prediction identity alignment and refuses an incomplete recipe. This report does not open the topic holdout.
+
+
+## Completed frozen topic audit
+
+The audit evaluated every frozen candidate once on 159 passages after all planned comparisons completed. Prediction identities, bundle artifact hashes, frozen manifest hashes and exposure provenance were verified by `scripts/report_topic_evaluation.py`; this reporting step performs no new predictions or model selection. [Complete aggregate report](../reports/human-topic-stress.json).
+
+At the default threshold, the selected mixture reaches macro-F1 0.89002, balanced accuracy 0.87190 and log loss 0.24121. Its confusion matrix is [[108, 3], [11, 37]] with true classes as rows and predicted classes as columns (left, right). Mistral alone reaches 0.90702 / 0.89274 / 0.26448 with [[108, 3], [9, 39]]. DeBERTa reaches 0.76618 / 0.74381 / 0.48757 with [[105, 6], [22, 26]]. The unchanged development-selected mixture remains the primary record; test metrics are not a new selection rule.
+
+The gate-fixed thresholds were 0.21 for the mixture, 0.24 for Mistral and 0.17 for DeBERTa. Applied without modification, they yield balanced accuracy 0.90597, 0.90597 and 0.77646. Equal-prior sensitivity is also reported separately; it does not replace primary probabilities or imply that neutrality or ideological intensity is measured.
+
+Only three topics are represented, and Mass Shootings contains just 14 passages (two left). Per-topic results and uncertainty must be read with these small counts. The mixture's macro-F1 interval is [0.82603, 0.93882] and log-loss interval [0.15006, 0.35737], conditional on the observed rows/class counts. No author-disjoint guarantee or broader deployment claim follows. Model selection, fitting and calibration for this version remain closed after exposure.

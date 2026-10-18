@@ -1,0 +1,1523 @@
+{
+  "selection_sha256": "03341c305f63d26a3f040d60fb8400eb01a0768b0807d0ba4321fde10532585e",
+  "dataset_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17",
+  "holdout_sha256": "b0fcc71069dcd2c157c29a641a5db151861a667db33f91a9c7c02d84f1b72eac",
+  "results": {
+    "selected": {
+      "all": {
+        "n": 159,
+        "macro_f1": 0.8900197628458498,
+        "balanced_accuracy": 0.8719031531531531,
+        "log_loss": 0.2412059554447319,
+        "brier": 0.0656068843947552,
+        "ece": 0.04846476770733452
+      },
+      "sources": {
+        "MITweet": {
+          "n": 159,
+          "macro_f1": 0.8900197628458498,
+          "balanced_accuracy": 0.8719031531531531,
+          "log_loss": 0.2412059554447319,
+          "brier": 0.0656068843947552,
+          "ece": 0.04846476770733452,
+          "default_decision": {
+            "threshold": 0.5,
+            "confusion_matrix_true_rows_predicted_columns": [
+              [
+                108,
+                3
+              ],
+              [
+                11,
+                37
+              ]
+            ],
+            "class_order": [
+              0,
+              1
+            ],
+            "class_recalls": {
+              "0": {
+                "n": 111,
+                "recall": 0.972972972972973,
+                "wilson_95_interval": [
+                  0.9235375935169964,
+                  0.9907663615027679
+                ]
+              },
+              "1": {
+                "n": 48,
+                "recall": 0.7708333333333334,
+                "wilson_95_interval": [
+                  0.6346073590999655,
+                  0.8669217373308877
+                ]
+              }
+            },
+            "balanced_accuracy": 0.8719031531531531
+          }
+        }
+      },
+      "topics": {
+        "Energy Crisis": {
+          "n": 61,
+          "macro_f1": 0.8335282651072125,
+          "balanced_accuracy": 0.8115942028985508,
+          "log_loss": 0.3057514893618341,
+          "brier": 0.08176459198843981,
+          "ece": 0.07235894845669652,
+          "default_decision": {
+            "threshold": 0.5,
+            "confusion_matrix_true_rows_predicted_columns": [
+              [
+                44,
+                2
+              ],
+              [
+                5,
+                10
+              ]
+            ],
+            "class_order": [
+              0,
+              1
+            ],
+            "class_recalls": {
+              "0": {
+                "n": 46,
+                "recall": 0.9565217391304348,
+                "wilson_95_interval": [
+                  0.8546774097378094,
+                  0.9879945544014435
+                ]
+              },
+              "1": {
+                "n": 15,
+                "recall": 0.6666666666666666,
+                "wilson_95_interval": [
+                  0.41713547738519774,
+                  0.8482367556028526
+                ]
+              }
+            },
+            "balanced_accuracy": 0.8115942028985508
+          }
+        },
+        "Mass Shootings": {
+          "n": 14,
+          "macro_f1": 0.7142857142857142,
+          "balanced_accuracy": 0.875,
+          "log_loss": 0.6276408104595314,
+          "brier": 0.1792575019702241,
+          "ece": 0.21195903570878455,
+          "default_decision": {
+            "threshold": 0.5,
+            "confusion_matrix_true_rows_predicted_columns": [
+              [
+                2,
+                0
+              ],
+              [
+                3,
+                9
+              ]
+            ],
+            "class_order": [
+              0,
+              1
+            ],
+            "class_recalls": {
+              "0": {
+                "n": 2,
+                "recall": 1.0,
+                "wilson_95_interval": [
+                  0.34238022750665303,
+                  1.0
+                ]
+              },
+              "1": {
+                "n": 12,
+                "recall": 0.75,
+                "wilson_95_interval": [
+                  0.46769466506643426,
+                  0.9110583316059453
+                ]
+              }
+            },
+            "balanced_accuracy": 0.875
+          }
+        },
+        "Political Parties": {
+          "n": 84,
+          "macro_f1": 0.934375,
+          "balanced_accuracy": 0.9206349206349206,
+          "log_loss": 0.1299277942643696,
+          "brier": 0.0349315414272394,
+          "ece": 0.04111218623574763,
+          "default_decision": {
+            "threshold": 0.5,
+            "confusion_matrix_true_rows_predicted_columns": [
+              [
+                62,
+                1
+              ],
+              [
+                3,
+                18
+              ]
+            ],
+            "class_order": [
+              0,
+              1
+            ],
+            "class_recalls": {
+              "0": {
+                "n": 63,
+                "recall": 0.9841269841269841,
+                "wilson_95_interval": [
+                  0.915414745405616,
+                  0.9971925057861307
+                ]
+              },
+              "1": {
+                "n": 21,
+                "recall": 0.8571428571428571,
+                "wilson_95_interval": [
+                  0.6536393971937906,
+                  0.9501898750027473
+                ]
+              }
+            },
+            "balanced_accuracy": 0.9206349206349206
+          }
+        }
+      },
+      "default_decision": {
+        "threshold": 0.5,
+        "confusion_matrix_true_rows_predicted_columns": [
+          [
+            108,
+            3
+          ],
+          [
+            11,
+            37
+          ]
+        ],
+        "class_order": [
+          0,
+          1
+        ],
+        "class_recalls": {
+          "0": {
+            "n": 111,
+            "recall": 0.972972972972973,
+            "wilson_95_interval": [
+              0.9235375935169964,
+              0.9907663615027679
+            ]
+          },
+          "1": {
+            "n": 48,
+            "recall": 0.7708333333333334,
+            "wilson_95_interval": [
+              0.6346073590999655,
+              0.8669217373308877
+            ]
+          }
+        },
+        "balanced_accuracy": 0.8719031531531531
+      },
+      "uncertainty": {
+        "percentile_95_intervals": {
+          "log_loss": [
+            0.15005712980763597,
+            0.357370718497319
+          ],
+          "brier": [
+            0.040383871494326415,
+            0.09682131899876478
+          ],
+          "balanced_accuracy": [
+            0.8048986486486487,
+            0.928490990990991
+          ],
+          "macro_f1": [
+            0.8260318893332746,
+            0.938822624086187
+          ]
+        },
+        "draws": 2000,
+        "seed": 42,
+        "method": "Class-stratified row bootstrap with fixed observed class counts.",
+        "limitations": "Conditional on these passages and class counts; does not capture topic/author dependence, label uncertainty or population shift. Only three topic groups cannot establish broad topic generalization."
+      },
+      "class_counts": {
+        "0": 111,
+        "1": 48
+      },
+      "end_to_end_seconds": 364.26882266800385,
+      "timing_scope": "Sequential batches of ten with model loading and integrity checks; not warm-server latency.",
+      "gate_fixed_balanced_decision": {
+        "threshold": 0.21000000000000002,
+        "confusion_matrix_true_rows_predicted_columns": [
+          [
+            104,
+            7
+          ],
+          [
+            6,
+            42
+          ]
+        ],
+        "class_order": [
+          0,
+          1
+        ],
+        "class_recalls": {
+          "0": {
+            "n": 111,
+            "recall": 0.9369369369369369,
+            "wilson_95_interval": [
+              0.8755233588904047,
+              0.9691193424135679
+            ]
+          },
+          "1": {
+            "n": 48,
+            "recall": 0.875,
+            "wilson_95_interval": [
+              0.7529954171361317,
+              0.9414294856142802
+            ]
+          }
+        },
+        "balanced_accuracy": 0.9059684684684685
+      },
+      "equal_prior_sensitivity": {
+        "calibration_prior_right": 0.10294117647058823,
+        "assumed_prior_right": 0.5,
+        "metrics": {
+          "all": {
+            "n": 159,
+            "macro_f1": 0.8856937455068297,
+            "balanced_accuracy": 0.9042792792792793,
+            "log_loss": 0.2468658627518948,
+            "brier": 0.07648268280655804,
+            "ece": 0.03639844641260015
+          },
+          "sources": {
+            "MITweet": {
+              "n": 159,
+              "macro_f1": 0.8856937455068297,
+              "balanced_accuracy": 0.9042792792792793,
+              "log_loss": 0.2468658627518948,
+              "brier": 0.07648268280655804,
+              "ece": 0.03639844641260015
+            }
+          },
+          "topics": {
+            "Energy Crisis": {
+              "n": 61,
+              "macro_f1": 0.8029715762273901,
+              "balanced_accuracy": 0.846376811594203,
+              "log_loss": 0.3540199866609634,
+              "brier": 0.11298448275881202,
+              "ece": 0.08124797232506867
+            },
+            "Mass Shootings": {
+              "n": 14,
+              "macro_f1": 0.8782608695652174,
+              "balanced_accuracy": 0.9583333333333333,
+              "log_loss": 0.23950891173003905,
+              "brier": 0.07589663810240288,
+              "ece": 0.15489849465811942
+            },
+            "Political Parties": {
+              "n": 84,
+              "macro_f1": 0.924119241192412,
+              "balanced_accuracy": 0.9444444444444444,
+              "log_loss": 0.17027771698823757,
+              "brier": 0.050073097434780396,
+              "ece": 0.04320822972920412
+            }
+          }
+        },
+        "decision": {
+          "threshold": 0.5,
+          "confusion_matrix_true_rows_predicted_columns": [
+            [
+              99,
+              12
+            ],
+            [
+              4,
+              44
+            ]
+          ],
+          "class_order": [
+            0,
+            1
+          ],
+          "class_recalls": {
+            "0": {
+              "n": 111,
+              "recall": 0.8918918918918919,
+              "wilson_95_interval": [
+                0.8204982036488334,
+                0.9370679305103996
+              ]
+            },
+            "1": {
+              "n": 48,
+              "recall": 0.9166666666666666,
+              "wilson_95_interval": [
+                0.8044669820963272,
+                0.9671162431819081
+              ]
+            }
+          },
+          "balanced_accuracy": 0.9042792792792793
+        },
+        "scope": "Fixed 50/50 prior adjustment from the exported scoring contract, not fitted to holdout labels. Assumes unchanged class-conditional text distributions; does not establish deployment prevalence, ideological intensity or neutrality.",
+        "replaces_primary_scores": false
+      }
+    },
+    "compact": {
+      "all": {
+        "n": 159,
+        "macro_f1": 0.7661764705882352,
+        "balanced_accuracy": 0.7438063063063063,
+        "log_loss": 0.48757430569180676,
+        "brier": 0.14597311131717203,
+        "ece": 0.11673235426533063
+      },
+      "sources": {
+        "MITweet": {
+          "n": 159,
+          "macro_f1": 0.7661764705882352,
+          "balanced_accuracy": 0.7438063063063063,
+          "log_loss": 0.48757430569180676,
+          "brier": 0.14597311131717203,
+          "ece": 0.11673235426533063,
+          "default_decision": {
+            "threshold": 0.5,
+            "confusion_matrix_true_rows_predicted_columns": [
+              [
+                105,
+                6
+              ],
+              [
+                22,
+                26
+              ]
+            ],
+            "class_order": [
+              0,
+              1
+            ],
+            "class_recalls": {
+              "0": {
+                "n": 111,
+                "recall": 0.9459459459459459,
+                "wilson_95_interval": [
+                  0.8870643289929536,
+                  0.9749936857399668
+                ]
+              },
+              "1": {
+                "n": 48,
+                "recall": 0.5416666666666666,
+                "wilson_95_interval": [
+                  0.40291074545649797,
+                  0.6742475770713254
+                ]
+              }
+            },
+            "balanced_accuracy": 0.7438063063063063
+          }
+        }
+      },
+      "topics": {
+        "Energy Crisis": {
+          "n": 61,
+          "macro_f1": 0.7789855072463767,
+          "balanced_accuracy": 0.7789855072463767,
+          "log_loss": 0.40443749325875045,
+          "brier": 0.12308663104290081,
+          "ece": 0.1278274669946993,
+          "default_decision": {
+            "threshold": 0.5,
+            "confusion_matrix_true_rows_predicted_columns": [
+              [
+                41,
+                5
+              ],
+              [
+                5,
+                10
+              ]
+            ],
+            "class_order": [
+              0,
+              1
+            ],
+            "class_recalls": {
+              "0": {
+                "n": 46,
+                "recall": 0.8913043478260869,
+                "wilson_95_interval": [
+                  0.7696217135574916,
+                  0.9526685414190106
+                ]
+              },
+              "1": {
+                "n": 15,
+                "recall": 0.6666666666666666,
+                "wilson_95_interval": [
+                  0.41713547738519774,
+                  0.8482367556028526
+                ]
+              }
+            },
+            "balanced_accuracy": 0.7789855072463767
+          }
+        },
+        "Mass Shootings": {
+          "n": 14,
+          "macro_f1": 0.41666666666666663,
+          "balanced_accuracy": 0.6666666666666666,
+          "log_loss": 1.4410471916372807,
+          "brier": 0.4548810733788008,
+          "ece": 0.4950272305188046,
+          "default_decision": {
+            "threshold": 0.5,
+            "confusion_matrix_true_rows_predicted_columns": [
+              [
+                2,
+                0
+              ],
+              [
+                8,
+                4
+              ]
+            ],
+            "class_order": [
+              0,
+              1
+            ],
+            "class_recalls": {
+              "0": {
+                "n": 2,
+                "recall": 1.0,
+                "wilson_95_interval": [
+                  0.34238022750665303,
+                  1.0
+                ]
+              },
+              "1": {
+                "n": 12,
+                "recall": 0.3333333333333333,
+                "wilson_95_interval": [
+                  0.13812009109121315,
+                  0.6093779111272004
+                ]
+              }
+            },
+            "balanced_accuracy": 0.6666666666666666
+          }
+        },
+        "Political Parties": {
+          "n": 84,
+          "macro_f1": 0.8156277436347674,
+          "balanced_accuracy": 0.7777777777777777,
+          "log_loss": 0.38903531944394726,
+          "brier": 0.11110839498226419,
+          "ece": 0.09586708232685061,
+          "default_decision": {
+            "threshold": 0.5,
+            "confusion_matrix_true_rows_predicted_columns": [
+              [
+                62,
+                1
+              ],
+              [
+                9,
+                12
+              ]
+            ],
+            "class_order": [
+              0,
+              1
+            ],
+            "class_recalls": {
+              "0": {
+                "n": 63,
+                "recall": 0.9841269841269841,
+                "wilson_95_interval": [
+                  0.915414745405616,
+                  0.9971925057861307
+                ]
+              },
+              "1": {
+                "n": 21,
+                "recall": 0.5714285714285714,
+                "wilson_95_interval": [
+                  0.3654655436930671,
+                  0.7553003107462404
+                ]
+              }
+            },
+            "balanced_accuracy": 0.7777777777777777
+          }
+        }
+      },
+      "default_decision": {
+        "threshold": 0.5,
+        "confusion_matrix_true_rows_predicted_columns": [
+          [
+            105,
+            6
+          ],
+          [
+            22,
+            26
+          ]
+        ],
+        "class_order": [
+          0,
+          1
+        ],
+        "class_recalls": {
+          "0": {
+            "n": 111,
+            "recall": 0.9459459459459459,
+            "wilson_95_interval": [
+              0.8870643289929536,
+              0.9749936857399668
+            ]
+          },
+          "1": {
+            "n": 48,
+            "recall": 0.5416666666666666,
+            "wilson_95_interval": [
+              0.40291074545649797,
+              0.6742475770713254
+            ]
+          }
+        },
+        "balanced_accuracy": 0.7438063063063063
+      },
+      "uncertainty": {
+        "percentile_95_intervals": {
+          "log_loss": [
+            0.3791669115935888,
+            0.605830086266271
+          ],
+          "brier": [
+            0.11123545373731474,
+            0.18360413688666652
+          ],
+          "balanced_accuracy": [
+            0.6708896396396397,
+            0.8153153153153153
+          ],
+          "macro_f1": [
+            0.6887777294475859,
+            0.8382173382173381
+          ]
+        },
+        "draws": 2000,
+        "seed": 42,
+        "method": "Class-stratified row bootstrap with fixed observed class counts.",
+        "limitations": "Conditional on these passages and class counts; does not capture topic/author dependence, label uncertainty or population shift. Only three topic groups cannot establish broad topic generalization."
+      },
+      "class_counts": {
+        "0": 111,
+        "1": 48
+      },
+      "end_to_end_seconds": 24.375651128004392,
+      "timing_scope": "Sequential batches of ten with model loading and integrity checks; not warm-server latency.",
+      "gate_fixed_balanced_decision": {
+        "threshold": 0.17,
+        "confusion_matrix_true_rows_predicted_columns": [
+          [
+            103,
+            8
+          ],
+          [
+            18,
+            30
+          ]
+        ],
+        "class_order": [
+          0,
+          1
+        ],
+        "class_recalls": {
+          "0": {
+            "n": 111,
+            "recall": 0.9279279279279279,
+            "wilson_95_interval": [
+              0.8641974721405519,
+              0.9630299157344726
+            ]
+          },
+          "1": {
+            "n": 48,
+            "recall": 0.625,
+            "wilson_95_interval": [
+              0.4836276351921527,
+              0.747847332391318
+            ]
+          }
+        },
+        "balanced_accuracy": 0.7764639639639639
+      },
+      "equal_prior_sensitivity": {
+        "calibration_prior_right": 0.10294117647058823,
+        "assumed_prior_right": 0.5,
+        "metrics": {
+          "all": {
+            "n": 159,
+            "macro_f1": 0.7985380116959064,
+            "balanced_accuracy": 0.7882882882882882,
+            "log_loss": 0.4645819371802337,
+            "brier": 0.1360741688379254,
+            "ece": 0.1229668364238748
+          },
+          "sources": {
+            "MITweet": {
+              "n": 159,
+              "macro_f1": 0.7985380116959064,
+              "balanced_accuracy": 0.7882882882882882,
+              "log_loss": 0.4645819371802337,
+              "brier": 0.1360741688379254,
+              "ece": 0.1229668364238748
+            }
+          },
+          "topics": {
+            "Energy Crisis": {
+              "n": 61,
+              "macro_f1": 0.7553475935828877,
+              "balanced_accuracy": 0.7797101449275362,
+              "log_loss": 0.5900045144312666,
+              "brier": 0.17198742151413351,
+              "ece": 0.1802361831939311
+            },
+            "Mass Shootings": {
+              "n": 14,
+              "macro_f1": 0.5906432748538011,
+              "balanced_accuracy": 0.7916666666666667,
+              "log_loss": 0.5279737693552597,
+              "brier": 0.1899419146063091,
+              "ece": 0.23035812244565443
+            },
+            "Political Parties": {
+              "n": 84,
+              "macro_f1": 0.8440272333402105,
+              "balanced_accuracy": 0.8174603174603174,
+              "log_loss": 0.36293595071876505,
+              "brier": 0.10101634914737695,
+              "ece": 0.1392501571030042
+            }
+          }
+        },
+        "decision": {
+          "threshold": 0.5,
+          "confusion_matrix_true_rows_predicted_columns": [
+            [
+              101,
+              10
+            ],
+            [
+              16,
+              32
+            ]
+          ],
+          "class_order": [
+            0,
+            1
+          ],
+          "class_recalls": {
+            "0": {
+              "n": 111,
+              "recall": 0.9099099099099099,
+              "wilson_95_interval": [
+                0.8420685326403188,
+                0.9503282283768102
+              ]
+            },
+            "1": {
+              "n": 48,
+              "recall": 0.6666666666666666,
+              "wilson_95_interval": [
+                0.5254010970594798,
+                0.7832321930518142
+              ]
+            }
+          },
+          "balanced_accuracy": 0.7882882882882882
+        },
+        "scope": "Fixed 50/50 prior adjustment from the exported scoring contract, not fitted to holdout labels. Assumes unchanged class-conditional text distributions; does not establish deployment prevalence, ideological intensity or neutrality.",
+        "replaces_primary_scores": false
+      }
+    },
+    "single_expert": {
+      "all": {
+        "n": 159,
+        "macro_f1": 0.9070175438596491,
+        "balanced_accuracy": 0.8927364864864865,
+        "log_loss": 0.26447683130173116,
+        "brier": 0.06538527388755874,
+        "ece": 0.055701754609343165
+      },
+      "sources": {
+        "MITweet": {
+          "n": 159,
+          "macro_f1": 0.9070175438596491,
+          "balanced_accuracy": 0.8927364864864865,
+          "log_loss": 0.26447683130173116,
+          "brier": 0.06538527388755874,
+          "ece": 0.055701754609343165,
+          "default_decision": {
+            "threshold": 0.5,
+            "confusion_matrix_true_rows_predicted_columns": [
+              [
+                108,
+                3
+              ],
+              [
+                9,
+                39
+              ]
+            ],
+            "class_order": [
+              0,
+              1
+            ],
+            "class_recalls": {
+              "0": {
+                "n": 111,
+                "recall": 0.972972972972973,
+                "wilson_95_interval": [
+                  0.9235375935169964,
+                  0.9907663615027679
+                ]
+              },
+              "1": {
+                "n": 48,
+                "recall": 0.8125,
+                "wilson_95_interval": [
+                  0.680601328507153,
+                  0.8980860904515235
+                ]
+              }
+            },
+            "balanced_accuracy": 0.8927364864864865
+          }
+        }
+      },
+      "topics": {
+        "Energy Crisis": {
+          "n": 61,
+          "macro_f1": 0.8869113830181683,
+          "balanced_accuracy": 0.8782608695652174,
+          "log_loss": 0.3354999622426031,
+          "brier": 0.08254715153373149,
+          "ece": 0.09809966471528062,
+          "default_decision": {
+            "threshold": 0.5,
+            "confusion_matrix_true_rows_predicted_columns": [
+              [
+                44,
+                2
+              ],
+              [
+                3,
+                12
+              ]
+            ],
+            "class_order": [
+              0,
+              1
+            ],
+            "class_recalls": {
+              "0": {
+                "n": 46,
+                "recall": 0.9565217391304348,
+                "wilson_95_interval": [
+                  0.8546774097378094,
+                  0.9879945544014435
+                ]
+              },
+              "1": {
+                "n": 15,
+                "recall": 0.8,
+                "wilson_95_interval": [
+                  0.5481455128483065,
+                  0.9295245065301844
+                ]
+              }
+            },
+            "balanced_accuracy": 0.8782608695652174
+          }
+        },
+        "Mass Shootings": {
+          "n": 14,
+          "macro_f1": 0.7142857142857142,
+          "balanced_accuracy": 0.875,
+          "log_loss": 0.7887240048005051,
+          "brier": 0.17316817561552947,
+          "ece": 0.21754783554446966,
+          "default_decision": {
+            "threshold": 0.5,
+            "confusion_matrix_true_rows_predicted_columns": [
+              [
+                2,
+                0
+              ],
+              [
+                3,
+                9
+              ]
+            ],
+            "class_order": [
+              0,
+              1
+            ],
+            "class_recalls": {
+              "0": {
+                "n": 2,
+                "recall": 1.0,
+                "wilson_95_interval": [
+                  0.34238022750665303,
+                  1.0
+                ]
+              },
+              "1": {
+                "n": 12,
+                "recall": 0.75,
+                "wilson_95_interval": [
+                  0.46769466506643426,
+                  0.9110583316059453
+                ]
+              }
+            },
+            "balanced_accuracy": 0.875
+          }
+        },
+        "Political Parties": {
+          "n": 84,
+          "macro_f1": 0.934375,
+          "balanced_accuracy": 0.9206349206349206,
+          "log_loss": 0.12552598110677854,
+          "brier": 0.03495866483270008,
+          "ece": 0.02965120075551078,
+          "default_decision": {
+            "threshold": 0.5,
+            "confusion_matrix_true_rows_predicted_columns": [
+              [
+                62,
+                1
+              ],
+              [
+                3,
+                18
+              ]
+            ],
+            "class_order": [
+              0,
+              1
+            ],
+            "class_recalls": {
+              "0": {
+                "n": 63,
+                "recall": 0.9841269841269841,
+                "wilson_95_interval": [
+                  0.915414745405616,
+                  0.9971925057861307
+                ]
+              },
+              "1": {
+                "n": 21,
+                "recall": 0.8571428571428571,
+                "wilson_95_interval": [
+                  0.6536393971937906,
+                  0.9501898750027473
+                ]
+              }
+            },
+            "balanced_accuracy": 0.9206349206349206
+          }
+        }
+      },
+      "default_decision": {
+        "threshold": 0.5,
+        "confusion_matrix_true_rows_predicted_columns": [
+          [
+            108,
+            3
+          ],
+          [
+            9,
+            39
+          ]
+        ],
+        "class_order": [
+          0,
+          1
+        ],
+        "class_recalls": {
+          "0": {
+            "n": 111,
+            "recall": 0.972972972972973,
+            "wilson_95_interval": [
+              0.9235375935169964,
+              0.9907663615027679
+            ]
+          },
+          "1": {
+            "n": 48,
+            "recall": 0.8125,
+            "wilson_95_interval": [
+              0.680601328507153,
+              0.8980860904515235
+            ]
+          }
+        },
+        "balanced_accuracy": 0.8927364864864865
+      },
+      "uncertainty": {
+        "percentile_95_intervals": {
+          "log_loss": [
+            0.14361904803993883,
+            0.41931050906891376
+          ],
+          "brier": [
+            0.03860627891506917,
+            0.09831358110109185
+          ],
+          "balanced_accuracy": [
+            0.8288288288288288,
+            0.9462626689189187
+          ],
+          "macro_f1": [
+            0.8474627619288059,
+            0.9541169680646402
+          ]
+        },
+        "draws": 2000,
+        "seed": 42,
+        "method": "Class-stratified row bootstrap with fixed observed class counts.",
+        "limitations": "Conditional on these passages and class counts; does not capture topic/author dependence, label uncertainty or population shift. Only three topic groups cannot establish broad topic generalization."
+      },
+      "class_counts": {
+        "0": 111,
+        "1": 48
+      },
+      "end_to_end_seconds": 123.76548970799558,
+      "timing_scope": "Sequential batches of ten with model loading and integrity checks; not warm-server latency.",
+      "gate_fixed_balanced_decision": {
+        "threshold": 0.24000000000000002,
+        "confusion_matrix_true_rows_predicted_columns": [
+          [
+            104,
+            7
+          ],
+          [
+            6,
+            42
+          ]
+        ],
+        "class_order": [
+          0,
+          1
+        ],
+        "class_recalls": {
+          "0": {
+            "n": 111,
+            "recall": 0.9369369369369369,
+            "wilson_95_interval": [
+              0.8755233588904047,
+              0.9691193424135679
+            ]
+          },
+          "1": {
+            "n": 48,
+            "recall": 0.875,
+            "wilson_95_interval": [
+              0.7529954171361317,
+              0.9414294856142802
+            ]
+          }
+        },
+        "balanced_accuracy": 0.9059684684684685
+      },
+      "equal_prior_sensitivity": {
+        "calibration_prior_right": 0.10294117647058823,
+        "assumed_prior_right": 0.5,
+        "metrics": {
+          "all": {
+            "n": 159,
+            "macro_f1": 0.8779408444344096,
+            "balanced_accuracy": 0.8938626126126126,
+            "log_loss": 0.2867326894200138,
+            "brier": 0.08230176250016322,
+            "ece": 0.05091761157166861
+          },
+          "sources": {
+            "MITweet": {
+              "n": 159,
+              "macro_f1": 0.8779408444344096,
+              "balanced_accuracy": 0.8938626126126126,
+              "log_loss": 0.2867326894200138,
+              "brier": 0.08230176250016322,
+              "ece": 0.05091761157166861
+            }
+          },
+          "topics": {
+            "Energy Crisis": {
+              "n": 61,
+              "macro_f1": 0.8029715762273901,
+              "balanced_accuracy": 0.846376811594203,
+              "log_loss": 0.40341353222652204,
+              "brier": 0.11993474739201546,
+              "ece": 0.09444416225251406
+            },
+            "Mass Shootings": {
+              "n": 14,
+              "macro_f1": 0.7878787878787878,
+              "balanced_accuracy": 0.9166666666666667,
+              "log_loss": 0.423676973888842,
+              "brier": 0.10018829541628989,
+              "ece": 0.15008252100131358
+            },
+            "Political Parties": {
+              "n": 84,
+              "macro_f1": 0.924119241192412,
+              "balanced_accuracy": 0.9444444444444444,
+              "log_loss": 0.17917612520857812,
+              "brier": 0.0519919584617256,
+              "ece": 0.044972862785184926
+            }
+          }
+        },
+        "decision": {
+          "threshold": 0.5,
+          "confusion_matrix_true_rows_predicted_columns": [
+            [
+              99,
+              12
+            ],
+            [
+              5,
+              43
+            ]
+          ],
+          "class_order": [
+            0,
+            1
+          ],
+          "class_recalls": {
+            "0": {
+              "n": 111,
+              "recall": 0.8918918918918919,
+              "wilson_95_interval": [
+                0.8204982036488334,
+                0.9370679305103996
+              ]
+            },
+            "1": {
+              "n": 48,
+              "recall": 0.8958333333333334,
+              "wilson_95_interval": [
+                0.7783257830561368,
+                0.9546782809581869
+              ]
+            }
+          },
+          "balanced_accuracy": 0.8938626126126126
+        },
+        "scope": "Fixed 50/50 prior adjustment from the exported scoring contract, not fitted to holdout labels. Assumes unchanged class-conditional text distributions; does not establish deployment prevalence, ideological intensity or neutrality.",
+        "replaces_primary_scores": false
+      }
+    }
+  },
+  "rows": 159,
+  "completed_at": 1792325311.7508101,
+  "scope": "Sealed MITweet topic stress evaluation after model selection.",
+  "limitations": [
+    "Only three held-out topic groups; not a broad US political-text benchmark.",
+    "Human ideology facets mapped to binary labels; not direct overall-US human gold.",
+    "No author-disjoint guarantee; synthetic training can cover related policy themes.",
+    "Results cannot be used to select or retune these candidates."
+  ],
+  "frozen_candidates": {
+    "selected": {
+      "manifest_sha256": "82eab6d27bb7c71465b7342e5852cef4ab9cb51c84ca7eae21fb486c278d32b4",
+      "selected_name": "fixed_0",
+      "decision_rules": {
+        "human_calibration_prior_right": 0.10294117647058823,
+        "gate_balanced_threshold": 0.21000000000000002
+      },
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.9673660188457008,
+          "balanced_accuracy": 0.9673660188457008,
+          "log_loss": 0.09870895487969024,
+          "brier": 0.023941461804480903,
+          "ece": 0.039024849784404986
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.9899474641341686,
+            "balanced_accuracy": 0.9898989898989898,
+            "log_loss": 0.09896858466931752,
+            "brier": 0.019562568071896998,
+            "ece": 0.07006204467611839
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.8853646353646354,
+            "balanced_accuracy": 0.9016393442622951,
+            "log_loss": 0.0984556885652989,
+            "brier": 0.028213029710285796,
+            "ece": 0.02284640028026002
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.8442758542011295,
+            "balanced_accuracy": 0.8508486398511974,
+            "log_loss": 0.14025565586211491,
+            "brier": 0.040778661063792535,
+            "ece": 0.030664147290567313
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 1.0,
+            "balanced_accuracy": 1.0,
+            "log_loss": 0.024711698764642322,
+            "brier": 0.001974301805566919,
+            "ece": 0.02365485248607744
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 1.0,
+            "balanced_accuracy": 1.0,
+            "log_loss": 0.07850323308597848,
+            "brier": 0.012923763563718353,
+            "ece": 0.07105263113302518
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 1.0,
+            "balanced_accuracy": 1.0,
+            "log_loss": 0.1420151974035414,
+            "brier": 0.03204089683091983,
+            "ece": 0.12214219819988517
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 1.0,
+            "balanced_accuracy": 1.0,
+            "log_loss": 0.037612502024865886,
+            "brier": 0.004689298203689577,
+            "ece": 0.03493301819005371
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 1.0,
+            "balanced_accuracy": 1.0,
+            "log_loss": 0.052773310749411356,
+            "brier": 0.004125107434660411,
+            "ece": 0.050568977546797456
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.6666666666666666,
+            "balanced_accuracy": 0.75,
+            "log_loss": 0.45891460969118825,
+            "brier": 0.16543452870543476,
+            "ece": 0.31861086242416914
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.8253968253968254,
+            "balanced_accuracy": 0.8881889763779528,
+            "log_loss": 0.052399952414329605,
+            "brier": 0.01609346186608814,
+            "ece": 0.034008611256927765
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.9899474641341686,
+            "balanced_accuracy": 0.9898989898989898,
+            "log_loss": 0.09896858466931752,
+            "brier": 0.019562568071896998,
+            "ece": 0.07006204467611839
+          }
+        }
+      }
+    },
+    "compact": {
+      "manifest_sha256": "85b300588d3f07574e0c82183a7975018c99c1909c6e685bc868956cae3e6b56",
+      "selected_name": "deberta_full_mixed",
+      "decision_rules": {
+        "human_calibration_prior_right": 0.10294117647058823,
+        "gate_balanced_threshold": 0.17
+      },
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.9574124396135266,
+          "balanced_accuracy": 0.9464664310954063,
+          "log_loss": 0.1696645312329413,
+          "brier": 0.03972060290832077,
+          "ece": 0.06852364033637083
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.9672902218372856,
+            "balanced_accuracy": 0.9671717171717171,
+            "log_loss": 0.19602334559206866,
+            "brier": 0.04400950237003421,
+            "ece": 0.10319541997311944
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.8924485528003796,
+            "balanced_accuracy": 0.8635831381733021,
+            "log_loss": 0.14395176624536118,
+            "brier": 0.03553682353145326,
+            "ece": 0.04057547506576526
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.9128888888888889,
+            "balanced_accuracy": 0.905022087886538,
+            "log_loss": 0.13546085622743215,
+            "brier": 0.03249965507899059,
+            "ece": 0.049730449886598166
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.6167565005875348,
+            "brier": 0.1579936878151446,
+            "ece": 0.1358118400133117
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.1970934993300764,
+            "brier": 0.31556104623540876,
+            "ece": 0.33949425197557587
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.7333333333333334,
+            "balanced_accuracy": 0.75,
+            "log_loss": 0.7994203361273335,
+            "brier": 0.24012624115441047,
+            "ece": 0.31875205515780336
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.915057915057915,
+            "balanced_accuracy": 0.9736842105263157,
+            "log_loss": 0.1269610897783319,
+            "brier": 0.034810714203683604,
+            "ece": 0.07143267179705669
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 1.0,
+            "balanced_accuracy": 1.0,
+            "log_loss": 0.21210243102568652,
+            "brier": 0.04459963340138111,
+            "ece": 0.18468407957341804
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 1.0,
+            "balanced_accuracy": 1.0,
+            "log_loss": 0.12422912744856468,
+            "brier": 0.02255349167811428,
+            "ece": 0.11067494766762112
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.6589147286821705,
+            "balanced_accuracy": 0.6,
+            "log_loss": 0.10844135675089153,
+            "brier": 0.02734546153027321,
+            "ece": 0.055157175196305405
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.9672902218372856,
+            "balanced_accuracy": 0.9671717171717171,
+            "log_loss": 0.19602334559206866,
+            "brier": 0.04400950237003421,
+            "ece": 0.10319541997311944
+          }
+        }
+      }
+    },
+    "single_expert": {
+      "manifest_sha256": "ce7ee4873e01fd9b54ac92ec0285fc1498ca9e2389ceed997c624a1dfe3d280d",
+      "selected_name": "mistral_human_lora_e2",
+      "decision_rules": {
+        "human_calibration_prior_right": 0.10294117647058823,
+        "gate_balanced_threshold": 0.24000000000000002
+      },
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.9672872713319017,
+          "balanced_accuracy": 0.9661660777385159,
+          "log_loss": 0.08755967621409816,
+          "brier": 0.02186587289186502,
+          "ece": 0.022533274295161432
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.987433298601244,
+            "balanced_accuracy": 0.9873737373737373,
+            "log_loss": 0.07195742750283117,
+            "brier": 0.014101012647915884,
+            "ece": 0.04700564891448547
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.8906390426186084,
+            "balanced_accuracy": 0.9030054644808743,
+            "log_loss": 0.10277951686871649,
+            "brier": 0.02944041793375659,
+            "ece": 0.02622460717230191
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.8535224366426413,
+            "balanced_accuracy": 0.8535224366426413,
+            "log_loss": 0.1526491361447379,
+            "brier": 0.04242545796584439,
+            "ece": 0.03877303552455165
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 1.0,
+            "balanced_accuracy": 1.0,
+            "log_loss": 0.012069988211464315,
+            "brier": 0.0004444608910766055,
+            "ece": 0.011840710820005707
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 1.0,
+            "balanced_accuracy": 1.0,
+            "log_loss": 0.06742109255936034,
+            "brier": 0.01012584077807074,
+            "ece": 0.06168377371213363
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 1.0,
+            "balanced_accuracy": 1.0,
+            "log_loss": 0.11392207590124435,
+            "brier": 0.021481320909545132,
+            "ece": 0.10124215808188766
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 1.0,
+            "balanced_accuracy": 1.0,
+            "log_loss": 0.02820617676256256,
+            "brier": 0.002810467956946372,
+            "ece": 0.02664843600125021
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 1.0,
+            "balanced_accuracy": 1.0,
+            "log_loss": 0.018805716971753626,
+            "brier": 0.0006741646666492747,
+            "ece": 0.018456908165984096
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.6666666666666666,
+            "balanced_accuracy": 0.75,
+            "log_loss": 0.49169748116983536,
+            "brier": 0.18148062395500753,
+            "ece": 0.3158968580700558
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.8253968253968254,
+            "balanced_accuracy": 0.8881889763779528,
+            "log_loss": 0.05056931846353857,
+            "brier": 0.01786234149207739,
+            "ece": 0.032223886212048095
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.987433298601244,
+            "balanced_accuracy": 0.9873737373737373,
+            "log_loss": 0.07195742750283117,
+            "brier": 0.014101012647915884,
+            "ece": 0.04700564891448547
+          }
+        }
+      }
+    }
+  },
+  "audit_checks": {
+    "all_bundles_and_prediction_provenance_verified": true,
+    "matched_complete_prediction_identities": true,
+    "new_predictions_or_model_selection_performed": false
+  }
+}

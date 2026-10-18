@@ -684,3 +684,27 @@ def test_prediction_resolves_verified_variants_and_prefers_frozen_manifest(tmp_p
     (bundle / 'verification.json').write_text(json.dumps({'passed': False}))
     with pytest.raises(ValueError, match='reload verification'):
         resolve_bundle(tmp_path)
+
+
+def test_final_publication_checks_provenance_and_never_repredicts(tmp_path, monkeypatch):
+    from possum.final_evaluation import freeze, evaluate
+    from possum import improvement_inference
+    from scripts.report_topic_evaluation import report
+    rows = [{'id': str(i), 'text': 'Private fixture passage', 'label': i % 2,
+             'source': 'MITweet', 'topic': 'fixture'} for i in range(4)]
+    final_fixture(tmp_path, ''.join(json.dumps(r) + '\n' for r in rows))
+    freeze(tmp_path, allow_incomplete=True, reason='Fixture')
+    evaluate(tmp_path, 'cpu')
+    def forbidden(*args, **kwargs):
+        raise AssertionError('Publication must not perform inference')
+    monkeypatch.setattr(improvement_inference, 'predict', forbidden)
+    published = report(tmp_path)
+    assert published['audit_checks']['new_predictions_or_model_selection_performed'] is False
+    assert 'Private fixture passage' not in json.dumps(published)
+    assert str(tmp_path) not in json.dumps(published)
+    metadata_path = tmp_path / 'final-evaluation/selected_scores.json'
+    metadata = json.loads(metadata_path.read_text())
+    metadata['bundle_sha256'] = 'changed'
+    metadata_path.write_text(json.dumps(metadata))
+    with pytest.raises(AssertionError):
+        report(tmp_path)

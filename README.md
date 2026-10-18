@@ -6,9 +6,25 @@
 
 PoSSUM studies the political viewpoint expressed in short English passages about U.S. politics. It combines calibrated predictions from multiple models and compares equal averaging with learned mixture weights. Neural routing uses 384-dimensional BGE-small embeddings; an optional self-prediction branch lets the routing head contribute its own answer.
 
-**Current status:** The strongest verified candidate on the revised human-text development benchmark is a calibrated fixed mixture of human-adapted Mistral (88.6%) and chat-formatted frozen Qwen (11.4%). It reaches **0.885 macro-F1 / 0.902 balanced accuracy / 0.0985 log loss** on 408 MITweet validation passages. Neural routing is weaker in this comparison. A reloadable local research export is available; there is no validated production release. All three candidates are now frozen; the one-time 159-example topic stress evaluation is in progress.
+**Current status:** The selected research model is a calibrated fixed mixture of human-adapted Mistral (88.6%) and frozen, chat-formatted Qwen (11.4%). It scored **0.890 macro-F1 / 0.872 balanced accuracy / 0.241 log loss** on a previously sealed 159-passage topic stress test. Mistral alone has higher F1 and substantially lower inference cost, while the mixture has lower log loss on this sample. Neural routing was weaker during development. All three evaluated models have verified local inference exports; broader validation and neutrality handling remain incomplete.
 
-**Human-text development (October 18, in progress):** The revised corpus contains **2,199 MITweet passages mapped from human ideology facets** and **2,113 synthetic passages**. Broader admission recovers meaningful short statements and additional topics while keeping ambiguous and conflicting labels out. The human validation subset is strongly left-skewed (**366 left / 42 right**), and **83.8%** of its passages belong to Abortion or Women’s Right. An earlier mixture scored 0.898 macro-F1 / 0.131 log loss on the remaining 66 passages, but that small, already-used subset is not broad validation. [Topic coverage audit](reports/human-topic-coverage.json). These are exploratory development results, with checkpoint and architecture selection on the same validation set.
+## Frozen topic stress evaluation
+
+All models, calibration, mixture weights and decision rules were fixed before opening **159 MITweet passages**: 111 left and 48 right, across Energy Crisis, Mass Shootings and Political Parties. No test result was used to select or retune the candidates.
+
+| Frozen candidate | Macro-F1 ↑ | Balanced accuracy ↑ | Log loss ↓ | Left recall | Right recall |
+|---|---:|---:|---:|---:|---:|
+| Development-selected Mistral–Qwen mixture | 0.890 | 0.872 | 0.241 | 0.973 | 0.771 |
+| Mistral adapter alone | 0.907 | 0.893 | 0.264 | 0.973 | 0.813 |
+| DeBERTa compact alternative | 0.766 | 0.744 | 0.488 | 0.946 | 0.542 |
+
+The mixture's descriptive 95% row-bootstrap intervals are **0.826–0.939 for macro-F1** and **0.150–0.357 for log loss**. They do not capture dependence between passages, author effects or label uncertainty. This is a narrow topic stress test using mapped human ideology facets, not a broad U.S. political-text benchmark; related policy themes can occur in synthetic training data. Mistral alone makes 12 classification errors versus 14 for the mixture, with no established universal advantage for either model.
+
+Topic performance varies. The mixture's macro-F1 is 0.834 on Energy Crisis (61 passages), 0.714 on Mass Shootings (14), and 0.934 on Political Parties (84). DeBERTa's Mass Shootings F1 is 0.417, illustrating the transfer gap despite its strong development score. At decision thresholds fixed earlier on gate data, the mixture and single adapter both reach 0.906 balanced accuracy; the table retains the default 0.5 threshold. [All candidates, topics, uncertainty, confusion matrices and fixed-prior sensitivity](reports/human-topic-stress.json).
+
+## Development comparison
+
+**Human-text development (October 18, completed):** The revised corpus contains **2,199 MITweet passages mapped from human ideology facets** and **2,113 synthetic passages**. Broader admission recovers meaningful short statements and additional topics while keeping ambiguous and conflicting labels out. The human validation subset is strongly left-skewed (**366 left / 42 right**), and **83.8%** of its passages belong to Abortion or Women’s Right. An earlier mixture scored 0.898 macro-F1 / 0.131 log loss on the remaining 66 passages, but that small, already-used subset is not broad validation. [Topic coverage audit](reports/human-topic-coverage.json). These are exploratory development results, with checkpoint and architecture selection on the same validation set.
 
 | Configuration | Human validation macro-F1 ↑ | Log loss ↓ |
 |---|---:|---:|
@@ -47,7 +63,7 @@ These figures use different inputs from the historical evaluations below and can
 | Routing input | BGE-small, 384-dimensional embeddings |
 | Current development selection | Two-model fixed mixture, selected by human validation log loss |
 | Training status | Planned compact, frozen-expert, distillation and human-only Mistral adapter comparisons complete |
-| Deployment status | Reloadable local adapters and mixture export; fresh human evaluation and abstention remain incomplete |
+| Deployment status | Verified local exports and completed 159-passage topic audit; broader human evaluation and abstention remain incomplete |
 
 Every enabled expert runs on every passage. This is a dense prediction ensemble, not sparse routing that avoids expert computation. Component weights and source datasets are downloaded separately.
 
