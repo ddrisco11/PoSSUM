@@ -80,10 +80,10 @@ def raw_component(bundle, spec, texts, device, embeddings):
         release_memory()
         return np.asarray(raw), joblib.load(folder / 'calibrator.joblib')
     name = spec['model']
-    if name in MODELS:
+    if spec.get('engine') == 'mlx' or name in MODELS:
         from .components.causal import MLXCausal
         backbone = spec['backbone']
-        model = MLXCausal(local_snapshot(backbone[0], backbone[1]))
+        model = MLXCausal(local_snapshot(backbone[0], backbone[1]), prompt_format=spec.get('prompt_format', 'plain'))
         model.model.eval()
     else:
         from .components.gliner import GLiNER
@@ -100,7 +100,7 @@ def component(bundle, spec, texts, device, embeddings, raw_cache=None):
         return np.full(len(texts), spec['probability'])
     # Cache is scoped to one prediction call; never reuse scores for another batch.
     cache = raw_cache if raw_cache is not None else {}
-    key = json.dumps({k: spec[k] for k in ['kind', 'model', 'backbone', 'calibrator', 'trial'] if k in spec}, sort_keys=True)
+    key = json.dumps({k: spec[k] for k in ['kind', 'model', 'backbone', 'calibrator', 'trial', 'prompt_format'] if k in spec}, sort_keys=True)
     if key not in cache:
         cache[key] = raw_component(bundle, spec, texts, device, embeddings)
     raw, default_calibrator = cache[key]
@@ -229,7 +229,8 @@ def export(root, device='mps', candidate=None):
             source = root / 'experts' / f'{model_name}_calibrator.joblib'
             destination = bundle / 'components' / f'{name}_calibrator.joblib'
             spec['calibrator'] = copy_once(source, destination)
-            spec['backbone'] = list(MODELS[model_name]) if model_name in MODELS else ['fastino/gliner2.5-base-v1', resolve('fastino/gliner2.5-base-v1')]
+            from .improvement_experts import expert_settings
+            spec.update(expert_settings(model_name))
         else:
             source = root / spec['model']
             destination = bundle / 'components' / name

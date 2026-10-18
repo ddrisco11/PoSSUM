@@ -9,6 +9,18 @@ def prompt(text):
             "\n</excerpt>\nThis statement reflects a")
 
 
+def scoring_prompt(tokenizer, text, prompt_format='plain'):
+    if prompt_format == 'plain':
+        return prompt(text)
+    if prompt_format != 'chat_nonthinking':
+        raise ValueError(f'Unknown scoring prompt format: {prompt_format}')
+    # Preserve the classification task, but place forced completion in the
+    # assistant turn of the model's own template. No reasoning is generated.
+    rendered = tokenizer.apply_chat_template([{'role': 'user', 'content': prompt(text)}],
+                tokenize=False, add_generation_prompt=True, enable_thinking=False)
+    return rendered + 'This statement reflects a'
+
+
 def candidate_ids(tokenizer, prefix, candidate):
     a = tokenizer.encode(prefix, add_special_tokens=True)
     b = tokenizer.encode(prefix+candidate, add_special_tokens=True)
@@ -49,14 +61,16 @@ class Causal:
 
 class MLXCausal:
     """Pass an explicitly selected, revision-pinned 4-bit MLX model directory."""
-    def __init__(self, model_id):
+    def __init__(self, model_id, prompt_format='plain'):
+        self.prompt_format = prompt_format
         from mlx_lm import load
         self.model, self.tokenizer = load(model_id)
     def score(self, texts):
         import mlx.core as mx
         rows = []
         for text in texts:
-            pairs = [candidate_ids(self.tokenizer, prompt(text), c) for c in (" left", " right")]
+            prefix = scoring_prompt(self.tokenizer, text, getattr(self, "prompt_format", "plain"))
+            pairs = [candidate_ids(self.tokenizer, prefix, c) for c in (" left", " right")]
             if all(len(b) == len(a)+1 for a,b in pairs):
                 # Shared prefix: one exact forward pass, no sampled generation.
                 logits = self.model(mx.array([pairs[0][0]]))[0, -1].astype(mx.float32)

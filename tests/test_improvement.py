@@ -334,3 +334,21 @@ def test_export_shares_predictor_artifacts_and_preserves_calibrated_parity(tmp_p
     module.export(tmp_path, device='cpu', candidate='original')
     assert json.loads((tmp_path / 'export.json').read_text())['selected'] == 'fixed'
     assert len(json.loads((tmp_path / 'export-ledger.json').read_text())['candidates']) == 2
+
+
+def test_chat_scoring_uses_nonreasoning_assistant_completion_and_preserves_plain_prompt():
+    from possum.components.causal import scoring_prompt, prompt
+    class Tokenizer:
+        def apply_chat_template(self, messages, **kwargs):
+            assert messages == [{'role': 'user', 'content': prompt('Some passage')}]
+            assert kwargs == dict(tokenize=False, add_generation_prompt=True, enable_thinking=False)
+            return 'assistant-prefix\n'
+    tokenizer = Tokenizer()
+    assert scoring_prompt(tokenizer, 'Some passage') == prompt('Some passage')
+    assert scoring_prompt(tokenizer, 'Some passage', 'chat_nonthinking') == 'assistant-prefix\nThis statement reflects a'
+    with pytest.raises(ValueError, match='Unknown'):
+        scoring_prompt(tokenizer, 'Some passage', 'typo')
+    from possum.improvement_experts import expert_settings
+    raw, chat = expert_settings('qwen'), expert_settings('qwen_chat')
+    assert raw['backbone'] == chat['backbone'] and chat['engine'] == 'mlx'
+    assert raw['prompt_format'] == 'plain' and chat['prompt_format'] == 'chat_nonthinking'

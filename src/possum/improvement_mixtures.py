@@ -71,7 +71,8 @@ def candidates(root, ids, calibration_prior):
         folder = best_path.parent / best['folder']
         entries[best['trial']['name']] = {'kind': 'compact', 'model': str(folder.relative_to(root)),
                                          'scores': str((folder / 'scores.npz').relative_to(root)), 'trial': best['trial']}
-    for name in ['gliner', 'mistral', 'qwen']:
+    from .improvement_experts import EXPERT_NAMES
+    for name in EXPERT_NAMES:
         meta_path = root / 'experts' / f'{name}.json'
         if meta_path.exists() and json.loads(meta_path.read_text()).get('complete'):
             entries[name] = {'kind': 'expert', 'model': name, 'scores': f'experts/{name}_scores.npz'}
@@ -145,7 +146,7 @@ def run(root):
                     and (family != 'baseline' or name.startswith('lexical_'))]
         if eligible:
             pool.append(min(eligible, key=lambda i: binary_loss(y, gate[:, i]).mean()))
-    pool += [names.index(name) for name in ['mistral', 'qwen'] if name in entries]
+    pool += [names.index(name) for name in ['mistral', 'qwen', 'qwen_chat'] if name in entries]
     for left, right in combinations(pool, 2):
         active = [left, right]
         weights = np.zeros(len(names))

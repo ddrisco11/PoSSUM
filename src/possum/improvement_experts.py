@@ -15,6 +15,19 @@ from .option_a import MODELS
 from .revisions import resolve, local_snapshot
 
 
+EXPERT_NAMES = ('gliner', 'mistral', 'qwen', 'qwen_chat')
+
+
+def expert_settings(name):
+    base = 'qwen' if name == 'qwen_chat' else name
+    if base in MODELS:
+        return {'backbone': list(MODELS[base]), 'engine': 'mlx',
+                'prompt_format': 'chat_nonthinking' if name == 'qwen_chat' else 'plain'}
+    if name != 'gliner':
+        raise ValueError(f'Unknown expert: {name}')
+    return {'backbone': ['fastino/gliner2.5-base-v1', resolve('fastino/gliner2.5-base-v1')], 'engine': 'gliner'}
+
+
 def run(root, name):
     lock = (root / 'expert-process.lock').open('w')
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -26,9 +39,10 @@ def run(root, name):
     out.mkdir(exist_ok=True)
     target = out / f'{name}_raw.npz'
     meta = out / f'{name}.json'
-    backbone = MODELS[name] if name in MODELS else ('fastino/gliner2.5-base-v1', resolve('fastino/gliner2.5-base-v1'))
+    settings = expert_settings(name)
+    backbone = settings['backbone']
     signature = {'manifest_sha256': json.loads((root / 'dataset.json').read_text())['manifest_sha256'],
-                 'backbone': list(backbone), 'frozen': True, 'prompt_version': 'causal-v1' if name in MODELS else 'gliner-v1'}
+                 'backbone': list(backbone), 'frozen': True, 'prompt_version': 'qwen-chat-nonthinking-v1' if name == 'qwen_chat' else 'causal-v1' if name in MODELS else 'gliner-v1'}
     values, elapsed = [], []
     if meta.exists():
         assert json.loads(meta.read_text())['signature'] == signature
@@ -41,9 +55,9 @@ def run(root, name):
     if len(values) < len(rows):
         if time.time() >= end:
             return
-        if name in MODELS:
+        if settings['engine'] == 'mlx':
             from .components.causal import MLXCausal
-            model = MLXCausal(local_snapshot(backbone[0], backbone[1]))
+            model = MLXCausal(local_snapshot(backbone[0], backbone[1]), prompt_format=settings['prompt_format'])
             model.model.eval()
         else:
             import torch
@@ -80,6 +94,6 @@ def run(root, name):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('run', type=Path)
-    parser.add_argument('expert', choices=['mistral', 'qwen', 'gliner'])
+    parser.add_argument('expert', choices=EXPERT_NAMES)
     args = parser.parse_args()
     run(args.run, args.expert)

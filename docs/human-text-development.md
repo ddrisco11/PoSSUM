@@ -54,3 +54,9 @@ A grouped fixed-mixture comparison regularizes the total weight assigned to each
 A predefined small-mixture family checks whether two predictors can retain the full ensemble's performance at lower inference cost. It compares pairs from the original-calibration lexical model, a compact model, frozen Mistral and frozen Qwen. The lexical/compact representatives are selected by human gate log loss; each pair's nonnegative convex weights are fitted on the same gate partition. Human validation still selects among the resulting models. This adds exploratory comparisons and does not create an independent test.
 
 A named candidate can be exported with `python -m possum.improvement_inference export RUN --candidate NAME`. Each export must pass reload parity. Exporting a smaller alternative does not replace a better verified incumbent; the bundle ledger retains both for later accuracy/latency comparisons.
+
+## Qwen prompt-format comparison
+
+Frozen Qwen3.5-9B scores substantially below Mistral with the shared raw-completion prompt: human macro-F1 0.604 and log loss 0.265. Its local tokenizer artifact provides a conversation template with an explicit `enable_thinking=False` assistant prefix. A separate, versioned `qwen_chat` comparison places the same classification task in the user turn and forces the assistant completion `This statement reflects a` followed by ` left` or ` right`. Both continuations are single tokens in the pinned tokenizer. No reasoning or completion is sampled.
+
+The raw-completion baseline remains unchanged. Chat-template scores have their own cache, calibration and provenance, and use the same calibration/gate/validation partitions. This tests a plausible formatting mismatch; it does not assume Qwen will improve or attribute the observed gap to formatting before the comparison finishes.

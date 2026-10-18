@@ -1,0 +1,302 @@
+{
+  "stage": "Frozen Qwen raw-completion comparison; ModernBERT training in progress.",
+  "qwen": {
+    "signature": {
+      "manifest_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17",
+      "backbone": [
+        "mlx-community/Qwen3.5-9B-4bit",
+        "8b2b98c00a6b4d291155e4890773ca8f769aee53"
+      ],
+      "frozen": true,
+      "prompt_version": "causal-v1"
+    },
+    "complete": true,
+    "validation": {
+      "all": {
+        "n": 806,
+        "macro_f1": 0.5067654858230775,
+        "balanced_accuracy": 0.5432494110718492,
+        "log_loss": 0.45856045777132004,
+        "brier": 0.1644573515054792,
+        "ece": 0.160464068117129
+      },
+      "sources": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.42330384661569864,
+          "balanced_accuracy": 0.5429292929292929,
+          "log_loss": 0.6565303447096479,
+          "brier": 0.25400904109414146,
+          "ece": 0.30906830419314746
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.6042328042328042,
+          "balanced_accuracy": 0.5815768930523029,
+          "log_loss": 0.2654427739442259,
+          "brier": 0.07710055626948019,
+          "ece": 0.036576758384291266
+        }
+      },
+      "topics": {
+        "Abortion": {
+          "n": 210,
+          "macro_f1": 0.588912379610054,
+          "balanced_accuracy": 0.5709137409904673,
+          "log_loss": 0.27819614589614905,
+          "brier": 0.08194024101501808,
+          "ece": 0.05192789898162626
+        },
+        "Black Lives Matter": {
+          "n": 6,
+          "macro_f1": 0.45454545454545453,
+          "balanced_accuracy": 0.5,
+          "log_loss": 0.7322907042930712,
+          "brier": 0.16660126998533276,
+          "ece": 0.19013081852514135
+        },
+        "CHIPS and Science Act": {
+          "n": 2,
+          "single_class": 0,
+          "accuracy": 1.0
+        },
+        "Capitol Hill Riot": {
+          "n": 3,
+          "macro_f1": 1.0,
+          "balanced_accuracy": 1.0,
+          "log_loss": 0.19822493704262156,
+          "brier": 0.05646235895817208,
+          "ece": 0.15891072311271842
+        },
+        "Covid-19": {
+          "n": 18,
+          "single_class": 0,
+          "accuracy": 1.0
+        },
+        "Democracy": {
+          "n": 4,
+          "macro_f1": 0.3333333333333333,
+          "balanced_accuracy": 0.5,
+          "log_loss": 0.9757033823928493,
+          "brier": 0.36076070390533316,
+          "ece": 0.4268553191767324
+        },
+        "Inflation Reduction Act": {
+          "n": 22,
+          "macro_f1": 0.4634146341463415,
+          "balanced_accuracy": 0.5,
+          "log_loss": 0.19956103187685306,
+          "brier": 0.06884183206322944,
+          "ece": 0.12441242723099809
+        },
+        "Mexico\u2013US Border": {
+          "n": 8,
+          "macro_f1": 0.36507936507936506,
+          "balanced_accuracy": 0.5833333333333334,
+          "log_loss": 1.1875748242361852,
+          "brier": 0.44523723124136366,
+          "ece": 0.5732122391922352
+        },
+        "Russo-Ukrainian War": {
+          "n": 3,
+          "macro_f1": 0.4,
+          "balanced_accuracy": 0.5,
+          "log_loss": 1.6756228064913359,
+          "brier": 0.3295464572514824,
+          "ece": 0.30635136604693014
+        },
+        "Women\u2019s Right": {
+          "n": 132,
+          "macro_f1": 0.6679841897233202,
+          "balanced_accuracy": 0.684251968503937,
+          "log_loss": 0.16056872157465754,
+          "brier": 0.041575880896079206,
+          "ece": 0.07943021783593557
+        },
+        "synthetic_issue_4": {
+          "n": 398,
+          "macro_f1": 0.42330384661569864,
+          "balanced_accuracy": 0.5429292929292929,
+          "log_loss": 0.6565303447096479,
+          "brier": 0.25400904109414146,
+          "ece": 0.30906830419314746
+        }
+      }
+    },
+    "seconds": 2128.4945268439997,
+    "rows": 1973
+  },
+  "selected": "fixed_0.1",
+  "selected_validation": {
+    "GPT-4 Political Ideologies": {
+      "n": 398,
+      "macro_f1": 0.979886800080857,
+      "balanced_accuracy": 0.9797979797979798,
+      "log_loss": 0.10263597910741319,
+      "brier": 0.020740522333061194,
+      "ece": 0.07609726285504134
+    },
+    "MITweet": {
+      "n": 408,
+      "macro_f1": 0.8725817321126251,
+      "balanced_accuracy": 0.8686572989851677,
+      "log_loss": 0.12525709569333157,
+      "brier": 0.03550244334613593,
+      "ece": 0.036562369424348894
+    }
+  },
+  "small_mixtures": {
+    "pair_lexical_mixed_C10__bert_full_mixed": {
+      "sources": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.9317987090877935,
+          "balanced_accuracy": 0.9318181818181819,
+          "log_loss": 0.23744503102438233,
+          "brier": 0.06553989847380771,
+          "ece": 0.07587260925068733
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.7546126535126012,
+          "balanced_accuracy": 0.7152615144418423,
+          "log_loss": 0.18932760397994125,
+          "brier": 0.05317746453719777,
+          "ece": 0.042012000922410656
+        }
+      },
+      "weights": {
+        "lexical_mixed_C10": 0.29351076724932706,
+        "bert_full_mixed": 0.706489232750673
+      }
+    },
+    "pair_lexical_mixed_C10__mistral": {
+      "sources": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.979886800080857,
+          "balanced_accuracy": 0.9797979797979798,
+          "log_loss": 0.07271903043732011,
+          "brier": 0.014957767966270312,
+          "ece": 0.05152182013299508
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.8672911787665886,
+          "balanced_accuracy": 0.8672911787665886,
+          "log_loss": 0.12840160714579704,
+          "brier": 0.03853176758708704,
+          "ece": 0.021829869831068546
+        }
+      },
+      "weights": {
+        "lexical_mixed_C10": 0.09517116396538344,
+        "mistral": 0.9048288360346166
+      }
+    },
+    "pair_lexical_mixed_C10__qwen": {
+      "sources": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.749229160522294,
+          "balanced_accuracy": 0.7626262626262627,
+          "log_loss": 0.3922528914159787,
+          "brier": 0.14177683792365994,
+          "ece": 0.07950482084607312
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.6783180026281209,
+          "balanced_accuracy": 0.6282201405152225,
+          "log_loss": 0.21104706892209257,
+          "brier": 0.05920724697089371,
+          "ece": 0.04555254421061293
+        }
+      },
+      "weights": {
+        "lexical_mixed_C10": 0.460679034621321,
+        "qwen": 0.539320965378679
+      }
+    },
+    "pair_bert_full_mixed__mistral": {
+      "sources": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.9824030620945788,
+          "balanced_accuracy": 0.9823232323232323,
+          "log_loss": 0.07605581621909097,
+          "brier": 0.014737007528991174,
+          "ece": 0.05692460475794663
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.8725817321126251,
+          "balanced_accuracy": 0.8686572989851677,
+          "log_loss": 0.12809748926841963,
+          "brier": 0.03777105160423884,
+          "ece": 0.022134245767015313
+        }
+      },
+      "weights": {
+        "bert_full_mixed": 0.1257051916084306,
+        "mistral": 0.8742948083915694
+      }
+    },
+    "pair_bert_full_mixed__qwen": {
+      "sources": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.8957682603557855,
+          "balanced_accuracy": 0.8964646464646464,
+          "log_loss": 0.3576364533591195,
+          "brier": 0.12053274807575232,
+          "ece": 0.17654125143232424
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.7173097598853183,
+          "balanced_accuracy": 0.6547619047619048,
+          "log_loss": 0.19690966726747827,
+          "brier": 0.05523601796974861,
+          "ece": 0.0427184037343134
+        }
+      },
+      "weights": {
+        "bert_full_mixed": 0.5561950113240696,
+        "qwen": 0.44380498867593043
+      }
+    },
+    "pair_mistral__qwen": {
+      "sources": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.9773696480354808,
+          "balanced_accuracy": 0.9772727272727273,
+          "log_loss": 0.09550255743422348,
+          "brier": 0.01984677760600971,
+          "ece": 0.06692848532493034
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.8725817321126251,
+          "balanced_accuracy": 0.8686572989851677,
+          "log_loss": 0.13448875990496112,
+          "brier": 0.040384507850944405,
+          "ece": 0.02895031504256476
+        }
+      },
+      "weights": {
+        "mistral": 0.9029545153021555,
+        "qwen": 0.0970454846978445
+      }
+    }
+  },
+  "limitations": [
+    "Development selection is not a final test.",
+    "Human labels map multiple ideology facets to one binary axis.",
+    "Human validation is strongly left-skewed.",
+    "Author-disjointness is unavailable."
+  ],
+  "topic_holdout_scored": false,
+  "formatting_followup": "The local Qwen snapshot includes a chat template with an explicit non-thinking assistant prefix. A separate chat-template variant is planned; the raw-completion result is retained."
+}
