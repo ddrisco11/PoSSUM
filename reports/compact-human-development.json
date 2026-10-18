@@ -1,0 +1,1892 @@
+{
+  "stage": "Initial compact comparison in progress",
+  "completed_recipes": [
+    "bert_lora_human",
+    "bert_full_human",
+    "bert_full_mixed"
+  ],
+  "results": {
+    "bert_lora_human_epoch1": {
+      "trial": {
+        "name": "bert_lora_human",
+        "mode": "lora",
+        "regime": "human",
+        "lr": 0.0002,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 1,
+      "fit_rows": 1224,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.41253644314868804,
+          "balanced_accuracy": 0.5,
+          "log_loss": 0.7551084104804032,
+          "brier": 0.24739335298444914,
+          "ece": 0.19520757292162272
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.33444816053511706,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.1896183086572365,
+            "brier": 0.40638554710586744,
+            "ece": 0.39543279880120363
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.4728682170542636,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.3312482647098648,
+            "brier": 0.09229802636600677,
+            "ece": 0.00011017193149764903
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.47103274559193953,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.34554592709705434,
+            "brier": 0.0975339881884049,
+            "ece": 0.006494740370043051
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.4697183372739105,
+            "brier": 0.14299758012476965,
+            "ece": 0.06330174919582776
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.8305209707780926,
+            "brier": 0.2753457623472564,
+            "ece": 0.23036791994933403
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.1893351765382787,
+            "brier": 0.4073254663177272,
+            "ece": 0.39670818611873204
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.4634146341463415,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.4027589452059992,
+            "brier": 0.11868160425400047,
+            "ece": 0.03307934855860295
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.2,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.7274105193855664,
+            "brier": 0.6052680035468853,
+            "ece": 0.646467242520825
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.8303195401565212,
+            "brier": 0.275308575655769,
+            "ece": 0.23053393435396585
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.49034749034749037,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.19065812433701543,
+            "brier": 0.040680606030923584,
+            "ece": 0.06509567495871527
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.33444816053511706,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.1896183086572365,
+            "brier": 0.40638554710586744,
+            "ece": 0.39543279880120363
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_lora_human_epoch2": {
+      "trial": {
+        "name": "bert_lora_human",
+        "mode": "lora",
+        "regime": "human",
+        "lr": 0.0002,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 2,
+      "fit_rows": 1224,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.41654099052904625,
+          "balanced_accuracy": 0.5011999411071849,
+          "log_loss": 0.7907319356962025,
+          "brier": 0.25194682411906977,
+          "ece": 0.20520117356570336
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.33444816053511706,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.2881477883273387,
+            "brier": 0.4218518905044516,
+            "ece": 0.41688330724044076
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.4955252001884126,
+            "balanced_accuracy": 0.5105386416861827,
+            "log_loss": 0.30550764808053515,
+            "brier": 0.08620609759607478,
+            "ece": 0.028179989163057244
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.4696969696969697,
+            "balanced_accuracy": 0.49732620320855614,
+            "log_loss": 0.3386835992015549,
+            "brier": 0.09707350278742238,
+            "ece": 0.018357166667411044
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.4696049304174094,
+            "brier": 0.14348394517017235,
+            "ece": 0.16303181719037393
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.9059698626181935,
+            "brier": 0.2893065447471039,
+            "ece": 0.3931666484086891
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.852744446433086,
+            "brier": 0.3175502302396007,
+            "ece": 0.4567993904211279
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.725,
+            "balanced_accuracy": 0.6666666666666666,
+            "log_loss": 0.24347868942679138,
+            "brier": 0.06447516047922995,
+            "ece": 0.15427028084291994
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.2,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.4267996063498436,
+            "brier": 0.5326867469196768,
+            "ece": 0.6046333664816557
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.7272494631085927,
+            "brier": 0.2535856260111032,
+            "ece": 0.2749630029071961
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.49034749034749037,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.17280385210248297,
+            "brier": 0.03768203592438171,
+            "ece": 0.06918722977535294
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.33444816053511706,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.2881477883273387,
+            "brier": 0.4218518905044516,
+            "ece": 0.41688330724044076
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_lora_human_epoch3": {
+      "trial": {
+        "name": "bert_lora_human",
+        "mode": "lora",
+        "regime": "human",
+        "lr": 0.0002,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 3,
+      "fit_rows": 1224,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.4286485444380181,
+          "balanced_accuracy": 0.505683156654888,
+          "log_loss": 0.7943946144408829,
+          "brier": 0.2509659739250343,
+          "ece": 0.2153339250895955
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.33444816053511706,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.3053535828322906,
+            "brier": 0.42212162078869675,
+            "ece": 0.42468697456650123
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.5549051432828672,
+            "balanced_accuracy": 0.5435206869633099,
+            "log_loss": 0.29595915017671576,
+            "brier": 0.08400531840606944,
+            "ece": 0.02987262814275092
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.5080046856696603,
+            "balanced_accuracy": 0.5163915368518949,
+            "log_loss": 0.33654591167137843,
+            "brier": 0.09754912172815744,
+            "ece": 0.044776984718369245
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.4616608645898799,
+            "brier": 0.14207541705041102,
+            "ece": 0.11183600065355473
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.0451918974667642,
+            "brier": 0.3313271908546552,
+            "ece": 0.47183868908871657
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.7096869014736764,
+            "brier": 0.25499175952898906,
+            "ece": 0.2601636943815958
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.915057915057915,
+            "balanced_accuracy": 0.9736842105263157,
+            "log_loss": 0.27175623521322173,
+            "brier": 0.07245538999804389,
+            "ece": 0.16674535666468945
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.2,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.1165937253964255,
+            "brier": 0.42182538067308034,
+            "ece": 0.5348423304882206
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.6481801644227748,
+            "brier": 0.23119968692722667,
+            "ece": 0.25350509607897453
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.49034749034749037,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.1598334506066993,
+            "brier": 0.03557552675955512,
+            "ece": 0.06908151468797126
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.33444816053511706,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.3053535828322906,
+            "brier": 0.42212162078869675,
+            "ece": 0.42468697456650123
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_lora_human_epoch4": {
+      "trial": {
+        "name": "bert_lora_human",
+        "mode": "lora",
+        "regime": "human",
+        "lr": 0.0002,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 4,
+      "fit_rows": 1224,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.42765633333038683,
+          "balanced_accuracy": 0.5039163722025913,
+          "log_loss": 0.7904239968158631,
+          "brier": 0.2496743850845479,
+          "ece": 0.2087569938086985
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.33444816053511706,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.3003687668630912,
+            "brier": 0.4201212648893792,
+            "ece": 0.4239108634872197
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.550326797385621,
+            "balanced_accuracy": 0.5407884465261514,
+            "log_loss": 0.2929778730933217,
+            "brier": 0.0834051248827762,
+            "ece": 0.037233693708742945
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.5052304212609556,
+            "balanced_accuracy": 0.5137177400604511,
+            "log_loss": 0.3375002229176797,
+            "brier": 0.09821998180673645,
+            "ece": 0.04903040544270405
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.45746286625699467,
+            "brier": 0.1413686541813922,
+            "ece": 0.14609872776932592
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.092604793181815,
+            "brier": 0.3474728191103054,
+            "ece": 0.4898263171685194
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.7152121402727276,
+            "brier": 0.25511976311153284,
+            "ece": 0.25230686968340965
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.8472222222222222,
+            "balanced_accuracy": 0.9473684210526316,
+            "log_loss": 0.278831280556442,
+            "brier": 0.0779787977812801,
+            "ece": 0.17090644103985309
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.2,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.0098965668738487,
+            "brier": 0.3728671308979278,
+            "ece": 0.4974509699453984
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.6243700387734527,
+            "brier": 0.22348618040117355,
+            "ece": 0.3515080321332279
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.49034749034749037,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.15456820098043333,
+            "brier": 0.034673242180223496,
+            "ece": 0.0659933358687387
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.33444816053511706,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.3003687668630912,
+            "brier": 0.4201212648893792,
+            "ece": 0.4239108634872197
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_full_human_epoch1": {
+      "trial": {
+        "name": "bert_full_human",
+        "mode": "full",
+        "regime": "human",
+        "lr": 2e-05,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 1,
+      "fit_rows": 1224,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.416986722597008,
+          "balanced_accuracy": 0.5020833333333333,
+          "log_loss": 0.7348194683964159,
+          "brier": 0.24121063058537556,
+          "ece": 0.20201485036551678
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.33444816053511706,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.2116626368631862,
+            "brier": 0.4083960983019419,
+            "ece": 0.4008883774744372
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.4967357622070459,
+            "balanced_accuracy": 0.5119047619047619,
+            "log_loss": 0.2696636324901056,
+            "brier": 0.07812284590107804,
+            "ece": 0.056455592505293625
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.47103274559193953,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.2587370247042906,
+            "brier": 0.07807679475673343,
+            "ece": 0.0745722031404051
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.4581632560152064,
+            "brier": 0.1407912886166744,
+            "ece": 0.055317051904234416
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.9940454143436451,
+            "brier": 0.30004496333743785,
+            "ece": 0.32158366539686845
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.0656182090119135,
+            "brier": 0.38128456523742205,
+            "ece": 0.37232344855736366
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.725,
+            "balanced_accuracy": 0.6666666666666666,
+            "log_loss": 0.24812636454417997,
+            "brier": 0.06744269464890537,
+            "ece": 0.15382241386545334
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.2,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.7081552512067226,
+            "brier": 0.5981108166258021,
+            "ece": 0.636867345266473
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.8363588120225466,
+            "brier": 0.27652651110943893,
+            "ece": 0.2905034127151335
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.49034749034749037,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.1647784108368477,
+            "brier": 0.036823194496219354,
+            "ece": 0.08096152931368421
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.33444816053511706,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.2116626368631862,
+            "brier": 0.4083960983019419,
+            "ece": 0.4008883774744372
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_full_human_epoch2": {
+      "trial": {
+        "name": "bert_full_human",
+        "mode": "full",
+        "regime": "human",
+        "lr": 2e-05,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 2,
+      "fit_rows": 1224,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.4560856892615619,
+          "balanced_accuracy": 0.5176163133097762,
+          "log_loss": 0.7180612875774424,
+          "brier": 0.23248793236179185,
+          "ece": 0.2024966528063299
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.33444816053511706,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.223971996528395,
+            "brier": 0.40299042127967416,
+            "ece": 0.4186273467445754
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.6620021046503817,
+            "balanced_accuracy": 0.6227556596409055,
+            "log_loss": 0.2245503509046994,
+            "brier": 0.0661644260154262,
+            "ece": 0.04220132228376777
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.6617268041237113,
+            "balanced_accuracy": 0.6224133922343641,
+            "log_loss": 0.22761286960710572,
+            "brier": 0.06725397822896709,
+            "ece": 0.05398984419172766
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.3609429506721807,
+            "brier": 0.11680731932241578,
+            "ece": 0.2168002738191868
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.9936539143116602,
+            "brier": 0.3189489126619807,
+            "ece": 0.4522409499187958
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.9380859555515316,
+            "brier": 0.3404087714571132,
+            "ece": 0.3476201187841116
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.7904761904761904,
+            "balanced_accuracy": 0.9210526315789473,
+            "log_loss": 0.2757827513916564,
+            "brier": 0.0861511371353483,
+            "ece": 0.14773590101531248
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.5,
+            "balanced_accuracy": 0.6666666666666666,
+            "log_loss": 0.9365902291846187,
+            "brier": 0.3251140711705087,
+            "ece": 0.4188967382987307
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.687999973762561,
+            "brier": 0.24583625832665,
+            "ece": 0.44438434404005855
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.49034749034749037,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.12794705862882355,
+            "brier": 0.03183802640831947,
+            "ece": 0.05642412113598586
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.33444816053511706,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.223971996528395,
+            "brier": 0.40299042127967416,
+            "ece": 0.4186273467445754
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_full_human_epoch3": {
+      "trial": {
+        "name": "bert_full_human",
+        "mode": "full",
+        "regime": "human",
+        "lr": 2e-05,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 3,
+      "fit_rows": 1224,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.4745526481431526,
+          "balanced_accuracy": 0.5262661955241461,
+          "log_loss": 0.7644629102578707,
+          "brier": 0.23838947507573718,
+          "ece": 0.22400060662412488
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.340033500837521,
+            "balanced_accuracy": 0.5025252525252525,
+            "log_loss": 1.3174821997344934,
+            "brier": 0.41757647326183084,
+            "ece": 0.4229226645010553
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.7074669671207621,
+            "balanced_accuracy": 0.6676424668227947,
+            "log_loss": 0.22499801513116546,
+            "brier": 0.06359431508047914,
+            "ece": 0.03817842235391191
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.7395976853127584,
+            "balanced_accuracy": 0.7040223203906069,
+            "log_loss": 0.23650171203886805,
+            "brier": 0.06670017764459357,
+            "ece": 0.043331377937493795
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.38239155973620087,
+            "brier": 0.12723044354963617,
+            "ece": 0.19292527662880832
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.0616430767029448,
+            "brier": 0.3211534035992553,
+            "ece": 0.3835143299593621
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.126477155028888,
+            "brier": 0.3900523052604182,
+            "ece": 0.4017833341108704
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.7451737451737452,
+            "balanced_accuracy": 0.7807017543859649,
+            "log_loss": 0.23297471449058846,
+            "brier": 0.07101930736244388,
+            "ece": 0.14037738839772212
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.5,
+            "balanced_accuracy": 0.6666666666666666,
+            "log_loss": 0.9563788017920904,
+            "brier": 0.3238603255803343,
+            "ece": 0.39842826760561245
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.25,
+            "balanced_accuracy": 0.25,
+            "log_loss": 0.9780730200494064,
+            "brier": 0.352828236064058,
+            "ece": 0.5262057444653511
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.6589147286821705,
+            "balanced_accuracy": 0.6,
+            "log_loss": 0.11297352466134201,
+            "brier": 0.02500730132808936,
+            "ece": 0.0674034820242628
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.340033500837521,
+            "balanced_accuracy": 0.5025252525252525,
+            "log_loss": 1.3174821997344934,
+            "brier": 0.41757647326183084,
+            "ece": 0.4229226645010553
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_full_human_epoch4": {
+      "trial": {
+        "name": "bert_full_human",
+        "mode": "full",
+        "regime": "human",
+        "lr": 2e-05,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 4,
+      "fit_rows": 1224,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.482230837122524,
+          "balanced_accuracy": 0.5304328621908128,
+          "log_loss": 0.7839653106145045,
+          "brier": 0.24059519514142355,
+          "ece": 0.20940876940388187
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.340033500837521,
+            "balanced_accuracy": 0.5025252525252525,
+            "log_loss": 1.3607001274863009,
+            "brier": 0.4230365428684333,
+            "ece": 0.42898305891526994
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.7317019707869199,
+            "balanced_accuracy": 0.6914519906323184,
+            "log_loss": 0.22136615101897775,
+            "brier": 0.06262544907438955,
+            "ece": 0.05175612307393157
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.7619047619047619,
+            "balanced_accuracy": 0.7421529876772843,
+            "log_loss": 0.22677365317474452,
+            "brier": 0.06457566964361161,
+            "ece": 0.04736492735773365
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.41797704107680494,
+            "brier": 0.13548252107154649,
+            "ece": 0.19141103876276358
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.0552460378774486,
+            "brier": 0.3155227819191903,
+            "ece": 0.374493972114472
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.2230566487552572,
+            "brier": 0.4091381212393581,
+            "ece": 0.41540380970278035
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.8070175438596491,
+            "balanced_accuracy": 0.8070175438596491,
+            "log_loss": 0.23925330572930414,
+            "brier": 0.06980200548998497,
+            "ece": 0.11140682807867022
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.5,
+            "balanced_accuracy": 0.6666666666666666,
+            "log_loss": 1.071128201735887,
+            "brier": 0.3633554485554226,
+            "ece": 0.47966803714361333
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.9241284952824738,
+            "brier": 0.3148069736657684,
+            "ece": 0.37304580235117263
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.6589147286821705,
+            "balanced_accuracy": 0.6,
+            "log_loss": 0.10816789465988684,
+            "brier": 0.023645373081821106,
+            "ece": 0.043994992963768215
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.340033500837521,
+            "balanced_accuracy": 0.5025252525252525,
+            "log_loss": 1.3607001274863009,
+            "brier": 0.4230365428684333,
+            "ece": 0.42898305891526994
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_full_mixed_epoch1": {
+      "trial": {
+        "name": "bert_full_mixed",
+        "mode": "full",
+        "regime": "mixed",
+        "lr": 2e-05,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 1,
+      "fit_rows": 2180,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.8837248443172802,
+          "balanced_accuracy": 0.8559997055359246,
+          "log_loss": 0.22940566312870786,
+          "brier": 0.06838942990138971,
+          "ece": 0.04851699055565699
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.9216351314443958,
+            "balanced_accuracy": 0.9217424242424243,
+            "log_loss": 0.18559139939371555,
+            "brier": 0.05817517381337592,
+            "ece": 0.06903034845742631
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.5712418300653594,
+            "balanced_accuracy": 0.5540593286494926,
+            "log_loss": 0.27214604785058755,
+            "brier": 0.0783533365754816,
+            "ece": 0.051602867283734984
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.5448119875600792,
+            "balanced_accuracy": 0.5381306672866775,
+            "log_loss": 0.27883529867447493,
+            "brier": 0.08090763590412477,
+            "ece": 0.0457557505464462
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.5283412524279596,
+            "brier": 0.15441313429166245,
+            "ece": 0.2295744101266814
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.8767821658999418,
+            "brier": 0.28358621781957155,
+            "ece": 0.3170566402845071
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.0358601625661934,
+            "brier": 0.37335429815037924,
+            "ece": 0.46259376513494443
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.8472222222222222,
+            "balanced_accuracy": 0.9473684210526316,
+            "log_loss": 0.2604596931625034,
+            "brier": 0.07291580773329075,
+            "ece": 0.07885856430609521
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.2,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.5924909729185606,
+            "brier": 0.5720822533291854,
+            "ece": 0.6338737742451792
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.6893931633100512,
+            "brier": 0.24506055140345318,
+            "ece": 0.33989073642146855
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.49034749034749037,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.15140046016071063,
+            "brier": 0.03439945813786626,
+            "ece": 0.05729144088100562
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.9216351314443958,
+            "balanced_accuracy": 0.9217424242424243,
+            "log_loss": 0.18559139939371555,
+            "brier": 0.05817517381337592,
+            "ece": 0.06903034845742631
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_full_mixed_epoch2": {
+      "trial": {
+        "name": "bert_full_mixed",
+        "mode": "full",
+        "regime": "mixed",
+        "lr": 2e-05,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 2,
+      "fit_rows": 2180,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.9036918200925746,
+          "balanced_accuracy": 0.8813162544169612,
+          "log_loss": 0.2056468030492581,
+          "brier": 0.05971950796146707,
+          "ece": 0.035083837225290106
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.9266909294157251,
+            "balanced_accuracy": 0.9267676767676767,
+            "log_loss": 0.2097169743568312,
+            "brier": 0.06171054189600786,
+            "ece": 0.0502269266010124
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.7362424242424243,
+            "balanced_accuracy": 0.6928181108508977,
+            "log_loss": 0.2016763908423608,
+            "brier": 0.057777273878263063,
+            "ece": 0.048884318448911834
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.7513157894736842,
+            "balanced_accuracy": 0.7230876540339456,
+            "log_loss": 0.2044989661126038,
+            "brier": 0.060341644772263926,
+            "ece": 0.06502313599225833
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.5757652896727089,
+            "brier": 0.15650863210011248,
+            "ece": 0.18468290740572055
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.0210952953364576,
+            "brier": 0.30386112706994306,
+            "ece": 0.3782764067777981
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.1547755429808,
+            "brier": 0.3833351722866613,
+            "ece": 0.4551115306657758
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.8070175438596491,
+            "balanced_accuracy": 0.8070175438596491,
+            "log_loss": 0.2836502399989746,
+            "brier": 0.07776777100483877,
+            "ece": 0.07978389078835918
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.6190476190476191,
+            "balanced_accuracy": 0.75,
+            "log_loss": 0.6375330013384563,
+            "brier": 0.22730174384909618,
+            "ece": 0.29955640650393645
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.6076764828866907,
+            "brier": 0.22261561418367534,
+            "ece": 0.32272451043381706
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.6589147286821705,
+            "balanced_accuracy": 0.6,
+            "log_loss": 0.10473664926158241,
+            "brier": 0.024312455032110547,
+            "ece": 0.05519938468833025
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.9266909294157251,
+            "balanced_accuracy": 0.9267676767676767,
+            "log_loss": 0.2097169743568312,
+            "brier": 0.06171054189600786,
+            "ece": 0.0502269266010124
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_full_mixed_epoch3": {
+      "trial": {
+        "name": "bert_full_mixed",
+        "mode": "full",
+        "regime": "mixed",
+        "lr": 2e-05,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 3,
+      "fit_rows": 2180,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.9158371040723983,
+          "balanced_accuracy": 0.8970995288574795,
+          "log_loss": 0.2276258129155822,
+          "brier": 0.060892674076973165,
+          "ece": 0.06564428628561617
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.93689551292215,
+            "balanced_accuracy": 0.9368686868686869,
+            "log_loss": 0.25548650481505686,
+            "brier": 0.06599751042038562,
+            "ece": 0.09945016351430934
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.7763115606390019,
+            "balanced_accuracy": 0.7390710382513661,
+            "log_loss": 0.20044798111168288,
+            "brier": 0.05591295627138944,
+            "ece": 0.04771317467426995
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.7969052224371374,
+            "balanced_accuracy": 0.7856312485468495,
+            "log_loss": 0.19736159351943647,
+            "brier": 0.05621040472494637,
+            "ece": 0.05494089155877188
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.5723136904620165,
+            "brier": 0.15509825089043572,
+            "ece": 0.14091630997241947
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.0397674736799454,
+            "brier": 0.30424264793121675,
+            "ece": 0.3662995661274578
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.5014578502662859,
+            "brier": 0.448826603902618,
+            "ece": 0.453433614832792
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.8070175438596491,
+            "balanced_accuracy": 0.8070175438596491,
+            "log_loss": 0.20010128805270577,
+            "brier": 0.06354492377098908,
+            "ece": 0.09617013347965024
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.6190476190476191,
+            "balanced_accuracy": 0.75,
+            "log_loss": 0.7232176470475032,
+            "brier": 0.25611083404260526,
+            "ece": 0.393760830523915
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.88892748850217,
+            "brier": 0.28555259387584425,
+            "ece": 0.3235502615592269
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.7798777098387993,
+            "balanced_accuracy": 0.7,
+            "log_loss": 0.10399323228482821,
+            "brier": 0.022234350472962953,
+            "ece": 0.0420103056941835
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.93689551292215,
+            "balanced_accuracy": 0.9368686868686869,
+            "log_loss": 0.25548650481505686,
+            "brier": 0.06599751042038562,
+            "ece": 0.09945016351430934
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_full_mixed_epoch4": {
+      "trial": {
+        "name": "bert_full_mixed",
+        "mode": "full",
+        "regime": "mixed",
+        "lr": 2e-05,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 4,
+      "fit_rows": 2180,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.9191811674688387,
+          "balanced_accuracy": 0.9012661955241461,
+          "log_loss": 0.20749202149182402,
+          "brier": 0.05464972625375692,
+          "ece": 0.06046529733976197
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.9419821395749751,
+            "balanced_accuracy": 0.9419191919191919,
+            "log_loss": 0.20804552416147729,
+            "brier": 0.051743778438113834,
+            "ece": 0.08817934997031174
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.7763115606390019,
+            "balanced_accuracy": 0.7390710382513661,
+            "log_loss": 0.206952085064074,
+            "brier": 0.057484449858232305,
+            "ece": 0.045663697761926796
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.7797791622972056,
+            "balanced_accuracy": 0.7638921181120669,
+            "log_loss": 0.2156876638490719,
+            "brier": 0.0618564375765849,
+            "ece": 0.05268552760424752
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.5707973805605279,
+            "brier": 0.1549853201644855,
+            "ece": 0.14083622081371633
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.011487969566144,
+            "brier": 0.30170153101580555,
+            "ece": 0.36883790895078994
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.4602275399959361,
+            "brier": 0.4439988855016274,
+            "ece": 0.44884783004248036
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.8070175438596491,
+            "balanced_accuracy": 0.8070175438596491,
+            "log_loss": 0.2182437217339962,
+            "brier": 0.06873116874320125,
+            "ece": 0.11971084065171252
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.7333333333333334,
+            "balanced_accuracy": 0.8333333333333333,
+            "log_loss": 0.5691372682078519,
+            "brier": 0.19738758745436705,
+            "ece": 0.32902719360889077
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.865782936829671,
+            "brier": 0.2843258187734304,
+            "ece": 0.34317028714880793
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.7798777098387993,
+            "balanced_accuracy": 0.7,
+            "log_loss": 0.1027253356336852,
+            "brier": 0.020687495940947622,
+            "ece": 0.043924525073761586
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.9419821395749751,
+            "balanced_accuracy": 0.9419191919191919,
+            "log_loss": 0.20804552416147729,
+            "brier": 0.051743778438113834,
+            "ece": 0.08817934997031174
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_lora_mixed_epoch1": {
+      "trial": {
+        "name": "bert_lora_mixed",
+        "mode": "lora",
+        "regime": "mixed",
+        "lr": 0.0001,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 1,
+      "fit_rows": 2180,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.7377869966382948,
+          "balanced_accuracy": 0.707449941107185,
+          "log_loss": 0.4118093738652361,
+          "brier": 0.12877460055888001,
+          "ece": 0.040833296238082045
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.7348505750220387,
+            "balanced_accuracy": 0.7500252525252525,
+            "log_loss": 0.5085170124736869,
+            "brier": 0.1687513270790444,
+            "ece": 0.07899377449504559
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.4728682170542636,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.3174720205167964,
+            "brier": 0.089777695767151,
+            "ece": 0.016329700439104776
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.47103274559193953,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.33184369474792474,
+            "brier": 0.0946743127867234,
+            "ece": 0.031261819093497546
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.4845581621261031,
+            "brier": 0.14558400175388936,
+            "ece": 0.11168496024379153
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.7644664196395193,
+            "brier": 0.26260879837803,
+            "ece": 0.350256711815507
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.155665819393983,
+            "brier": 0.39850564731383215,
+            "ece": 0.4075020662752231
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.4634146341463415,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.3820801598112935,
+            "brier": 0.11524799706996279,
+            "ece": 0.08235263713766516
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.2,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.6086384151010673,
+            "brier": 0.5742866769317027,
+            "ece": 0.6311616982860327
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.9545739259197474,
+            "brier": 0.3067098373697023,
+            "ece": 0.3739465816001368
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.49034749034749037,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.1770051561495378,
+            "brier": 0.03881183810368645,
+            "ece": 0.07110721498220526
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.7348505750220387,
+            "balanced_accuracy": 0.7500252525252525,
+            "log_loss": 0.5085170124736869,
+            "brier": 0.1687513270790444,
+            "ece": 0.07899377449504559
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_lora_mixed_epoch2": {
+      "trial": {
+        "name": "bert_lora_mixed",
+        "mode": "lora",
+        "regime": "mixed",
+        "lr": 0.0001,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 2,
+      "fit_rows": 2180,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.8728398058252427,
+          "balanced_accuracy": 0.8434997055359246,
+          "log_loss": 0.24973153301318513,
+          "brier": 0.0704189403009645,
+          "ece": 0.04681627566879955
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.9164392189796347,
+            "balanced_accuracy": 0.9166666666666667,
+            "log_loss": 0.1991459621273515,
+            "brier": 0.054656550359233766,
+            "ece": 0.06504781613320615
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.5114812548226592,
+            "balanced_accuracy": 0.5169789227166276,
+            "log_loss": 0.2990772614753463,
+            "brier": 0.0857949971558881,
+            "ece": 0.035796970827570364
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.5080046856696603,
+            "balanced_accuracy": 0.5163915368518949,
+            "log_loss": 0.329058887019482,
+            "brier": 0.09541034365711014,
+            "ece": 0.028756733415809883
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.515220952791513,
+            "brier": 0.151675108427841,
+            "ece": 0.15682916242429343
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.8476650290524684,
+            "brier": 0.2793815787455603,
+            "ece": 0.3831596019300704
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.9447330463615004,
+            "brier": 0.3315679018455591,
+            "ece": 0.36831391816785625
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.6140350877192983,
+            "balanced_accuracy": 0.6140350877192983,
+            "log_loss": 0.2702599363448939,
+            "brier": 0.07838936046062678,
+            "ece": 0.20409035350039895
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.2,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.3872134124820943,
+            "brier": 0.5016806974150513,
+            "ece": 0.5890087290592199
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.8377355266151664,
+            "brier": 0.28085299010976,
+            "ece": 0.3892358539839017
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.4883720930232558,
+            "balanced_accuracy": 0.49606299212598426,
+            "log_loss": 0.16090923050612524,
+            "brier": 0.03705708489980165,
+            "ece": 0.06259149030590286
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.9164392189796347,
+            "balanced_accuracy": 0.9166666666666667,
+            "log_loss": 0.1991459621273515,
+            "brier": 0.054656550359233766,
+            "ece": 0.06504781613320615
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    },
+    "bert_lora_mixed_epoch3": {
+      "trial": {
+        "name": "bert_lora_mixed",
+        "mode": "lora",
+        "regime": "mixed",
+        "lr": 0.0001,
+        "epochs": 4,
+        "seed": 42
+      },
+      "epoch": 3,
+      "fit_rows": 2180,
+      "validation": {
+        "all": {
+          "n": 806,
+          "macro_f1": 0.9102686549673337,
+          "balanced_accuracy": 0.8884496466431095,
+          "log_loss": 0.2121018071127307,
+          "brier": 0.058071151489530744,
+          "ece": 0.03513780132568327
+        },
+        "sources": {
+          "GPT-4 Political Ideologies": {
+            "n": 398,
+            "macro_f1": 0.9622579482737911,
+            "balanced_accuracy": 0.9621464646464646,
+            "log_loss": 0.12469687641000833,
+            "brier": 0.029750305229491306,
+            "ece": 0.046392660977153555
+          },
+          "MITweet": {
+            "n": 408,
+            "macro_f1": 0.5686669351590817,
+            "balanced_accuracy": 0.5526932084309133,
+            "log_loss": 0.2973644601021509,
+            "brier": 0.08569785936084372,
+            "ece": 0.033153411317177
+          }
+        },
+        "topics": {
+          "Abortion": {
+            "n": 210,
+            "macro_f1": 0.5080046856696603,
+            "balanced_accuracy": 0.5163915368518949,
+            "log_loss": 0.326624651572476,
+            "brier": 0.09508666062848774,
+            "ece": 0.036986417124796445
+          },
+          "Black Lives Matter": {
+            "n": 6,
+            "macro_f1": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.5318367852379818,
+            "brier": 0.15433592755960315,
+            "ece": 0.12821460739074048
+          },
+          "CHIPS and Science Act": {
+            "n": 2,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Capitol Hill Riot": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.8824757352683821,
+            "brier": 0.2917148394808822,
+            "ece": 0.41304473006931014
+          },
+          "Covid-19": {
+            "n": 18,
+            "single_class": 0,
+            "accuracy": 1.0
+          },
+          "Democracy": {
+            "n": 4,
+            "macro_f1": 0.3333333333333333,
+            "balanced_accuracy": 0.5,
+            "log_loss": 1.0427032199027642,
+            "brier": 0.36474193452141357,
+            "ece": 0.39307609012020084
+          },
+          "Inflation Reduction Act": {
+            "n": 22,
+            "macro_f1": 0.8472222222222222,
+            "balanced_accuracy": 0.9473684210526316,
+            "log_loss": 0.29425978553744425,
+            "brier": 0.0841569161236846,
+            "ece": 0.16345990877785024
+          },
+          "Mexico\u2013US Border": {
+            "n": 8,
+            "macro_f1": 0.36507936507936506,
+            "balanced_accuracy": 0.5833333333333334,
+            "log_loss": 1.2299489333889033,
+            "brier": 0.4435972865306843,
+            "ece": 0.5434021793071625
+          },
+          "Russo-Ukrainian War": {
+            "n": 3,
+            "macro_f1": 0.4,
+            "balanced_accuracy": 0.5,
+            "log_loss": 0.8988612239575962,
+            "brier": 0.30213062770912963,
+            "ece": 0.42362051134600626
+          },
+          "Women\u2019s Right": {
+            "n": 132,
+            "macro_f1": 0.4883720930232558,
+            "balanced_accuracy": 0.49606299212598426,
+            "log_loss": 0.16044050391832454,
+            "brier": 0.03817777818852933,
+            "ece": 0.06376533070046092
+          },
+          "synthetic_issue_4": {
+            "n": 398,
+            "macro_f1": 0.9622579482737911,
+            "balanced_accuracy": 0.9621464646464646,
+            "log_loss": 0.12469687641000833,
+            "brier": 0.029750305229491306,
+            "ece": 0.046392660977153555
+          }
+        }
+      },
+      "input_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+    }
+  },
+  "selection_metric": "Human MITweet validation log loss",
+  "topic_holdout_scored": false,
+  "limitations": [
+    "Repeated selection on the same development split.",
+    "Human facet mappings are not direct overall U.S. ideology labels.",
+    "408 human validation rows: 366 left and 42 right."
+  ]
+}

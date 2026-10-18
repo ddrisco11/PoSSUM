@@ -17,6 +17,26 @@ MODERN_TRIALS=[
  dict(name='modernbert_full_mixed',model_id='answerdotai/ModernBERT-base',mode='full',regime='mixed',lr=2e-5,epochs=4,seed=42),
 ]
 
+def replication_plan(root):
+ signature=json.loads((root/'dataset.json').read_text())['manifest_sha256']
+ path=root/'replication-plan.json'
+ if path.exists():
+  plan=json.loads(path.read_text());assert plan['input_sha256']==signature
+  return plan
+ results=[]
+ for trial in TRIALS+MODERN_TRIALS:
+  folder=root/'compact'/trial['name']
+  assert json.loads((folder/'complete.json').read_text())['input_sha256']==signature
+  result=json.loads((folder/'best.json').read_text());assert result['input_sha256']==signature
+  results.append(result)
+ selected=min(results,key=lambda r:r['log_loss'])
+ trials=[dict(selected['trial'],name=f'{selected["trial"]["name"]}_seed{seed}',seed=seed) for seed in [43,44]]
+ plan={'input_sha256':signature,'base_trial':selected['trial'],'trials':trials,
+       'selection':'Lowest human validation log loss among the six initial compact recipes; repeat all four epochs.',
+       'interpretation':'Initialization/order sensitivity on the same split, not independent dataset replications.'}
+ save_json(path,plan)
+ return plan
+
 def run(root, family='bert'):
  import torch,joblib,fcntl
  from transformers import AutoTokenizer,AutoModelForSequenceClassification
@@ -26,7 +46,7 @@ def run(root, family='bert'):
  torch.set_num_threads(4)
  parts=load_data(root);deadline=datetime.datetime.fromisoformat(json.loads((root/'state.json').read_text())['deadline']).timestamp()
  signature=json.loads((root/'dataset.json').read_text())['manifest_sha256']
- trials=TRIALS if family=='bert' else MODERN_TRIALS
+ trials=TRIALS if family=='bert' else MODERN_TRIALS if family=='modernbert' else replication_plan(root)['trials']
  directory=root/'compact';directory.mkdir(exist_ok=True)
  registry_path=directory/'report.json';registry=json.loads(registry_path.read_text()) if registry_path.exists() else {}
  for trial in trials:
@@ -101,8 +121,8 @@ def run(root, family='bert'):
   if not stop:save_json(out/'complete.json',dict(best=best,best_epoch=best_epoch,completed_at=time.time(),input_sha256=signature))
   del model,opt;gc.collect();torch.mps.empty_cache()
   if stop:break
- finished='compact-finished.json' if family=='bert' else 'modernbert-finished.json'
+ finished={'bert':'compact-finished.json','modernbert':'modernbert-finished.json','replication':'replication-finished.json'}[family]
  save_json(root/finished,dict(complete=all((directory/t['name']/'complete.json').exists() for t in trials),updated_at=time.time()))
 
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('run',type=Path);p.add_argument('--family',choices=['bert','modernbert'],default='bert');a=p.parse_args();run(a.run,a.family)
+ p=argparse.ArgumentParser();p.add_argument('run',type=Path);p.add_argument('--family',choices=['bert','modernbert','replication'],default='bert');a=p.parse_args();run(a.run,a.family)

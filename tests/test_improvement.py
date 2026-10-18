@@ -84,3 +84,35 @@ def test_paired_bootstrap_identical_predictions_have_zero_difference():
     result = paired_uncertainty(y, p, p, draws=30)
     assert result['candidate_minus_baseline_log_loss'] == 0
     assert result['percentile_95_interval'] == [0, 0]
+
+
+def test_replication_recipe_is_frozen_after_initial_selection(tmp_path):
+    from possum.compact_training import TRIALS, MODERN_TRIALS, replication_plan
+    (tmp_path / 'dataset.json').write_text(json.dumps({'manifest_sha256': 'frozen'}))
+    for i, trial in enumerate(TRIALS + MODERN_TRIALS):
+        folder = tmp_path / 'compact' / trial['name']
+        folder.mkdir(parents=True)
+        (folder / 'complete.json').write_text(json.dumps({'input_sha256': 'frozen'}))
+        (folder / 'best.json').write_text(json.dumps({'input_sha256': 'frozen', 'trial': trial, 'log_loss': 1 / (i + 1)}))
+    plan = replication_plan(tmp_path)
+    assert plan['base_trial'] == MODERN_TRIALS[-1]
+    assert [t['seed'] for t in plan['trials']] == [43, 44]
+    assert all(t['epochs'] == 4 for t in plan['trials'])
+    assert replication_plan(tmp_path) == plan
+    (tmp_path / 'dataset.json').write_text(json.dumps({'manifest_sha256': 'changed'}))
+    with pytest.raises(AssertionError):
+        replication_plan(tmp_path)
+
+
+def test_cpu_cleanup_does_not_initialize_mlx(monkeypatch):
+    import builtins
+    import sys
+    from possum.improvement_inference import release_memory
+    monkeypatch.delitem(sys.modules, 'mlx.core', raising=False)
+    original = builtins.__import__
+    def guarded(name, *args, **kwargs):
+        if name.startswith('mlx'):
+            raise AssertionError('CPU cleanup must not initialize MLX')
+        return original(name, *args, **kwargs)
+    monkeypatch.setattr(builtins, '__import__', guarded)
+    release_memory()

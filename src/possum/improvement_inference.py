@@ -3,6 +3,7 @@ import argparse
 import gc
 import json
 import shutil
+import sys
 import time
 from pathlib import Path
 
@@ -21,11 +22,9 @@ def release_memory():
     import torch
     if torch.backends.mps.is_available():
         torch.mps.empty_cache()
-    try:
-        import mlx.core as mx
+    mx = sys.modules.get('mlx.core')
+    if mx is not None:
         mx.clear_cache()
-    except ImportError:
-        pass
 
 
 def encoder_features(name, texts, device):
@@ -146,7 +145,7 @@ def predict(bundle, texts, device='mps'):
     return output
 
 
-def export(root):
+def export(root, device='mps'):
     comparison = json.loads((root / 'mixtures/comparison.json').read_text())
     from .improvement_audit import run as audit
     audit(root)
@@ -202,7 +201,7 @@ def export(root):
     parts = load_data(root)
     # Calibration examples are already used; parity checks never touch the topic holdout.
     checks = [parts['calibration'][0], parts['calibration'][-1], max(parts['calibration'], key=lambda r: len(r['text']))]
-    actual = np.array([r['probability_right'] for r in predict(bundle, [r['text'] for r in checks])])
+    actual = np.array([r['probability_right'] for r in predict(bundle, [r['text'] for r in checks], device=device)])
     z = np.load(root / 'mixtures' / f'{selected_name}_scores.npz', allow_pickle=False)
     lookup = {k: float(v) for k, v in zip(z['ids'].tolist(), z['values'])}
     expected = np.array([lookup[r['id']] for r in checks])
@@ -217,11 +216,11 @@ def export(root):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest='command', required=True)
-    make = sub.add_parser('export'); make.add_argument('run', type=Path)
+    make = sub.add_parser('export'); make.add_argument('run', type=Path); make.add_argument('--device', choices=['cpu', 'mps'], default='mps')
     infer = sub.add_parser('predict'); infer.add_argument('bundle', type=Path); infer.add_argument('--text', required=True)
     infer.add_argument('--device', choices=['cpu', 'mps'], default='mps')
     args = parser.parse_args()
     if args.command == 'export':
-        export(args.run)
+        export(args.run, args.device)
     else:
         print(json.dumps(predict(args.bundle, [args.text], args.device), indent=2))
