@@ -604,3 +604,19 @@ def test_expert_export_limit_is_forwarded_and_memory_released_on_error(tmp_path,
     with pytest.raises(ValueError, match='validated limit'):
         inference.raw_component(tmp_path, spec, ['example'], 'cpu', {})
     assert captured['max_input_tokens'] == 256 and released == [True]
+
+
+def test_compact_resume_rejects_nonfinite_parameters_and_moments():
+    import torch
+    import pytest
+    from possum.compact_training import validate_resume_tensors
+    state = {'model': {'weight': torch.ones(2)},
+             'optimizer': {'state': {0: {'exp_avg': torch.zeros(2), 'step': torch.tensor(1.)}}}}
+    validate_resume_tensors(state)
+    state['model']['weight'][0] = float('nan')
+    with pytest.raises(ValueError, match='checkpoint parameter'):
+        validate_resume_tensors(state)
+    state['model']['weight'][0] = 1.
+    state['optimizer']['state'][0]['exp_avg'][1] = float('inf')
+    with pytest.raises(ValueError, match='optimizer tensor'):
+        validate_resume_tensors(state)

@@ -21,6 +21,16 @@ DEBERTA_TRIALS=[
  dict(name='deberta_full_human',model_id='microsoft/deberta-v3-base',mode='full',regime='human',lr=2e-5,epochs=4,seed=42),
 ]
 
+def validate_resume_tensors(state):
+ import torch
+ for name,value in state['model'].items():
+  if not torch.isfinite(value).all():
+   raise ValueError(f'Nonfinite checkpoint parameter: {name}; refuse unsafe resume')
+ for values in state['optimizer']['state'].values():
+  for name,value in values.items():
+   if torch.is_tensor(value) and not torch.isfinite(value).all():
+    raise ValueError(f'Nonfinite checkpoint optimizer tensor: {name}; refuse unsafe resume')
+
 def deberta_plan(root):
  signature=json.loads((root/'dataset.json').read_text())['manifest_sha256']
  deadline=datetime.datetime.fromisoformat(json.loads((root/'state.json').read_text())['deadline']).timestamp()
@@ -82,7 +92,8 @@ def run(root, family='bert'):
   encoded={p:[tok(r['text'],truncation=False) for r in rr] for p,rr in parts.items()}
   assert max(len(e['input_ids']) for enc in encoded.values() for e in enc)<=256,'No silent truncation'
   torch.manual_seed(trial['seed']);torch.mps.manual_seed(trial['seed'])
-  model=AutoModelForSequenceClassification.from_pretrained(name,revision=revision,num_labels=2,attn_implementation='eager',local_files_only=True)
+  # AdamW parameters and moment buffers need float32 even when base weights are half precision.
+  model=AutoModelForSequenceClassification.from_pretrained(name,revision=revision,num_labels=2,attn_implementation='eager',local_files_only=True,dtype=torch.float32)
   if trial['mode']=='lora':model=get_peft_model(model,LoraConfig(task_type=TaskType.SEQ_CLS,r=8,lora_alpha=16,lora_dropout=0.,target_modules=['query','value'],modules_to_save=['classifier']))
   model.to('mps');opt=torch.optim.AdamW([p for p in model.parameters() if p.requires_grad],lr=trial['lr'],weight_decay=.01)
   train_indices=np.array([i for i,r in enumerate(parts['fit']) if trial['regime']=='mixed' or r['source']=='MITweet'])
@@ -99,6 +110,7 @@ def run(root, family='bert'):
    atomic_write(checkpoint,lambda f:torch.save(state,f))
   if checkpoint.exists():
    state=torch.load(checkpoint,map_location='cpu',weights_only=True);assert state['input_sha256']==signature and state['trial']==trial
+   validate_resume_tensors(state)
    assert state.get('teacher_sha256')==teacher_sha,'Teacher target cache differs from checkpoint'
    if trial['mode']=='lora':set_peft_model_state_dict(model,state['model'])
    else:model.load_state_dict(state['model'])
@@ -121,7 +133,7 @@ def run(root, family='bert'):
      teacher_batch=None if teacher_values is None else torch.tensor(teacher_values[indices],device='mps')
      loss=training_loss(model(**batch).logits,y,w,teacher_batch,trial.get('distillation_alpha',0.),trial.get('distillation_temperature',2.))
      if not torch.isfinite(loss):raise ValueError('Nonfinite loss')
-     loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),1.);opt.step();torch.mps.synchronize()
+     loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),1.,error_if_nonfinite=True);opt.step();torch.mps.synchronize()
      losses.append(float(loss.detach().cpu()));steps+=1;offset=start+len(local)
      if steps%50==0:
       save();progress=dict(trial=trial['name'],epoch=ep+1,completed=offset,total=len(order),steps=steps,loss=float(np.mean(losses[-50:])),updated_at=time.time())

@@ -113,3 +113,10 @@ Two full fine-tunes use the same frozen partitions and calibrated evaluation as 
 ## Development topic coverage
 
 Abortion and Women’s Right account for 342 of 408 human validation passages (83.8%; 314 left and 28 right). The other eight topics contribute 66 passages (52 left and 14 right). For the verified mixture after the Qwen chat comparison, macro-F1/log loss are 0.861/0.121 on the two largest topics and 0.898/0.131 on the remainder. The smaller subset does not show an aggregate collapse, but its size and label coverage cannot establish broad political-text performance. These slices were defined by topic counts, not errors, and they do not alter model selection. They are diagnostics on development data already used for selection. [Per-partition topic counts and model snapshot](../reports/human-topic-coverage.json).
+
+
+### Completed human-only Mistral comparison
+
+Both planned epochs completed with 425,984 trainable adapter parameters and 1,224 human fit passages. Epoch two reaches human macro-F1 0.8906, balanced accuracy 0.9030 and log loss 0.10278. The selected fixed mixture assigns 88.604% to epoch two and 11.396% to frozen chat-formatted Qwen, reaching log loss 0.09846 but slightly lower macro-F1 0.8854. The paired mixture-minus-adapter loss interval spans zero, so the single adapter remains a meaningful efficiency alternative. Synthetic loss worsens relative to frozen Mistral, despite higher synthetic F1. Both epochs, source/topic breakdowns, training provenance and descriptive paired intervals are in [the completed report](../reports/human-mistral-adapter-completed.json). Export parity passed on three calibration examples with maximum error 1.11e−16. No topic holdout was scored.
+
+The DeBERTa checkpoint stores half-precision weights. An initial AdamW update in that precision produced nonfinite parameters; it yielded no completed epoch or evaluation. Compact training now explicitly loads float32 parameters, rejects nonfinite gradient norms and refuses invalid resume tensors. The failed checkpoint is retained locally, and DeBERTa restarted from the pinned pretrained weights with the same seed, partitions and recipe.
