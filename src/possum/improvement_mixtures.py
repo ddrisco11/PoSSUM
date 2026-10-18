@@ -59,6 +59,22 @@ def fit_fixed(gate, labels, penalty, groups=None):
     return weights / weights.sum()
 
 
+def prune_predictors(weights, groups, minimum_mass=.01):
+    """Drop low-mass predictors as a group, preserving their calibration variants."""
+    weights, groups = np.asarray(weights, dtype=float), np.asarray(groups)
+    assert 0 < minimum_mass < 1
+    assert weights.ndim == 1 and np.isfinite(weights).all() and (weights >= 0).all()
+    assert np.isclose(weights.sum(), 1.)
+    assert groups.ndim == 2 and groups.shape[1] == len(weights)
+    assert np.isin(groups, [0, 1]).all() and (groups.sum(axis=0) == 1).all()
+    masses = groups @ weights
+    keep = masses >= minimum_mass
+    if not keep.any():
+        keep[np.argmax(masses)] = True
+    retained = weights * (groups[keep].sum(axis=0) > 0)
+    return retained / retained.sum()
+
+
 def candidates(root, ids, calibration_prior):
     entries = {}
     baselines = json.loads((root / 'baselines/report.json').read_text())
@@ -136,10 +152,21 @@ def run(root):
             record('compact_seed_average', probabilities @ weights,
                    {'kind': 'fixed', 'weights': weights.tolist(), 'family': 'equal average of three compact seeds',
                     'members': seed_names, 'extra_fitting': False})
+    groups = predictor_groups(entries)
     for penalty in [0., .01, .1]:
         weights = fit_fixed(gate, y, penalty)
         record(f'fixed_{penalty:g}', probabilities @ weights, {'kind': 'fixed', 'weights': weights.tolist(), 'penalty': penalty})
-    groups = predictor_groups(entries)
+        if penalty == .1:
+            pruned = prune_predictors(weights, groups, .01)
+            removed = (groups @ weights > 1e-8) & (groups @ pruned == 0)
+            if removed.any():
+                record('fixed_0.1_pruned_0.01', probabilities @ pruned,
+                       {'kind': 'fixed', 'weights': pruned.tolist(), 'penalty': penalty,
+                        'family': 'Remove predictors with less than 1% total gate-fitted weight; renormalize without refitting.',
+                        'minimum_predictor_mass': .01, 'extra_fitting': False,
+                        'predictors_before': int((groups @ weights > 1e-8).sum()),
+                        'predictors_after': int((groups @ pruned > 1e-8).sum()),
+                        'removed_groups': [[names[i] for i in np.flatnonzero(row)] for row in groups[removed]]})
     for penalty in [.01, .1]:
         weights = fit_fixed(gate, y, penalty, groups)
         record(f'fixed_grouped_{penalty:g}', probabilities @ weights,

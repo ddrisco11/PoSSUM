@@ -543,3 +543,22 @@ def test_best_compact_selection_searches_history_and_excludes_ensembles(tmp_path
         export(tmp_path, candidate='bert', best_compact=True)
     with pytest.raises(ValueError, match='cannot be combined'):
         export(tmp_path, comparison_dir=tmp_path / 'mixtures', best_compact=True)
+
+
+def test_pruning_uses_total_predictor_mass_and_keeps_one_predictor():
+    from possum.improvement_mixtures import predictor_groups, prune_predictors
+    entries = {'a': {'kind': 'expert', 'model': 'a'}, 'a_cv': {'kind': 'expert', 'model': 'a'},
+               'b': {'kind': 'expert', 'model': 'b'}, 'c': {'kind': 'compact', 'model': 'c'}}
+    groups = predictor_groups(entries)
+    weights = np.array([.006, .006, .005, .983])
+    pruned = prune_predictors(weights, groups)
+    np.testing.assert_allclose(pruned, np.array([.006, .006, 0., .983]) / .995)
+    assert pruned.sum() == pytest.approx(1.) and (pruned >= 0).all()
+    # Two sub-threshold calibrators survive because their shared predictor exceeds 1%.
+    assert pruned[0] > 0 and pruned[1] > 0 and pruned[2] == 0
+    reduced = prune_predictors(np.array([.012, .005, .983]), np.eye(3))
+    assert pruned[0] + pruned[1] == pytest.approx(reduced[0])
+    np.testing.assert_allclose(prune_predictors([.5, .5], np.eye(2), .9), [1., 0.])
+    np.testing.assert_allclose(prune_predictors([.01, .99], np.eye(2)), [.01, .99])
+    with pytest.raises(AssertionError):
+        prune_predictors([-.1, 1.1], np.eye(2))
