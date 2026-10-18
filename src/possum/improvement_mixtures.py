@@ -124,6 +124,8 @@ def run(root):
               'limitations': ['Development selection is not a final test.', 'Human labels map multiple ideology facets to one binary axis.',
                               'Human validation is strongly left-skewed.', 'Author-disjointness is unavailable.']}
     save_json(out / 'comparison.json', report)
+    from .improvement_audit import run as audit
+    audit(root)
 
 
 if __name__ == '__main__':

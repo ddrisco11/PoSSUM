@@ -1,0 +1,126 @@
+{
+  "selected": "fixed_0",
+  "lexical_reference": "lexical_mixed_C10",
+  "human_calibration_prior_right": 0.10294117647058823,
+  "human_validation_counts": {
+    "left": 366,
+    "right": 42
+  },
+  "paired_uncertainty": {
+    "candidate_minus_baseline_log_loss": -0.006215760689587715,
+    "percentile_95_interval": [
+      -0.02244018096951611,
+      0.007665006638887261
+    ],
+    "draws": 2000,
+    "method": "paired class-stratified row bootstrap",
+    "limitations": "Descriptive development interval, without selection correction or author clustering; not a significance test."
+  },
+  "topic_holdout_scored": false,
+  "selection_changed": false,
+  "interpretation": [
+    "Equal-prior adjustment assumes class-conditional distributions remain fixed while prevalence changes.",
+    "This is a sensitivity analysis, not evidence that deployment prevalence is 50/50.",
+    "Gate thresholds use only human gate labels; they do not change calibrated probabilities.",
+    "Probability is not ideological intensity or a neutral/nonpolitical detector."
+  ],
+  "stage": "Early partial comparison; human BERT and initial baselines only. Later candidates pending.",
+  "models": {
+    "lexical_mixed_C10": {
+      "observed_prior": {
+        "validation": {
+          "n": 408,
+          "macro_f1": 0.7272727272727273,
+          "balanced_accuracy": 0.6900858704137393,
+          "log_loss": 0.21042053457182539,
+          "brier": 0.06059413000577565,
+          "ece": 0.034265049207219477
+        },
+        "diagnostics": {
+          "human_roc_auc": 0.8993624772313297,
+          "human_class_balanced_log_loss": 0.6328269139723025,
+          "human_left_recall": 0.9754098360655737,
+          "human_right_recall": 0.40476190476190477,
+          "human_counts": {
+            "left": 366,
+            "right": 42
+          }
+        }
+      },
+      "equal_prior_sensitivity": {
+        "validation": {
+          "n": 408,
+          "macro_f1": 0.6391565423823489,
+          "balanced_accuracy": 0.7964480874316939,
+          "log_loss": 0.4770924927943526,
+          "brier": 0.15380362101720335,
+          "ece": 0.057989889052312615
+        },
+        "diagnostics": {
+          "human_roc_auc": 0.8993624772313297,
+          "human_class_balanced_log_loss": 0.4106871864867029,
+          "human_left_recall": 0.7595628415300546,
+          "human_right_recall": 0.8333333333333334,
+          "human_counts": {
+            "left": 366,
+            "right": 42
+          }
+        }
+      },
+      "gate_selected_balanced_threshold": {
+        "threshold": 0.11,
+        "validation_balanced_accuracy": 0.795472287275566,
+        "validation_left_recall": 0.7814207650273224,
+        "validation_right_recall": 0.8095238095238095
+      }
+    },
+    "fixed_0": {
+      "observed_prior": {
+        "validation": {
+          "n": 408,
+          "macro_f1": 0.7301587301587302,
+          "balanced_accuracy": 0.6744730679156908,
+          "log_loss": 0.20420477388223765,
+          "brier": 0.05848004572175482,
+          "ece": 0.043839198854828586
+        },
+        "diagnostics": {
+          "human_roc_auc": 0.9307832422586522,
+          "human_class_balanced_log_loss": 0.6062167763094419,
+          "human_left_recall": 0.9918032786885246,
+          "human_right_recall": 0.35714285714285715,
+          "human_counts": {
+            "left": 366,
+            "right": 42
+          }
+        }
+      },
+      "equal_prior_sensitivity": {
+        "validation": {
+          "n": 408,
+          "macro_f1": 0.6695433598659405,
+          "balanced_accuracy": 0.8495316159250585,
+          "log_loss": 0.5071000772450944,
+          "brier": 0.16309448988066663,
+          "ece": 0.06842244438142016
+        },
+        "diagnostics": {
+          "human_roc_auc": 0.9307832422586522,
+          "human_class_balanced_log_loss": 0.39724069828869074,
+          "human_left_recall": 0.7704918032786885,
+          "human_right_recall": 0.9285714285714286,
+          "human_counts": {
+            "left": 366,
+            "right": 42
+          }
+        }
+      },
+      "gate_selected_balanced_threshold": {
+        "threshold": 0.13,
+        "validation_balanced_accuracy": 0.8544106167056986,
+        "validation_left_recall": 0.8278688524590164,
+        "validation_right_recall": 0.8809523809523809
+      }
+    }
+  }
+}

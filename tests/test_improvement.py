@@ -52,12 +52,35 @@ def test_reloadable_lexical_prediction_and_artifact_integrity(tmp_path):
     artifact = tmp_path / 'classifier.joblib'
     joblib.dump({'features': 'lexical', 'vectorizer': vectorizer, 'head': head, 'calibrator': cal}, artifact)
     manifest = {'artifact_hashes': {'classifier.joblib': digest(artifact)}, 'selection': {'kind': 'single'},
-                'components': {'lexical': {'kind': 'baseline', 'model': 'classifier.joblib'}}}
+                'components': {'lexical': {'kind': 'baseline', 'model': 'classifier.joblib'}},
+                'decision_rules': {'human_calibration_prior_right': .5, 'gate_balanced_threshold': .4}}
     (tmp_path / 'model.json').write_text(json.dumps(manifest))
     actual = predict(tmp_path, ['\ufeffsupport  public\nservices', texts[-1]], device='cpu')
     expected = cal.predict_proba(head.decision_function(vectorizer.transform([texts[0], texts[-1]]))[:, None])[:, 1]
     np.testing.assert_allclose([r['probability_right'] for r in actual], expected)
+    np.testing.assert_allclose([r['score_right_equal_prior'] for r in actual], expected)
+    assert [r['balanced_decision_label'] for r in actual] == [int(p >= .4) for p in expected]
     assert all(r['components']['lexical']['weight'] == 1 for r in actual)
     artifact.write_bytes(artifact.read_bytes() + b'changed')
     with pytest.raises(AssertionError, match='Changed artifact'):
         predict(tmp_path, [texts[0]], device='cpu')
+
+
+def test_prior_shift_preserves_order_and_maps_prior_to_new_prior():
+    from possum.improvement_audit import shift_prior
+    probabilities = np.array([.01, .1, .2, .8])
+    changed = shift_prior(probabilities, .1, .5)
+    assert changed[1] == pytest.approx(.5)
+    assert np.all(np.diff(changed) > 0)
+    np.testing.assert_allclose(shift_prior(changed, .5, .1), probabilities)
+    with pytest.raises(ValueError):
+        shift_prior(probabilities, 0)
+
+
+def test_paired_bootstrap_identical_predictions_have_zero_difference():
+    from possum.improvement_audit import paired_uncertainty
+    y = np.array([0, 0, 0, 1, 1])
+    p = np.array([.1, .2, .3, .7, .9])
+    result = paired_uncertainty(y, p, p, draws=30)
+    assert result['candidate_minus_baseline_log_loss'] == 0
+    assert result['percentile_95_interval'] == [0, 0]

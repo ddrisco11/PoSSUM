@@ -128,16 +128,29 @@ def predict(bundle, texts, device='mps'):
         hidden = np.tanh(x @ state['0.weight'].T + state['0.bias'])
         weights = softmax(hidden @ state['2.weight'].T + state['2.bias'], axis=1)
     p = (weights * probabilities).sum(axis=1)
-    return [{'probability_right': float(p[i]), 'probability_left': float(1 - p[i]),
+    decisions = manifest.get('decision_rules')
+    output = [{'probability_right': float(p[i]), 'probability_left': float(1 - p[i]),
              'label': int(p[i] >= .5), 'word_count': len(text.split()),
              'within_development_word_range': 12 <= len(text.split()) <= 150,
              'components': {name: {'probability_right': float(probabilities[i, j]), 'weight': float(weights[i, j])} for j, name in enumerate(names)},
              'interpretation': 'Binary class probability under the calibration distribution; not ideological intensity or a neutrality test.'}
             for i, text in enumerate(texts)]
+    if decisions:
+        from .improvement_audit import shift_prior
+        adjusted = shift_prior(p, decisions['human_calibration_prior_right'])
+        for i, row in enumerate(output):
+            row['balanced_decision_label'] = int(p[i] >= decisions['gate_balanced_threshold'])
+            row['balanced_decision_threshold'] = decisions['gate_balanced_threshold']
+            row['score_right_equal_prior'] = float(adjusted[i])
+            row['equal_prior_assumption'] = 'Assumes 50/50 class prevalence with unchanged class-conditional text distributions; not ideological intensity.'
+    return output
 
 
 def export(root):
     comparison = json.loads((root / 'mixtures/comparison.json').read_text())
+    from .improvement_audit import run as audit
+    audit(root)
+    audit_result = json.loads((root / 'mixtures/audit.json').read_text())
     selected_name = comparison['selected']
     selected = dict(comparison['results'][selected_name]['spec'])
     entries = comparison['candidates']
@@ -181,6 +194,8 @@ def export(root):
     manifest = {'format_version': 1, 'status': 'development candidate; final topic holdout pending', 'selected_name': selected_name,
                 'selection': selected, 'components': components, 'artifact_hashes': hashes, 'dataset': comparison['dataset'],
                 'encoder_revisions': {name: resolve(name) for name in ['google-bert/bert-base-uncased', 'BAAI/bge-small-en-v1.5']},
+                'decision_rules': {'human_calibration_prior_right': audit_result['human_calibration_prior_right'],
+                                   'gate_balanced_threshold': audit_result['models'][selected_name]['gate_selected_balanced_threshold']['threshold']},
                 'validation': comparison['results'][selected_name]['validation'], 'preprocessing': 'remove BOM; collapse whitespace',
                 'limitations': comparison['limitations']}
     save_json(bundle / 'model.json', manifest)
