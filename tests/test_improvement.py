@@ -620,3 +620,42 @@ def test_compact_resume_rejects_nonfinite_parameters_and_moments():
     state['optimizer']['state'][0]['exp_avg'][1] = float('inf')
     with pytest.raises(ValueError, match='optimizer tensor'):
         validate_resume_tensors(state)
+
+
+def test_single_expert_reference_is_frozen_before_holdout_and_cannot_change(tmp_path, monkeypatch):
+    import shutil
+    from possum.final_evaluation import freeze, evaluate
+    from possum import improvement_inference
+    rows = [{'id': str(i), 'text': 'Fixture text', 'label': i % 2,
+             'source': 'MITweet', 'topic': 'fixture'} for i in range(4)]
+    _, bundle = final_fixture(tmp_path, ''.join(json.dumps(r) + '\n' for r in rows))
+    reference = tmp_path / 'single-expert'
+    shutil.copytree(bundle, reference)
+    manifest = json.loads((reference / 'model.json').read_text())
+    manifest.update(selected_name='reference', components={'expert': {'kind': 'expert', 'model': 'fixture'}})
+    manifest['selection'] = {'kind': 'fixed', 'weights': [1.]}
+    (reference / 'model.json').write_text(json.dumps(manifest))
+    with pytest.raises(AssertionError, match='Expected one expert'):
+        freeze(tmp_path, allow_incomplete=True, reason='Fixture', expert_bundle=reference)
+    assert not (tmp_path / 'selection-freeze.json').exists()
+    manifest['selection'] = {'kind': 'single'}
+    (reference / 'model.json').write_text(json.dumps(manifest))
+    plan = freeze(tmp_path, allow_incomplete=True, reason='Fixture', expert_bundle=reference)
+    assert set(plan['bundles']) == {'selected', 'single_expert'}
+    assert not (tmp_path / 'final-evaluation/exposure.json').exists()
+    original = (reference / 'model.json').read_text()
+    (reference / 'model.json').write_text(original + '\n')
+    with pytest.raises(AssertionError, match='Frozen bundle changed'):
+        evaluate(tmp_path, 'cpu')
+    assert not (tmp_path / 'final-evaluation/exposure.json').exists()
+    (reference / 'model.json').write_text(original)
+    calls = []
+    def predict(path, texts, device):
+        calls.append(Path(path).name)
+        return [{'probability_right': .4} for _ in texts]
+    monkeypatch.setattr(improvement_inference, 'predict', predict)
+    result = evaluate(tmp_path, 'cpu')
+    assert set(result['results']) == {'selected', 'single_expert'}
+    assert calls == ['bundle', 'single-expert']
+    assert evaluate(tmp_path, 'cpu') == result
+    assert len(calls) == 2

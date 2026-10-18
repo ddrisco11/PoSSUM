@@ -75,7 +75,7 @@ def bundle_record(root, bundle):
             'decision_rules': manifest.get('decision_rules')}
 
 
-def freeze(root, compact_bundle=None, allow_incomplete=False, reason=None):
+def freeze(root, compact_bundle=None, allow_incomplete=False, reason=None, expert_bundle=None):
     lock = (root / 'pipeline.lock').open('a')
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     marker = root / 'selection-freeze.json'
@@ -97,6 +97,11 @@ def freeze(root, compact_bundle=None, allow_incomplete=False, reason=None):
         manifest = json.loads((Path(record['path']) / 'model.json').read_text())
         assert len(manifest['components']) == 1 and next(iter(manifest['components'].values()))['kind'] == 'compact', 'Expected one compact model'
         records['compact'] = record
+    if expert_bundle is not None:
+        record = bundle_record(root, expert_bundle)
+        manifest = json.loads((Path(record['path']) / 'model.json').read_text())
+        assert manifest['selection']['kind'] == 'single' and len(manifest['components']) == 1 and next(iter(manifest['components'].values()))['kind'] == 'expert', 'Expected one expert'
+        records['single_expert'] = record
     dataset = json.loads((root / 'dataset.json').read_text())
     manifest_path = Path(dataset['path']) / 'manifest.json'
     assert digest(manifest_path) == dataset['manifest_sha256']
@@ -209,6 +214,7 @@ if __name__ == '__main__':
     freezing = sub.add_parser('freeze')
     freezing.add_argument('run', type=Path)
     freezing.add_argument('--compact-bundle', type=Path)
+    freezing.add_argument('--expert-bundle', type=Path, help='Freeze one development-selected single expert as an efficiency reference.')
     freezing.add_argument('--allow-incomplete', action='store_true')
     freezing.add_argument('--reason')
     scoring = sub.add_parser('evaluate')
@@ -216,6 +222,6 @@ if __name__ == '__main__':
     scoring.add_argument('--device', choices=['cpu', 'mps'], default='mps')
     args = parser.parse_args()
     if args.command == 'freeze':
-        freeze(args.run, args.compact_bundle, args.allow_incomplete, args.reason)
+        freeze(args.run, args.compact_bundle, args.allow_incomplete, args.reason, args.expert_bundle)
     else:
         evaluate(args.run, args.device)
