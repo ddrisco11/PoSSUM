@@ -1,0 +1,327 @@
+{
+  "stage": "Partial development comparison: compact encoders, GLiNER and Mistral; Qwen/ModernBERT pending.",
+  "dataset_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17",
+  "human_validation_counts": {
+    "left": 366,
+    "right": 42
+  },
+  "mistral": {
+    "signature": {
+      "manifest_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17",
+      "backbone": [
+        "mlx-community/Mistral-7B-v0.3-4bit",
+        "5e8b40756eaa1cb5131715937c77107b4421c3a5"
+      ],
+      "frozen": true,
+      "prompt_version": "causal-v1"
+    },
+    "complete": true,
+    "validation": {
+      "all": {
+        "n": 806,
+        "macro_f1": 0.9521849717840909,
+        "balanced_accuracy": 0.9489325677267373,
+        "log_loss": 0.10417770927725839,
+        "brier": 0.027823878251859335,
+        "ece": 0.020287492040880394
+      },
+      "sources": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.9773696480354808,
+          "balanced_accuracy": 0.9772727272727273,
+          "log_loss": 0.061880281185744346,
+          "brier": 0.013282429954567812,
+          "ece": 0.04623747672716849
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.8520410576604702,
+          "balanced_accuracy": 0.8631928181108508,
+          "log_loss": 0.14543843569986278,
+          "brier": 0.042008918502648616,
+          "ece": 0.033656954983670107
+        }
+      },
+      "topics": {
+        "Abortion": {
+          "n": 210,
+          "macro_f1": 0.8267231420870235,
+          "balanced_accuracy": 0.8455010462683097,
+          "log_loss": 0.2016775040828591,
+          "brier": 0.057316609655775994,
+          "ece": 0.050539254570886046
+        },
+        "Black Lives Matter": {
+          "n": 6,
+          "macro_f1": 1.0,
+          "balanced_accuracy": 1.0,
+          "log_loss": 0.01481590482433718,
+          "brier": 0.0006343625839771998,
+          "ece": 0.014487762861674636
+        },
+        "CHIPS and Science Act": {
+          "n": 2,
+          "single_class": 0,
+          "accuracy": 1.0
+        },
+        "Capitol Hill Riot": {
+          "n": 3,
+          "macro_f1": 1.0,
+          "balanced_accuracy": 1.0,
+          "log_loss": 0.08534108536775581,
+          "brier": 0.013666579334255205,
+          "ece": 0.07744901800067427
+        },
+        "Covid-19": {
+          "n": 18,
+          "single_class": 0,
+          "accuracy": 1.0
+        },
+        "Democracy": {
+          "n": 4,
+          "macro_f1": 0.7333333333333334,
+          "balanced_accuracy": 0.75,
+          "log_loss": 0.24290889430439302,
+          "brier": 0.07720668503902983,
+          "ece": 0.18567394947073035
+        },
+        "Inflation Reduction Act": {
+          "n": 22,
+          "macro_f1": 0.725,
+          "balanced_accuracy": 0.6666666666666666,
+          "log_loss": 0.1475322259731967,
+          "brier": 0.055872763659187474,
+          "ece": 0.07983344609526188
+        },
+        "Mexico\u2013US Border": {
+          "n": 8,
+          "macro_f1": 1.0,
+          "balanced_accuracy": 1.0,
+          "log_loss": 0.13434979695381935,
+          "brier": 0.029049027183154226,
+          "ece": 0.11495524307271218
+        },
+        "Russo-Ukrainian War": {
+          "n": 3,
+          "macro_f1": 0.4,
+          "balanced_accuracy": 0.5,
+          "log_loss": 0.3483954950961172,
+          "brier": 0.11384800829751934,
+          "ece": 0.2624471682840981
+        },
+        "Women\u2019s Right": {
+          "n": 132,
+          "macro_f1": 0.8491428571428572,
+          "balanced_accuracy": 0.984251968503937,
+          "log_loss": 0.07598875232955155,
+          "brier": 0.0221330804395795,
+          "ece": 0.031354838437227826
+        },
+        "synthetic_issue_4": {
+          "n": 398,
+          "macro_f1": 0.9773696480354808,
+          "balanced_accuracy": 0.9772727272727273,
+          "log_loss": 0.061880281185744346,
+          "brier": 0.013282429954567812,
+          "ece": 0.04623747672716849
+        }
+      }
+    },
+    "seconds": 1558.5363324560053,
+    "rows": 1973
+  },
+  "selected": "fixed_0.1",
+  "selected_validation": {
+    "all": {
+      "n": 806,
+      "macro_f1": 0.9595058530621814,
+      "balanced_accuracy": 0.9545494699646644,
+      "log_loss": 0.10726544496380713,
+      "brier": 0.02659442124766941,
+      "ece": 0.04274259979903334
+    },
+    "sources": {
+      "GPT-4 Political Ideologies": {
+        "n": 398,
+        "macro_f1": 0.979886800080857,
+        "balanced_accuracy": 0.9797979797979798,
+        "log_loss": 0.0902652533994225,
+        "brier": 0.0178934080002091,
+        "ece": 0.06980227688374815
+      },
+      "MITweet": {
+        "n": 408,
+        "macro_f1": 0.8725817321126251,
+        "balanced_accuracy": 0.8686572989851677,
+        "log_loss": 0.12384896516631964,
+        "brier": 0.035082174366515485,
+        "ece": 0.03401138005341921
+      }
+    },
+    "topics": {
+      "Abortion": {
+        "n": 210,
+        "macro_f1": 0.8535224366426413,
+        "balanced_accuracy": 0.8535224366426413,
+        "log_loss": 0.15940237437354768,
+        "brier": 0.04591462629290495,
+        "ece": 0.027345195181844428
+      },
+      "Black Lives Matter": {
+        "n": 6,
+        "macro_f1": 1.0,
+        "balanced_accuracy": 1.0,
+        "log_loss": 0.06423460809460695,
+        "brier": 0.01074338890981027,
+        "ece": 0.05781877980767093
+      },
+      "CHIPS and Science Act": {
+        "n": 2,
+        "single_class": 0,
+        "accuracy": 1.0
+      },
+      "Capitol Hill Riot": {
+        "n": 3,
+        "macro_f1": 1.0,
+        "balanced_accuracy": 1.0,
+        "log_loss": 0.18044651751365157,
+        "brier": 0.0449961611968896,
+        "ece": 0.15074102456188634
+      },
+      "Covid-19": {
+        "n": 18,
+        "single_class": 0,
+        "accuracy": 1.0
+      },
+      "Democracy": {
+        "n": 4,
+        "macro_f1": 0.7333333333333334,
+        "balanced_accuracy": 0.75,
+        "log_loss": 0.3709615370348292,
+        "brier": 0.13037588032550385,
+        "ece": 0.06719557418849254
+      },
+      "Inflation Reduction Act": {
+        "n": 22,
+        "macro_f1": 0.725,
+        "balanced_accuracy": 0.6666666666666666,
+        "log_loss": 0.13978331962578147,
+        "brier": 0.0461391785677191,
+        "ece": 0.09491244141901692
+      },
+      "Mexico\u2013US Border": {
+        "n": 8,
+        "macro_f1": 1.0,
+        "balanced_accuracy": 1.0,
+        "log_loss": 0.1967395909163237,
+        "brier": 0.046586628743357575,
+        "ece": 0.16570153453409942
+      },
+      "Russo-Ukrainian War": {
+        "n": 3,
+        "macro_f1": 0.4,
+        "balanced_accuracy": 0.5,
+        "log_loss": 0.4267252942121161,
+        "brier": 0.1485198962148028,
+        "ece": 0.2984163159844438
+      },
+      "Women\u2019s Right": {
+        "n": 132,
+        "macro_f1": 0.8786392889978547,
+        "balanced_accuracy": 0.9881889763779528,
+        "log_loss": 0.06155880182118018,
+        "brier": 0.01572318084370044,
+        "ece": 0.04339965563969509
+      },
+      "synthetic_issue_4": {
+        "n": 398,
+        "macro_f1": 0.979886800080857,
+        "balanced_accuracy": 0.9797979797979798,
+        "log_loss": 0.0902652533994225,
+        "brier": 0.0178934080002091,
+        "ece": 0.06980227688374815
+      }
+    }
+  },
+  "selected_diagnostics": {
+    "human_roc_auc": 0.9774264897215716,
+    "human_class_balanced_log_loss": 0.35056366010913803,
+    "human_left_recall": 0.9754098360655737,
+    "human_right_recall": 0.7619047619047619,
+    "human_counts": {
+      "left": 366,
+      "right": 42
+    }
+  },
+  "weights": {
+    "lexical_mixed_C10": 0.04089965352118754,
+    "bert_full_mixed": 0.15207334899013125,
+    "mistral": 0.3787977318494131,
+    "lexical_mixed_C10_cvcal": 0.04941630593814054,
+    "mistral_cvcal": 0.3788129597011277
+  },
+  "paired_development_intervals": {
+    "lexical_mixed_C10": {
+      "candidate_minus_baseline_log_loss": -0.08657156940550575,
+      "percentile_95_interval": [
+        -0.12946463028593805,
+        -0.04557835498190122
+      ],
+      "draws": 2000,
+      "method": "paired class-stratified row bootstrap",
+      "limitations": "Descriptive development interval, without selection correction or author clustering; not a significance test."
+    },
+    "bert_full_mixed": {
+      "candidate_minus_baseline_log_loss": -0.07659901594536324,
+      "percentile_95_interval": [
+        -0.11633218287571828,
+        -0.03852702084409301
+      ],
+      "draws": 2000,
+      "method": "paired class-stratified row bootstrap",
+      "limitations": "Descriptive development interval, without selection correction or author clustering; not a significance test."
+    },
+    "mistral": {
+      "candidate_minus_baseline_log_loss": -0.02158947053354318,
+      "percentile_95_interval": [
+        -0.04722806364774521,
+        -0.0002927015330687357
+      ],
+      "draws": 2000,
+      "method": "paired class-stratified row bootstrap",
+      "limitations": "Descriptive development interval, without selection correction or author clustering; not a significance test."
+    }
+  },
+  "neural_router_human_results": {
+    "router_0.01": {
+      "n": 408,
+      "macro_f1": 0.8179384203480589,
+      "balanced_accuracy": 0.7683450429352069,
+      "log_loss": 0.15308497093660997,
+      "brier": 0.0429366181051066,
+      "ece": 0.038465012639892285
+    },
+    "router_0.1": {
+      "n": 408,
+      "macro_f1": 0.740151032663088,
+      "balanced_accuracy": 0.6772053083528493,
+      "log_loss": 0.16940454485861578,
+      "brier": 0.045037393119636164,
+      "ece": 0.052661300995267404
+    }
+  },
+  "gate_threshold": {
+    "threshold": 0.39,
+    "validation_balanced_accuracy": 0.8737314597970336,
+    "validation_left_recall": 0.9617486338797814,
+    "validation_right_recall": 0.7857142857142857
+  },
+  "limitations": [
+    "Development selection is not a final test.",
+    "Human labels map multiple ideology facets to one binary axis.",
+    "Human validation is strongly left-skewed.",
+    "Author-disjointness is unavailable."
+  ],
+  "topic_holdout_scored": false
+}

@@ -46,7 +46,10 @@ def run(root, family='bert'):
  torch.set_num_threads(4)
  parts=load_data(root);deadline=datetime.datetime.fromisoformat(json.loads((root/'state.json').read_text())['deadline']).timestamp()
  signature=json.loads((root/'dataset.json').read_text())['manifest_sha256']
- trials=TRIALS if family=='bert' else MODERN_TRIALS if family=='modernbert' else replication_plan(root)['trials']
+ if family=='distillation':
+  from .distillation import plan
+  trials=plan(root)['trials']
+ else:trials=TRIALS if family=='bert' else MODERN_TRIALS if family=='modernbert' else replication_plan(root)['trials']
  directory=root/'compact';directory.mkdir(exist_ok=True)
  registry_path=directory/'report.json';registry=json.loads(registry_path.read_text()) if registry_path.exists() else {}
  for trial in trials:
@@ -63,14 +66,19 @@ def run(root, family='bert'):
   model.to('mps');opt=torch.optim.AdamW([p for p in model.parameters() if p.requires_grad],lr=trial['lr'],weight_decay=.01)
   train_indices=np.array([i for i,r in enumerate(parts['fit']) if trial['regime']=='mixed' or r['source']=='MITweet'])
   fit_rows=[parts['fit'][i] for i in train_indices];weights=sample_weights(fit_rows)
+  teacher_values=None;teacher_sha=None
+  if trial.get('distillation_alpha'):
+   from .distillation import load_targets
+   teacher_values,teacher_sha=load_targets(root,parts['fit'],trial['teacher'])
   checkpoint=out/'resume.pt';epoch=offset=steps=0;best=float('inf');best_epoch=None
   def save():
    params=get_peft_model_state_dict(model) if trial['mode']=='lora' else model.state_dict()
    state=dict(model={k:v.detach().cpu() for k,v in params.items()},optimizer=opt.state_dict(),epoch=epoch,offset=offset,steps=steps,best=best,best_epoch=best_epoch,
-    trial=trial,input_sha256=signature,cpu_rng=torch.get_rng_state(),mps_rng=torch.mps.get_rng_state())
+    trial=trial,input_sha256=signature,teacher_sha256=teacher_sha,cpu_rng=torch.get_rng_state(),mps_rng=torch.mps.get_rng_state())
    atomic_write(checkpoint,lambda f:torch.save(state,f))
   if checkpoint.exists():
    state=torch.load(checkpoint,map_location='cpu',weights_only=True);assert state['input_sha256']==signature and state['trial']==trial
+   assert state.get('teacher_sha256')==teacher_sha,'Teacher target cache differs from checkpoint'
    if trial['mode']=='lora':set_peft_model_state_dict(model,state['model'])
    else:model.load_state_dict(state['model'])
    opt.load_state_dict(state['optimizer']);epoch=state['epoch'];offset=state['offset'];steps=state['steps'];best=state['best'];best_epoch=state['best_epoch']
@@ -87,7 +95,10 @@ def run(root, family='bert'):
      w=torch.tensor(weights[local],dtype=torch.float32,device='mps')
      warmup=max(1,int(.1*total_steps));factor=min((steps+1)/warmup,max(.05,(total_steps-steps)/max(1,total_steps-warmup)))
      for group in opt.param_groups:group['lr']=trial['lr']*factor
-     opt.zero_grad();loss=(torch.nn.functional.cross_entropy(model(**batch).logits,y,reduction='none')*w).mean()
+     opt.zero_grad()
+     from .distillation import training_loss
+     teacher_batch=None if teacher_values is None else torch.tensor(teacher_values[indices],device='mps')
+     loss=training_loss(model(**batch).logits,y,w,teacher_batch,trial.get('distillation_alpha',0.),trial.get('distillation_temperature',2.))
      if not torch.isfinite(loss):raise ValueError('Nonfinite loss')
      loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),1.);opt.step();torch.mps.synchronize()
      losses.append(float(loss.detach().cpu()));steps+=1;offset=start+len(local)
@@ -121,8 +132,8 @@ def run(root, family='bert'):
   if not stop:save_json(out/'complete.json',dict(best=best,best_epoch=best_epoch,completed_at=time.time(),input_sha256=signature))
   del model,opt;gc.collect();torch.mps.empty_cache()
   if stop:break
- finished={'bert':'compact-finished.json','modernbert':'modernbert-finished.json','replication':'replication-finished.json'}[family]
+ finished={'bert':'compact-finished.json','modernbert':'modernbert-finished.json','replication':'replication-finished.json','distillation':'distillation-finished.json'}[family]
  save_json(root/finished,dict(complete=all((directory/t['name']/'complete.json').exists() for t in trials),updated_at=time.time()))
 
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('run',type=Path);p.add_argument('--family',choices=['bert','modernbert','replication'],default='bert');a=p.parse_args();run(a.run,a.family)
+ p=argparse.ArgumentParser();p.add_argument('run',type=Path);p.add_argument('--family',choices=['bert','modernbert','replication','distillation'],default='bert');a=p.parse_args();run(a.run,a.family)

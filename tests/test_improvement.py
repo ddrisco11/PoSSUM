@@ -203,3 +203,47 @@ def test_export_selection_keeps_better_incumbent_and_matches_dataset(tmp_path):
     best = select_verified_export(tmp_path)
     assert best['selected'] == 'older'
     assert len(json.loads((tmp_path / 'export-ledger.json').read_text())['candidates']) == 2
+
+
+def test_distillation_loss_preserves_hard_loss_and_detaches_teacher():
+    import torch
+    from possum.distillation import training_loss
+    logits = torch.tensor([[1., -1.], [-.2, .4]], requires_grad=True)
+    teacher = torch.tensor([[2., -2.], [-1., 1.]], requires_grad=True)
+    labels = torch.tensor([0, 1])
+    weights = torch.tensor([.5, 1.5])
+    hard = (torch.nn.functional.cross_entropy(logits, labels, reduction='none') * weights).mean()
+    torch.testing.assert_close(training_loss(logits, labels, weights), hard)
+    torch.testing.assert_close(training_loss(logits, labels, weights, teacher, alpha=0), hard)
+    loss = training_loss(logits, labels, weights, teacher, alpha=.5)
+    loss.backward()
+    assert torch.isfinite(logits.grad).all() and teacher.grad is None
+    with pytest.raises(ValueError, match='required'):
+        training_loss(logits, labels, weights, alpha=.5)
+
+
+def test_distillation_targets_reject_role_order_and_integrity_changes(tmp_path):
+    from possum.distillation import load_targets
+    from possum.checkpoints import save_scores
+    from possum.improvement import digest
+    rows = [{'id': 'fit-a'}, {'id': 'fit-b'}]
+    (tmp_path / 'dataset.json').write_text(json.dumps({'manifest_sha256': 'dataset'}))
+    directory = tmp_path / 'distillation'
+    directory.mkdir()
+    path = directory / 'teacher_raw.npz'
+    save_scores(path, [[-1., -2.], [-3., -1.]], ['fit-a', 'fit-b'], [])
+    meta = dict(complete=True, input_sha256='dataset', teacher='mistral', role='fit', scores_sha256=digest(path))
+    (directory / 'teacher.json').write_text(json.dumps(meta))
+    scores, _ = load_targets(tmp_path, rows, 'mistral')
+    assert scores.shape == (2, 2)
+    with pytest.raises(AssertionError, match='fit rows'):
+        load_targets(tmp_path, rows[::-1], 'mistral')
+    meta['role'] = 'validation'
+    (directory / 'teacher.json').write_text(json.dumps(meta))
+    with pytest.raises(AssertionError):
+        load_targets(tmp_path, rows, 'mistral')
+    meta['role'] = 'fit'
+    (directory / 'teacher.json').write_text(json.dumps(meta))
+    save_scores(path, [[-2., -1.], [-3., -1.]], ['fit-a', 'fit-b'], [])
+    with pytest.raises(AssertionError, match='cache changed'):
+        load_targets(tmp_path, rows, 'mistral')
