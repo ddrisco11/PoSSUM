@@ -6,9 +6,26 @@
 
 PoSSUM studies the political viewpoint expressed in short English passages about U.S. politics. It combines calibrated predictions from multiple models and compares equal averaging with learned mixture weights. Neural routing uses 384-dimensional BGE-small embeddings; an optional self-prediction branch lets the routing head contribute its own answer.
 
-**Current status:** BERT and Mistral LoRA training, four-expert scoring and routing evaluation are complete on the expanded development corpus. The router with a bounded self contribution has the lowest validation log loss, while simpler averaging has higher macro-F1. Group-level uncertainty and poor Manifesto transfer prevent a general claim that learned routing is better. A reloadable local research export is available; there is no validated production release.
+**Current status:** The strongest verified candidate on the revised human-text development benchmark is a calibrated fixed mixture of frozen Mistral, fine-tuned BERT and a lexical classifier. It reaches **0.873 macro-F1 / 0.869 balanced accuracy / 0.124 log loss** on 408 MITweet validation passages. Neural routing is weaker in this comparison. A reloadable local research export is available; there is no validated production release. The final 159-example topic holdout remains sealed.
 
-**Human-text development (October 18, in progress):** A revised benchmark contains **2,199 MITweet passages mapped from human ideology facets** and **2,113 synthetic passages**. Broader admission recovers meaningful short statements and additional topics while keeping ambiguous and conflicting labels out. The 408-example human validation subset is strongly left-skewed (366 left / 42 right); its best initial lexical baseline reaches **0.727 macro-F1, 0.690 balanced accuracy and 0.210 log loss**. The completed mixed-data BERT full fine-tune reaches **0.776 macro-F1 / 0.200 log loss** on the same human validation subset; the human-only full fine-tune reaches 0.732 / 0.221. Frozen Mistral reaches **0.852 macro-F1 / 0.145 log loss**. Adding it to a regularized fixed mixture gives **0.873 macro-F1 / 0.124 log loss**; the neural routers currently perform worse. Qwen with the shared raw-completion prompt is weaker (**0.604 macro-F1 / 0.265 log loss**); a separate chat-template comparison is planned. Both ModernBERT trials finished behind BERT (human-only log loss 0.228; mixed-data 0.230). BERT seed repetitions are complete: human log loss ranges from 0.200 to 0.229; equal averaging gives 0.197, with an uncertain improvement over the initial seed. Compact distillation is in progress. [Seed sensitivity](reports/human-seed-sensitivity.json). The best mixture has passed local reload verification. [Completed compact comparison](reports/human-compact-completed.json). [Qwen comparison](reports/human-qwen-development.json). [Mistral and mixture comparison](reports/human-mistral-development.json). These are development results with checkpoint selection on the same validation set. [Compact training results](reports/compact-human-development.json). A separate 159-example topic holdout remains sealed. These figures use different inputs from the historical evaluations below and cannot be compared directly. [Protocol](docs/human-text-development.md) · [Aggregate data audit](reports/human-development-data.json) · [Initial baselines](reports/human-development-baselines.json).
+**Human-text development (October 18, in progress):** The revised corpus contains **2,199 MITweet passages mapped from human ideology facets** and **2,113 synthetic passages**. Broader admission recovers meaningful short statements and additional topics while keeping ambiguous and conflicting labels out. The human validation subset is strongly left-skewed (**366 left / 42 right**). These are exploratory development results, with checkpoint and architecture selection on the same validation set.
+
+| Configuration | Human validation macro-F1 ↑ | Log loss ↓ |
+|---|---:|---:|
+| Lexical baseline | 0.727 | 0.210 |
+| BERT full fine-tune, mixed data, seed 42 | 0.776 | 0.200 |
+| BERT full fine-tune, human data only | 0.732 | 0.221 |
+| BERT distilled from Mistral, alpha 0.25 | 0.802 | 0.206 |
+| BERT distilled from Mistral, alpha 0.5 | 0.758 | 0.209 |
+| Frozen Mistral | 0.852 | 0.145 |
+| Frozen Qwen, raw-completion prompt | 0.604 | 0.265 |
+| **Best verified fixed mixture** | **0.873** | **0.124** |
+
+Both distillation settings finished four epochs and selected epoch 3. Neither improves BERT's primary metric, calibrated log loss; the alpha-0.25 F1 increase does not change that selection rule. Paired loss intervals include zero. The mixture refit with distilled candidates reaches 0.126 log loss, so the earlier verified 0.124 mixture remains selected. [Distillation results, including all epochs](reports/human-distillation-development.json).
+
+Both ModernBERT trials finished behind BERT (human-only log loss 0.228; mixed-data 0.230). BERT seed repetitions give human log loss from 0.200 to 0.229; equal averaging gives 0.197, with an uncertain improvement over seed 42. Qwen's separate chat-template comparison is running, and a human-only Mistral LoRA comparison is queued. [Seed sensitivity](reports/human-seed-sensitivity.json) · [Completed compact comparison](reports/human-compact-completed.json) · [Qwen raw-prompt results](reports/human-qwen-development.json) · [Mistral and mixture comparison](reports/human-mistral-development.json).
+
+These figures use different inputs from the historical evaluations below and cannot be compared directly. [Protocol](docs/human-text-development.md) · [Aggregate data audit](reports/human-development-data.json) · [Initial baselines](reports/human-development-baselines.json).
 
 **Data revision (October 17):** Manifesto policy-category labels are excluded from new development because isolated passages can lack a self-contained ideological stance. The derived `assembled-v2-no-manifesto` corpus contains 13,416 development passages: 7,598 fit, 1,967 calibration, 2,195 router-fit and 1,656 validation. No model has yet been trained on this revision. Historical results below retain their original Manifesto-containing inputs and are not evidence that Manifesto caused the observed transfer regression. [Exclusion verification](reports/manifesto-exclusion.json) · [Dataset review guide](docs/dataset-review.md).
 
@@ -18,16 +35,16 @@ PoSSUM studies the political viewpoint expressed in short English passages about
 |---|---|
 | Task | Binary political slant classification |
 | Labels | `0 = Left`, `1 = Right` |
-| Input | Approximately 20–150 words; English, U.S. politics |
-| Evaluated experts | BERT and Mistral 7B LoRA; frozen GLiNER 2.5 and Qwen3.5 9B; matched frozen baselines |
+| Input | Short English passages about U.S. politics; current development admission uses 12–150 words |
+| Evaluated components | Lexical and embedding baselines; BERT fine-tunes and distillation; ModernBERT; frozen Mistral, GLiNER and Qwen; historical adapters |
 | Routing input | BGE-small, 384-dimensional embeddings |
-| Development selection | Router + capped self contribution, selected by validation log loss |
-| Training status | Completed BERT and Mistral LoRA; frozen GLiNER, Qwen and BGE |
+| Current development selection | Regularized fixed mixture, selected by human validation log loss |
+| Training status | Current compact comparisons complete; new human-only Mistral adapter trial queued |
 | Deployment status | Reloadable local adapters and mixture export; fresh human evaluation and abstention remain incomplete |
 
 Every enabled expert runs on every passage. This is a dense prediction ensemble, not sparse routing that avoids expert computation. Component weights and source datasets are downloaded separately.
 
-## Latest adapted-model evaluation
+## Historical adapted-model evaluation (October 17)
 
 The expanded run completed one pass over **7,652 expert-fit examples**, followed by calibration on 1,967, router fitting on 2,195 and validation on **1,899 examples across 21 groups**. Validation comprises 1,256 party-labeled tweets, 400 synthetic statements and 243 policy-mapped Manifesto passages. All labels are weak or synthetic. Locked test data were not used for fitting or model selection. Subsequent source auditing exposed 13 reserved synthetic passages; they remain excluded and are not an unseen benchmark.
 
@@ -44,7 +61,7 @@ The expanded run completed one pass over **7,652 expert-fit examples**, followed
 | Equal average without GLiNER, exploratory ablation | 0.857 | 0.336 |
 | BERT/GLiNER equal average | 0.819 | 0.461 |
 
-The predeclared selection metric is validation log loss, so `router_self_43` is the local export. It assigns average weights of 80.6% to Mistral, 9.9% to BERT, 4.6% to self prediction, 3.0% to Qwen and 1.9% to GLiNER. Self weight is capped at 25%; its classifier is fitted on expert-fit data and frozen during routing. Three router seeds give nearly identical results on the same split, not independent replications.
+The predeclared selection metric for this historical run was validation log loss, so `router_self_43` was its local export. It assigns average weights of 80.6% to Mistral, 9.9% to BERT, 4.6% to self prediction, 3.0% to Qwen and 1.9% to GLiNER. Self weight is capped at 25%; its classifier is fitted on expert-fit data and frozen during routing. Three router seeds give nearly identical results on the same split, not independent replications.
 
 The paired whole-group bootstrap interval for selected-router minus equal-average log loss is **−0.148 to +0.039**, crossing zero. This is a descriptive development interval without selection correction. The small aggregate self-branch gain is also uncertain. These results support further testing, not a statistically established routing advantage or a decision to drop an expert.
 
