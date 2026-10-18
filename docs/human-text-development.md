@@ -139,3 +139,10 @@ At the default threshold, the selected mixture reaches macro-F1 0.89002, balance
 The gate-fixed thresholds were 0.21 for the mixture, 0.24 for Mistral and 0.17 for DeBERTa. Applied without modification, they yield balanced accuracy 0.90597, 0.90597 and 0.77646. Equal-prior sensitivity is also reported separately; it does not replace primary probabilities or imply that neutrality or ideological intensity is measured.
 
 Only three topics are represented, and Mass Shootings contains just 14 passages (two left). Per-topic results and uncertainty must be read with these small counts. The mixture's macro-F1 interval is [0.82603, 0.93882] and log-loss interval [0.15006, 0.35737], conditional on the observed rows/class counts. No author-disjoint guarantee or broader deployment claim follows. Model selection, fitting and calibration for this version remain closed after exposure.
+
+
+## Export relocation verification
+
+`python -m possum.export_validation RUN --device mps` copies each frozen bundle into a temporary directory and launches a fresh Python process from that directory. It compares three already-used calibration passages with their cached reference probabilities, verifies manifest/artifact hashes before and after, and removes the temporary copies. It does not load the topic holdout, fit models or change candidate selection.
+
+All three exports passed. Maximum absolute differences were 1.11e−16 for the selected mixture, 1.15e−8 for DeBERTa and zero for Mistral alone. The checks use the existing installed editable package and dependency environment; causal-model base weights remain in the separately cached pinned snapshots. They establish local relocation, not clean-machine installation or cross-platform support. [Aggregate verification](../reports/human-export-portability.json).

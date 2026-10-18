@@ -75,7 +75,7 @@ With the local exports and cached base models available, run from the repository
 HF_HOME=cache/huggingface HF_HUB_OFFLINE=1 .venv/bin/python -m possum.predict_development --run runs/improvement-20261018 --variant selected --text "The government should expand affordable healthcare coverage through public funding and ensure that access to essential treatment does not depend on income."
 ```
 
-Use `--variant compact` for the selected DeBERTa encoder or `--variant single_expert` for the two-epoch Mistral adapter. The command resolves the verified version automatically and uses the immutable candidate record after final evaluation is frozen. Exports and base weights are local artifacts, not included in the Git checkout.
+Use `--variant compact` for the selected DeBERTa encoder or `--variant single_expert` for the two-epoch Mistral adapter. The command resolves the verified version automatically and uses the immutable candidate record after final evaluation is frozen. Exports and base weights are local artifacts, not included in the Git checkout. All three exports also passed relocation into a different directory and inference in fresh Python processes, with maximum probability difference below 1.2e−8 on three calibration passages. This uses the existing runtime and cached base weights; clean-machine installation is untested. [Portability checks](reports/human-export-portability.json).
 
 Measured local inference on 12 calibration passages:
 

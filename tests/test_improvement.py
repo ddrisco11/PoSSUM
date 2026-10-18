@@ -708,3 +708,14 @@ def test_final_publication_checks_provenance_and_never_repredicts(tmp_path, monk
     metadata_path.write_text(json.dumps(metadata))
     with pytest.raises(AssertionError):
         report(tmp_path)
+
+
+def test_relocated_export_score_check_rejects_incomplete_invalid_and_changed_results():
+    from possum.export_validation import compare_scores
+    assert compare_scores([.1, .8], [.1, .80001]) == pytest.approx(.00001)
+    for actual, message in [([.1], 'count'), ([float('nan'), .8], 'Invalid'),
+                            ([.1, 1.1], 'Invalid'), ([.1, .7], 'differ')]:
+        with pytest.raises(ValueError, match=message):
+            compare_scores(actual, [.1, .8])
+    with pytest.raises(ValueError, match='Invalid'):
+        compare_scores([.1, .8], [.1, float('nan')])
