@@ -6,7 +6,7 @@
 
 PoSSUM studies the political viewpoint expressed in short English passages about U.S. politics. It combines calibrated predictions from multiple models and compares equal averaging with learned mixture weights. Neural routing uses 384-dimensional BGE-small embeddings; an optional self-prediction branch lets the routing head contribute its own answer.
 
-**Current status:** The strongest verified candidate on the revised human-text development benchmark is a calibrated fixed mixture of human-adapted Mistral (88.6%) and chat-formatted frozen Qwen (11.4%). It reaches **0.885 macro-F1 / 0.902 balanced accuracy / 0.0985 log loss** on 408 MITweet validation passages. Neural routing is weaker in this comparison. A reloadable local research export is available; there is no validated production release. The final 159-example topic holdout remains sealed.
+**Current status:** The strongest verified candidate on the revised human-text development benchmark is a calibrated fixed mixture of human-adapted Mistral (88.6%) and chat-formatted frozen Qwen (11.4%). It reaches **0.885 macro-F1 / 0.902 balanced accuracy / 0.0985 log loss** on 408 MITweet validation passages. Neural routing is weaker in this comparison. A reloadable local research export is available; there is no validated production release. All three candidates are now frozen; the one-time 159-example topic stress evaluation is in progress.
 
 **Human-text development (October 18, in progress):** The revised corpus contains **2,199 MITweet passages mapped from human ideology facets** and **2,113 synthetic passages**. Broader admission recovers meaningful short statements and additional topics while keeping ambiguous and conflicting labels out. The human validation subset is strongly left-skewed (**366 left / 42 right**), and **83.8%** of its passages belong to Abortion or Women’s Right. An earlier mixture scored 0.898 macro-F1 / 0.131 log loss on the remaining 66 passages, but that small, already-used subset is not broad validation. [Topic coverage audit](reports/human-topic-coverage.json). These are exploratory development results, with checkpoint and architecture selection on the same validation set.
 
@@ -60,6 +60,16 @@ HF_HOME=cache/huggingface HF_HUB_OFFLINE=1 .venv/bin/python -m possum.predict_de
 ```
 
 Use `--variant compact` for the selected DeBERTa encoder or `--variant single_expert` for the two-epoch Mistral adapter. The command resolves the verified version automatically and uses the immutable candidate record after final evaluation is frozen. Exports and base weights are local artifacts, not included in the Git checkout.
+
+Measured local inference on 12 calibration passages:
+
+| Export | Median single request, seconds | Batch seconds per passage |
+|---|---:|---:|
+| Selected Mistral–Qwen mixture | 6.38 | 2.33 |
+| DeBERTa compact alternative | 1.34 | 0.138 |
+| Mistral adapter alone | 1.36 | 0.820 |
+
+Each request includes model loading, integrity checks and cleanup; these are not persistent warm-server measurements. The batch contains the same 12 passages, and all three exports passed single/batch prediction parity. The mixture's small validation-loss improvement over Mistral alone comes with substantially higher measured cost. [Timing protocol and complete measurements](reports/human-inference-latency.json).
 
 The output includes left/right probabilities, a default binary label, the gate-set decision threshold and a separate equal-prior score. These are probabilities under a binary task, not a measure of ideological intensity. Neutral, ambiguous or nonpolitical input can still receive a confident binary answer; a validated neutrality/abstention model remains outstanding. Inputs over the recorded token limit are rejected rather than truncated.
 

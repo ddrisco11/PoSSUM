@@ -1,0 +1,209 @@
+{
+  "results": [
+    {
+      "plan": {
+        "dataset_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17",
+        "sample_ids_sha256": "234da2105532285f21edf7f8b53cd74b6a58cfffae8535468f9bc636a3cf13d6",
+        "sampling": "Shortest, median-length and longest calibration passage per source/class cell.",
+        "device": "mps",
+        "word_counts": {
+          "min": 18,
+          "max": 96
+        },
+        "topic_holdout_scored": false
+      },
+      "bundle_manifest_sha256": "82eab6d27bb7c71465b7342e5852cef4ab9cb51c84ca7eae21fb486c278d32b4",
+      "bundle_name": "fixed_0-1792324394475390000",
+      "selected_name": "fixed_0",
+      "validation": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.9899474641341686,
+          "balanced_accuracy": 0.9898989898989898,
+          "log_loss": 0.09896858466931752,
+          "brier": 0.019562568071896998,
+          "ece": 0.07006204467611839
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.8853646353646354,
+          "balanced_accuracy": 0.9016393442622951,
+          "log_loss": 0.0984556885652989,
+          "brier": 0.028213029710285796,
+          "ece": 0.02284640028026002
+        }
+      },
+      "measurements": {
+        "examples": 12,
+        "first_single_request_seconds": 8.262866249999206,
+        "subsequent_single_request_seconds": {
+          "median": 6.375293125001917,
+          "p90": 6.862217583999154,
+          "min": 5.85933366700192,
+          "max": 7.291260458001489
+        },
+        "all_single_requests_seconds": [
+          8.262866249999206,
+          6.358333500000299,
+          7.291260458001489,
+          6.375293125001917,
+          6.648773083001288,
+          6.862217583999154,
+          5.85933366700192,
+          6.355954500002554,
+          6.411757916997885,
+          6.027989833000902,
+          6.318589167000027,
+          6.492510165997373
+        ],
+        "batch_seconds": 27.95883487500032,
+        "batch_seconds_per_passage": 2.3299029062500267,
+        "batch_single_max_absolute_error": 0.0,
+        "batch_single_parity_passed": true
+      },
+      "scope": [
+        "Each request uses the public reloadable predictor, including artifact hashing, model loading and cleanup.",
+        "First call includes lazy imports; later calls may benefit from filesystem/runtime caches.",
+        "Models are reloaded for each request; this is not a persistent warm-server benchmark.",
+        "Calibration examples only; latency measurements are not new accuracy evaluation."
+      ]
+    },
+    {
+      "plan": {
+        "dataset_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17",
+        "sample_ids_sha256": "234da2105532285f21edf7f8b53cd74b6a58cfffae8535468f9bc636a3cf13d6",
+        "sampling": "Shortest, median-length and longest calibration passage per source/class cell.",
+        "device": "mps",
+        "word_counts": {
+          "min": 18,
+          "max": 96
+        },
+        "topic_holdout_scored": false
+      },
+      "bundle_manifest_sha256": "85b300588d3f07574e0c82183a7975018c99c1909c6e685bc868956cae3e6b56",
+      "bundle_name": "deberta_full_mixed-1792324597854706000",
+      "selected_name": "deberta_full_mixed",
+      "validation": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.9672902218372856,
+          "balanced_accuracy": 0.9671717171717171,
+          "log_loss": 0.19602334559206866,
+          "brier": 0.04400950237003421,
+          "ece": 0.10319541997311944
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.8924485528003796,
+          "balanced_accuracy": 0.8635831381733021,
+          "log_loss": 0.14395176624536118,
+          "brier": 0.03553682353145326,
+          "ece": 0.04057547506576526
+        }
+      },
+      "measurements": {
+        "examples": 12,
+        "first_single_request_seconds": 1.858266499999445,
+        "subsequent_single_request_seconds": {
+          "median": 1.3395527079992462,
+          "p90": 1.3723874160023115,
+          "min": 1.3105835000023944,
+          "max": 1.383310375000292
+        },
+        "all_single_requests_seconds": [
+          1.858266499999445,
+          1.3715447499998845,
+          1.3505995000014082,
+          1.383310375000292,
+          1.3592501249986526,
+          1.3345332919998327,
+          1.3224515830006567,
+          1.3395527079992462,
+          1.3723874160023115,
+          1.331587374999799,
+          1.3105835000023944,
+          1.3374914580017503
+        ],
+        "batch_seconds": 1.6531543750024866,
+        "batch_seconds_per_passage": 0.13776286458354056,
+        "batch_single_max_absolute_error": 9.20163312212452e-08,
+        "batch_single_parity_passed": true
+      },
+      "scope": [
+        "Each request uses the public reloadable predictor, including artifact hashing, model loading and cleanup.",
+        "First call includes lazy imports; later calls may benefit from filesystem/runtime caches.",
+        "Models are reloaded for each request; this is not a persistent warm-server benchmark.",
+        "Calibration examples only; latency measurements are not new accuracy evaluation."
+      ]
+    },
+    {
+      "plan": {
+        "dataset_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17",
+        "sample_ids_sha256": "234da2105532285f21edf7f8b53cd74b6a58cfffae8535468f9bc636a3cf13d6",
+        "sampling": "Shortest, median-length and longest calibration passage per source/class cell.",
+        "device": "mps",
+        "word_counts": {
+          "min": 18,
+          "max": 96
+        },
+        "topic_holdout_scored": false
+      },
+      "bundle_manifest_sha256": "ce7ee4873e01fd9b54ac92ec0285fc1498ca9e2389ceed997c624a1dfe3d280d",
+      "bundle_name": "mistral_human_lora_e2-1792324604112677000",
+      "selected_name": "mistral_human_lora_e2",
+      "validation": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.987433298601244,
+          "balanced_accuracy": 0.9873737373737373,
+          "log_loss": 0.07195742750283117,
+          "brier": 0.014101012647915884,
+          "ece": 0.04700564891448547
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.8906390426186084,
+          "balanced_accuracy": 0.9030054644808743,
+          "log_loss": 0.10277951686871649,
+          "brier": 0.02944041793375659,
+          "ece": 0.02622460717230191
+        }
+      },
+      "measurements": {
+        "examples": 12,
+        "first_single_request_seconds": 1.4644464580014755,
+        "subsequent_single_request_seconds": {
+          "median": 1.3573848749983881,
+          "p90": 1.5028609590008273,
+          "min": 1.1814273339987267,
+          "max": 1.7677592079999158
+        },
+        "all_single_requests_seconds": [
+          1.4644464580014755,
+          1.3821837909999886,
+          1.7677592079999158,
+          1.3573848749983881,
+          1.4727376660011942,
+          1.5028609590008273,
+          1.2489362919986888,
+          1.2926585410023108,
+          1.30028429199956,
+          1.1814273339987267,
+          1.380993209000735,
+          1.287956291998853
+        ],
+        "batch_seconds": 9.843378666999342,
+        "batch_seconds_per_passage": 0.8202815555832785,
+        "batch_single_max_absolute_error": 0.0,
+        "batch_single_parity_passed": true
+      },
+      "scope": [
+        "Each request uses the public reloadable predictor, including artifact hashing, model loading and cleanup.",
+        "First call includes lazy imports; later calls may benefit from filesystem/runtime caches.",
+        "Models are reloaded for each request; this is not a persistent warm-server benchmark.",
+        "Calibration examples only; latency measurements are not new accuracy evaluation."
+      ]
+    }
+  ],
+  "completed_at": 1792324770.366488
+}
