@@ -127,6 +127,15 @@ def run(root):
     for i, name in enumerate(names):
         record(name, probabilities[:, i], {'kind': 'single', 'index': i})
     record('equal_average', probabilities.mean(axis=1), {'kind': 'fixed', 'weights': [1 / len(names)] * len(names)})
+    replication = root / 'replication-plan.json'
+    if replication.exists():
+        plan = json.loads(replication.read_text())
+        seed_names = [plan['base_trial']['name'], *[t['name'] for t in plan['trials']]]
+        if all(name in entries and (root / 'compact' / name / 'complete.json').exists() for name in seed_names):
+            weights = np.array([1 / len(seed_names) if name in seed_names else 0. for name in names])
+            record('compact_seed_average', probabilities @ weights,
+                   {'kind': 'fixed', 'weights': weights.tolist(), 'family': 'equal average of three compact seeds',
+                    'members': seed_names, 'extra_fitting': False})
     for penalty in [0., .01, .1]:
         weights = fit_fixed(gate, y, penalty)
         record(f'fixed_{penalty:g}', probabilities @ weights, {'kind': 'fixed', 'weights': weights.tolist(), 'penalty': penalty})
