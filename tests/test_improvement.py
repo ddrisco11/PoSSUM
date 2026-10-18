@@ -659,3 +659,28 @@ def test_single_expert_reference_is_frozen_before_holdout_and_cannot_change(tmp_
     assert calls == ['bundle', 'single-expert']
     assert evaluate(tmp_path, 'cpu') == result
     assert len(calls) == 2
+
+
+def test_prediction_resolves_verified_variants_and_prefers_frozen_manifest(tmp_path):
+    from possum.predict_development import resolve_bundle
+    _, bundle = final_fixture(tmp_path, 'No holdout parsing needed')
+    (tmp_path / 'final-reference-bundles.json').write_text(json.dumps({'compact': str(bundle)}))
+    assert resolve_bundle(tmp_path) == resolve_bundle(tmp_path, 'compact') == bundle
+    with pytest.raises(ValueError, match='Unknown'):
+        resolve_bundle(tmp_path, 'bad')
+    with pytest.raises(ValueError, match='No verified'):
+        resolve_bundle(tmp_path, 'single_expert')
+    (tmp_path / 'selection-freeze.json').write_text(json.dumps({'bundles': {
+        'selected': {'path': str(bundle), 'manifest_sha256': digest(bundle / 'model.json')}}}))
+    (tmp_path / 'export.json').write_text(json.dumps({'path': str(tmp_path / 'wrong')}))
+    assert resolve_bundle(tmp_path) == bundle
+    with pytest.raises(ValueError, match='not included'):
+        resolve_bundle(tmp_path, 'compact')
+    (bundle / 'model.json').write_text('{}')
+    with pytest.raises(ValueError, match='manifest changed'):
+        resolve_bundle(tmp_path)
+    (tmp_path / 'selection-freeze.json').unlink()
+    (tmp_path / 'export.json').write_text(json.dumps({'path': str(bundle)}))
+    (bundle / 'verification.json').write_text(json.dumps({'passed': False}))
+    with pytest.raises(ValueError, match='reload verification'):
+        resolve_bundle(tmp_path)

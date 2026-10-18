@@ -16,6 +16,7 @@ PoSSUM studies the political viewpoint expressed in short English passages about
 | BERT full fine-tune, mixed data, seed 42 | 0.776 | 0.200 |
 | BERT full fine-tune, human data only | 0.732 | 0.221 |
 | DeBERTa full fine-tune, mixed data | 0.892 | 0.144 |
+| DeBERTa full fine-tune, human data only | 0.786 | 0.192 |
 | BERT distilled from Mistral, alpha 0.25 | 0.802 | 0.206 |
 | BERT distilled from Mistral, alpha 0.5 | 0.758 | 0.209 |
 | Frozen Mistral | 0.852 | 0.145 |
@@ -29,7 +30,7 @@ Both human-only Mistral adapter epochs are complete. Epoch two improves human va
 
 Both distillation settings finished four epochs and selected epoch 3. Neither improves BERT's primary metric, calibrated log loss; the alpha-0.25 F1 increase does not change that selection rule. Paired loss intervals include zero. Before the chat-template comparison, the mixture refit with distilled candidates reached 0.126 log loss and did not replace the earlier 0.124 mixture. [Distillation results, including all epochs](reports/human-distillation-development.json).
 
-Both ModernBERT trials finished behind BERT (human-only log loss 0.228; mixed-data 0.230). BERT seed repetitions give human log loss from 0.200 to 0.229; equal averaging gives 0.197, with an uncertain improvement over seed 42. Qwen's nonthinking chat-template comparison is complete: macro-F1 improves from 0.604 to 0.764 and log loss from 0.265 to 0.191. Adding it to the mixture changes loss from 0.12385 to 0.12288 with unchanged F1; the paired loss interval spans zero, and the added inference cost still needs measurement. [Chat-template and mixture comparison](reports/human-qwen-chat-development.json). Human-only Mistral LoRA training and evaluation are complete. The mixed-source DeBERTa-v3-base run completed four epochs, selecting epoch 3 with 0.892 macro-F1 and 0.144 log loss; the human-only recipe remains in progress. This improves the single BERT reference, while the adapted Mistral and selected mixture still have lower probability loss. Its initial half-precision optimizer update failed; training restarted from pretrained weights in float32. [DeBERTa interim results, all four mixed-source epochs](reports/human-deberta-interim.json). [Seed sensitivity](reports/human-seed-sensitivity.json) · [Completed compact comparison](reports/human-compact-completed.json) · [Qwen raw-prompt results](reports/human-qwen-development.json) · [Mistral and mixture comparison](reports/human-mistral-development.json).
+Both ModernBERT trials finished behind BERT (human-only log loss 0.228; mixed-data 0.230). BERT seed repetitions give human log loss from 0.200 to 0.229; equal averaging gives 0.197, with an uncertain improvement over seed 42. Qwen's nonthinking chat-template comparison is complete: macro-F1 improves from 0.604 to 0.764 and log loss from 0.265 to 0.191. Adding it to the mixture changes loss from 0.12385 to 0.12288 with unchanged F1; the paired loss interval spans zero, and the added inference cost still needs measurement. [Chat-template and mixture comparison](reports/human-qwen-chat-development.json). Human-only Mistral LoRA training and evaluation are complete. Both DeBERTa-v3-base recipes completed four epochs. Mixed-source training selects epoch 3 (0.892 macro-F1 / 0.144 log loss); human-only selects epoch 4 (0.786 / 0.192). This improves the single BERT reference, while the adapted Mistral and selected mixture still have lower probability loss. Its initial half-precision optimizer update failed; training restarted from pretrained weights in float32. [Completed DeBERTa comparison, all eight epochs](reports/human-deberta-completed.json). Adding DeBERTa to the candidate pool leaves the selected mixture effectively unchanged. [Seed sensitivity](reports/human-seed-sensitivity.json) · [Completed compact comparison](reports/human-compact-completed.json) · [Qwen raw-prompt results](reports/human-qwen-development.json) · [Mistral and mixture comparison](reports/human-mistral-development.json).
 
 These figures use different inputs from the historical evaluations below and cannot be compared directly. [Protocol](docs/human-text-development.md) · [Aggregate data audit](reports/human-development-data.json) · [Initial baselines](reports/human-development-baselines.json).
 
@@ -45,10 +46,22 @@ These figures use different inputs from the historical evaluations below and can
 | Evaluated components | Lexical and embedding baselines; BERT fine-tunes and distillation; ModernBERT; frozen Mistral, GLiNER and Qwen; historical adapters |
 | Routing input | BGE-small, 384-dimensional embeddings |
 | Current development selection | Two-model fixed mixture, selected by human validation log loss |
-| Training status | Initial compact, frozen-expert and human-only Mistral adapter comparisons complete; DeBERTa comparison running |
+| Training status | Planned compact, frozen-expert, distillation and human-only Mistral adapter comparisons complete |
 | Deployment status | Reloadable local adapters and mixture export; fresh human evaluation and abstention remain incomplete |
 
 Every enabled expert runs on every passage. This is a dense prediction ensemble, not sparse routing that avoids expert computation. Component weights and source datasets are downloaded separately.
+
+## Run the current local models
+
+With the local exports and cached base models available, run from the repository directory:
+
+```bash
+HF_HOME=cache/huggingface HF_HUB_OFFLINE=1 .venv/bin/python -m possum.predict_development --run runs/improvement-20261018 --variant selected --text "The government should expand affordable healthcare coverage through public funding and ensure that access to essential treatment does not depend on income."
+```
+
+Use `--variant compact` for the selected DeBERTa encoder or `--variant single_expert` for the two-epoch Mistral adapter. The command resolves the verified version automatically and uses the immutable candidate record after final evaluation is frozen. Exports and base weights are local artifacts, not included in the Git checkout.
+
+The output includes left/right probabilities, a default binary label, the gate-set decision threshold and a separate equal-prior score. These are probabilities under a binary task, not a measure of ideological intensity. Neutral, ambiguous or nonpolitical input can still receive a confident binary answer; a validated neutrality/abstention model remains outstanding. Inputs over the recorded token limit are rejected rather than truncated.
 
 ## Historical adapted-model evaluation (October 17)
 
