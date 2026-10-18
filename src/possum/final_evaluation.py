@@ -182,6 +182,15 @@ def evaluate(root, device='mps'):
         if record['decision_rules']:
             threshold = record['decision_rules']['gate_balanced_threshold']
             report['gate_fixed_balanced_decision'] = decision_summary(y, p, threshold)
+            from .improvement_audit import shift_prior
+            old_prior = record['decision_rules']['human_calibration_prior_right']
+            balanced_scores = shift_prior(p, old_prior, .5)
+            report['equal_prior_sensitivity'] = {
+                'calibration_prior_right': old_prior, 'assumed_prior_right': .5,
+                'metrics': report_predictions(rows, balanced_scores),
+                'decision': decision_summary(y, balanced_scores),
+                'scope': 'Fixed 50/50 prior adjustment from the exported scoring contract, not fitted to holdout labels. Assumes unchanged class-conditional text distributions; does not establish deployment prevalence, ideological intensity or neutrality.',
+                'replaces_primary_scores': False}
         reports[name] = report
     result = {'selection_sha256': signature, 'dataset_sha256': plan['dataset']['manifest_sha256'],
               'holdout_sha256': plan['holdout_sha256'], 'results': reports, 'rows': len(rows),

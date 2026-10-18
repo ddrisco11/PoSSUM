@@ -463,6 +463,11 @@ def test_final_evaluation_requires_freeze_rejects_tampering_and_runs_once(tmp_pa
     assert selected['default_decision']['confusion_matrix_true_rows_predicted_columns'] == [[2, 0], [2, 0]]
     assert selected['topics']['topic']['default_decision']['class_recalls']['1']['recall'] == 0
     assert selected['uncertainty']['draws'] == 2000
+    sensitivity = selected['equal_prior_sensitivity']
+    assert sensitivity['calibration_prior_right'] == .25 and sensitivity['assumed_prior_right'] == .5
+    assert sensitivity['metrics']['all']['log_loss'] == pytest.approx(np.log(2))
+    assert sensitivity['decision']['confusion_matrix_true_rows_predicted_columns'] == [[0, 2], [0, 2]]
+    assert sensitivity['replaces_primary_scores'] is False
     assert (tmp_path / 'final-evaluation/exposure.json').exists()
     def forbidden(*args, **kwargs):
         raise AssertionError('Completed holdout must not run predictions again')
