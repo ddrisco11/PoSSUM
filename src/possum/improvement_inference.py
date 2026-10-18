@@ -201,9 +201,40 @@ def best_comparison(root):
     return Path(min(eligible)[1]).parent
 
 
-def export(root, device='mps', candidate=None, comparison_dir=None):
+def best_compact_comparison(root):
+    """Choose one compact predictor across completed, same-dataset comparisons."""
+    signature = json.loads((root / 'dataset.json').read_text())['manifest_sha256']
+    paths = [root / 'mixtures/comparison.json', *sorted((root / 'mixture-history').glob('*/comparison.json'))]
+    eligible = []
+    for path in paths:
+        if not path.exists():
+            continue
+        comparison = json.loads(path.read_text())
+        if comparison['dataset']['manifest_sha256'] != signature:
+            continue
+        entries = list(comparison['candidates'].values())
+        for name, result in comparison['results'].items():
+            spec = result['spec']
+            if spec['kind'] != 'single' or entries[spec['index']]['kind'] != 'compact':
+                continue
+            score = result['validation']['sources']['MITweet']['log_loss']
+            if not np.isfinite(score):
+                raise ValueError(f'Nonfinite compact selection score: {path}: {name}')
+            eligible.append((score, str(path.parent), name))
+    if not eligible:
+        raise ValueError('No single compact candidate for the active dataset')
+    score, directory, name = min(eligible)
+    return {'comparison_dir': directory, 'candidate': name, 'human_validation_log_loss': score}
+
+
+def export(root, device='mps', candidate=None, comparison_dir=None, best_compact=False):
     from .improvement import require_development_open
     require_development_open(root)
+    if best_compact:
+        if candidate is not None or comparison_dir is not None:
+            raise ValueError('Best-compact selection cannot be combined with an explicit candidate or comparison')
+        compact = best_compact_comparison(root)
+        candidate, comparison_dir = compact['candidate'], compact['comparison_dir']
     directory = Path(comparison_dir) if comparison_dir is not None else best_comparison(root) if candidate is None else root / 'mixtures'
     comparison = json.loads((directory / 'comparison.json').read_text())
     assert comparison['dataset']['manifest_sha256'] == json.loads((root / 'dataset.json').read_text())['manifest_sha256'], 'Comparison dataset differs'
@@ -299,10 +330,11 @@ if __name__ == '__main__':
     make = sub.add_parser('export'); make.add_argument('run', type=Path); make.add_argument('--device', choices=['cpu', 'mps'], default='mps')
     make.add_argument('--comparison-dir', type=Path, help='Explicit archived comparison directory; must match the active dataset.')
     make.add_argument('--candidate', help='Export a named comparison candidate; incumbent selection remains unchanged.')
+    make.add_argument('--best-compact', action='store_true', help='Export the best single compact predictor across current and archived comparisons.')
     infer = sub.add_parser('predict'); infer.add_argument('bundle', type=Path); infer.add_argument('--text', required=True)
     infer.add_argument('--device', choices=['cpu', 'mps'], default='mps')
     args = parser.parse_args()
     if args.command == 'export':
-        export(args.run, args.device, args.candidate, args.comparison_dir)
+        export(args.run, args.device, args.candidate, args.comparison_dir, args.best_compact)
     else:
         print(json.dumps(predict(args.bundle, [args.text], args.device), indent=2))

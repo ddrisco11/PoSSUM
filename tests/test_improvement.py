@@ -517,3 +517,29 @@ def test_final_decisions_expose_class_errors_and_undefined_absent_recall():
     assert set(uncertainty(y[:3], p[:3], draws=100)['percentile_95_intervals']) == {'log_loss', 'brier'}
     with pytest.raises(AssertionError):
         uncertainty(y, p * 2)
+
+
+def test_best_compact_selection_searches_history_and_excludes_ensembles(tmp_path):
+    from possum.improvement_inference import best_compact_comparison, export
+    (tmp_path / 'dataset.json').write_text(json.dumps({'manifest_sha256': 'active'}))
+    with pytest.raises(ValueError, match='No single compact'):
+        best_compact_comparison(tmp_path)
+    def comparison(folder, signature, compact_loss):
+        folder.mkdir(parents=True)
+        payload = {'dataset': {'manifest_sha256': signature}, 'selected': 'mixture',
+          'candidates': {'bert': {'kind': 'compact'}, 'mistral': {'kind': 'expert'}},
+          'results': {
+            'bert': {'spec': {'kind': 'single', 'index': 0}, 'validation': {'sources': {'MITweet': {'log_loss': compact_loss}}}},
+            'mistral': {'spec': {'kind': 'single', 'index': 1}, 'validation': {'sources': {'MITweet': {'log_loss': .1}}}},
+            'mixture': {'spec': {'kind': 'fixed', 'weights': [.5, .5]}, 'validation': {'sources': {'MITweet': {'log_loss': .05}}}}}}
+        (folder / 'comparison.json').write_text(json.dumps(payload))
+    comparison(tmp_path / 'mixtures', 'active', .3)
+    comparison(tmp_path / 'mixture-history/earlier', 'active', .2)
+    comparison(tmp_path / 'mixture-history/unrelated', 'different', .01)
+    result = best_compact_comparison(tmp_path)
+    assert result['candidate'] == 'bert' and result['human_validation_log_loss'] == .2
+    assert Path(result['comparison_dir']).name == 'earlier'
+    with pytest.raises(ValueError, match='cannot be combined'):
+        export(tmp_path, candidate='bert', best_compact=True)
+    with pytest.raises(ValueError, match='cannot be combined'):
+        export(tmp_path, comparison_dir=tmp_path / 'mixtures', best_compact=True)

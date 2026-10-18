@@ -55,6 +55,8 @@ A predefined small-mixture family checks whether two predictors can retain the f
 
 A named candidate can be exported with `python -m possum.improvement_inference export RUN --candidate NAME`. Each export must pass reload parity. Exporting a smaller alternative does not replace a better verified incumbent; the bundle ledger retains both for later accuracy/latency comparisons.
 
+For the compact alternative, `python -m possum.improvement_inference export RUN --best-compact` selects the single compact predictor with the lowest human validation log loss across all completed comparisons for the same frozen dataset. Calibration variants remain eligible; multiple-model averages and noncompact experts are excluded from this one-model category. Archived candidates can win, so adding later models does not silently discard an earlier compact result. The export still requires actual reload parity and does not replace a better overall incumbent. This selection uses development data only and must precede the final holdout freeze.
+
 ## Qwen prompt-format comparison
 
 Frozen Qwen3.5-9B scores substantially below Mistral with the shared raw-completion prompt: human macro-F1 0.604 and log loss 0.265. Its local tokenizer artifact provides a conversation template with an explicit `enable_thinking=False` assistant prefix. A separate, versioned `qwen_chat` comparison places the same classification task in the user turn and forces the assistant completion `This statement reflects a` followed by ` left` or ` right`. Both continuations are single tokens in the pinned tokenizer. No reasoning or completion is sampled.
