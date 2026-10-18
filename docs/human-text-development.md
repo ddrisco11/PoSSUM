@@ -97,6 +97,8 @@ An equal-weight average of the three calibrated predictions is now included as a
 
 The report separates the first request, later single-request latency, and batch time per passage. Each call includes integrity checks, model loading, prediction and cleanup; later calls can benefit from filesystem and runtime caches. These measurements describe the reloadable predictor, not a persistent warm inference service. They do not constitute another accuracy evaluation. Actual timing results will be reported after measurement.
 
+New causal-model exports record a 256-token model-input limit that includes the classification prompt. Overlength inputs fail before the forward pass, with an explicit segmentation request; they are never silently truncated. Multi-token candidate scoring counts the full continuation it evaluates. Tokenizer-only checks across the four development partitions found maximum input lengths of 183 for Mistral, 157 for raw-prompt Qwen and 173 for chat-formatted Qwen, so the limit does not alter those cached scores. Existing bundles retain their recorded configuration. Expert inference releases model resources even when scoring raises an error.
+
 ## Runtime provenance
 
 The [runtime snapshot](../reports/human-development-runtime.json) records Python, macOS, architecture and installed versions of the libraries used for the development run. Compact models use PyTorch MPS and quantized causal models use MLX. Model revisions and dataset hashes are recorded separately in training and export metadata. This package snapshot documents the environment that produced the results; it is not a tested fresh-install recipe or a portable dependency lock.

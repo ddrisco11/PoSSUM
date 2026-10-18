@@ -84,15 +84,18 @@ def raw_component(bundle, spec, texts, device, embeddings):
         from .components.causal import MLXCausal
         backbone = spec['backbone']
         model = MLXCausal(local_snapshot(backbone[0], backbone[1]), prompt_format=spec.get('prompt_format', 'plain'),
-                          adapter_path=str(bundle / spec['adapter']) if 'adapter' in spec else None)
+                          adapter_path=str(bundle / spec['adapter']) if 'adapter' in spec else None,
+                          max_input_tokens=spec.get('max_input_tokens'))
         model.model.eval()
     else:
         from .components.gliner import GLiNER
         assert resolve(spec['backbone'][0]) == spec['backbone'][1], 'GLiNER revision differs from export'
         model = GLiNER()
-    raw = model.score(texts)
-    del model
-    release_memory()
+    try:
+        raw = model.score(texts)
+    finally:
+        del model
+        release_memory()
     return raw[:, 1] - raw[:, 0], joblib.load(bundle / spec['calibrator'])
 
 
@@ -289,6 +292,8 @@ def export(root, device='mps', candidate=None, comparison_dir=None, best_compact
             spec['calibrator'] = copy_once(source, destination)
             from .improvement_experts import expert_settings
             spec.update(expert_settings(model_name))
+            if spec.get('engine') == 'mlx':
+                spec['max_input_tokens'] = 256
             if 'adapter' in spec:
                 spec['adapter'] = copy_once(root / spec['adapter'], bundle / 'components' / f'{name}_adapter')
         else:

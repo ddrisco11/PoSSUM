@@ -583,3 +583,24 @@ def test_deberta_plan_pins_data_recipe_revision_and_reserves_final_hour(tmp_path
     (tmp_path / 'dataset.json').write_text(json.dumps({'manifest_sha256': 'changed'}))
     with pytest.raises(AssertionError, match='plan changed'):
         deberta_plan(tmp_path)
+
+
+def test_expert_export_limit_is_forwarded_and_memory_released_on_error(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+    from possum import improvement_inference as inference
+    from possum.components import causal
+    captured, released = {}, []
+    class RejectingScorer:
+        model = SimpleNamespace(eval=lambda: None)
+        def __init__(self, path, **kwargs):
+            captured.update(kwargs)
+        def score(self, texts):
+            raise ValueError('Input exceeds the validated limit')
+    monkeypatch.setattr(causal, 'MLXCausal', RejectingScorer)
+    monkeypatch.setattr(inference, 'local_snapshot', lambda *args: 'fixture')
+    monkeypatch.setattr(inference, 'release_memory', lambda: released.append(True))
+    spec = {'kind': 'expert', 'model': 'mistral', 'engine': 'mlx',
+            'backbone': ['fixture', 'revision'], 'max_input_tokens': 256}
+    with pytest.raises(ValueError, match='validated limit'):
+        inference.raw_component(tmp_path, spec, ['example'], 'cpu', {})
+    assert captured['max_input_tokens'] == 256 and released == [True]

@@ -61,8 +61,9 @@ class Causal:
 
 class MLXCausal:
     """Pass an explicitly selected, revision-pinned 4-bit MLX model directory."""
-    def __init__(self, model_id, prompt_format='plain', adapter_path=None):
+    def __init__(self, model_id, prompt_format='plain', adapter_path=None, max_input_tokens=None):
         self.prompt_format = prompt_format
+        self.max_input_tokens = max_input_tokens
         from mlx_lm import load
         self.model, self.tokenizer = load(model_id, adapter_path=adapter_path)
     def score(self, texts):
@@ -71,7 +72,12 @@ class MLXCausal:
         for text in texts:
             prefix = scoring_prompt(self.tokenizer, text, getattr(self, "prompt_format", "plain"))
             pairs = [candidate_ids(self.tokenizer, prefix, c) for c in (" left", " right")]
-            if all(len(b) == len(a)+1 for a,b in pairs):
+            single_token = all(len(b) == len(a)+1 for a,b in pairs)
+            model_input_length = max(len(a) if single_token else len(b) for a, b in pairs)
+            limit = getattr(self, 'max_input_tokens', None)
+            if limit is not None and model_input_length > limit:
+                raise ValueError(f'Input exceeds the validated {limit}-token causal prompt limit; segment it explicitly.')
+            if single_token:
                 # Shared prefix: one exact forward pass, no sampled generation.
                 logits = self.model(mx.array([pairs[0][0]]))[0, -1].astype(mx.float32)
                 lp = logits - mx.logsumexp(logits)

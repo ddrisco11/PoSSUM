@@ -2,6 +2,7 @@
 import sys
 import types
 import numpy as np
+import pytest
 from scipy.special import logsumexp
 from possum.components.causal import MLXCausal
 
@@ -28,3 +29,18 @@ def test_single_token_labels_share_prefix_and_keep_full_vocabulary_normalization
     scores=scorer.score(['A passage'])
     assert calls==[[[0,3]]]
     np.testing.assert_allclose(scores,[[1-logsumexp([0,1,3,5]),3-logsumexp([0,1,3,5])]],rtol=1e-6)
+    scorer.max_input_tokens=2
+    np.testing.assert_allclose(scorer.score(['A passage']), scores)
+    calls.clear()
+    scorer.max_input_tokens=1
+    with pytest.raises(ValueError, match='segment it explicitly'):
+        scorer.score(['A passage'])
+    assert not calls  # Reject before any forward pass; no truncation.
+    class MultiTokenTokenizer:
+        def encode(self,text,add_special_tokens=True):
+            suffix=[1,2] if text.endswith((' left',' right')) else []
+            return [0,3]+suffix
+    scorer.tokenizer=MultiTokenTokenizer();scorer.max_input_tokens=2
+    with pytest.raises(ValueError, match='causal prompt limit'):
+        scorer.score(['A passage'])
+    assert not calls  # The fallback scores full continuations, so they count too.
