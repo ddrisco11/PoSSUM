@@ -30,7 +30,7 @@ def diagnostics(rows, probabilities):
             'human_counts': {'left': int((y == 0).sum()), 'right': int((y == 1).sum())}}
 
 
-def candidates(root, ids):
+def candidates(root, ids, calibration_prior):
     entries = {}
     baselines = json.loads((root / 'baselines/report.json').read_text())
     for family in ['lexical', 'bge', 'bert']:
@@ -46,8 +46,12 @@ def candidates(root, ids):
         meta_path = root / 'experts' / f'{name}.json'
         if meta_path.exists() and json.loads(meta_path.read_text()).get('complete'):
             entries[name] = {'kind': 'expert', 'model': name, 'scores': f'experts/{name}_scores.npz'}
+    entries['constant_calibration_prior'] = {'kind': 'constant', 'probability': float(calibration_prior)}
     columns = []
     for spec in entries.values():
+        if spec['kind'] == 'constant':
+            columns.append(np.full(len(ids), spec['probability']))
+            continue
         z = np.load(root / spec['scores'], allow_pickle=False)
         assert z['ids'].tolist() == ids, 'Prediction order differs'
         p = z['values']
@@ -62,7 +66,8 @@ def run(root):
     parts = load_data(root)
     rows = sum([parts[p] for p in PARTS[1:]], [])
     ids = [r['id'] for r in rows]
-    entries, probabilities = candidates(root, ids)
+    calibration_prior = np.mean([r['label'] for r in parts['calibration'] if r['source'] == 'MITweet'])
+    entries, probabilities = candidates(root, ids, calibration_prior)
     names = list(entries)
     ncal, ngate = len(parts['calibration']), len(parts['gate'])
     gs = slice(ncal, ncal + ngate)

@@ -116,3 +116,38 @@ def test_cpu_cleanup_does_not_initialize_mlx(monkeypatch):
         return original(name, *args, **kwargs)
     monkeypatch.setattr(builtins, '__import__', guarded)
     release_memory()
+
+
+def test_local_snapshot_falls_back_without_network_and_checks_all_shards(tmp_path, monkeypatch):
+    import huggingface_hub
+    import huggingface_hub.constants
+    from possum.revisions import local_snapshot
+    configured, standard = tmp_path / 'configured', tmp_path / 'home/.cache/huggingface/hub'
+    monkeypatch.setattr(huggingface_hub.constants, 'HF_HUB_CACHE', str(configured))
+    monkeypatch.setattr(Path, 'home', classmethod(lambda cls: tmp_path / 'home'))
+    for directory in [configured, standard]:
+        directory.mkdir(parents=True)
+        (directory / 'config.json').write_text('{}')
+        (directory / 'model.safetensors.index.json').write_text(json.dumps({'weight_map': {'a': 'part1.safetensors', 'b': 'part2.safetensors'}}))
+        (directory / 'part1.safetensors').touch()
+    (standard / 'part2.safetensors').touch()
+    def cached(repo, *, revision, cache_dir, local_files_only):
+        assert repo == 'test/model' and revision == 'pinned' and local_files_only is True
+        return cache_dir
+    monkeypatch.setattr(huggingface_hub, 'snapshot_download', cached)
+    assert local_snapshot('test/model', 'pinned') == str(standard)
+    (standard / 'part2.safetensors').unlink()
+    with pytest.raises(FileNotFoundError, match='Complete local snapshot unavailable'):
+        local_snapshot('test/model', 'pinned')
+
+
+def test_constant_prior_bundle_needs_no_model_weights(tmp_path):
+    from possum.improvement_inference import predict
+    manifest = {'artifact_hashes': {}, 'selection': {'kind': 'single'},
+                'components': {'prior': {'kind': 'constant', 'probability': .2}},
+                'decision_rules': {'human_calibration_prior_right': .2, 'gate_balanced_threshold': .15}}
+    (tmp_path / 'model.json').write_text(json.dumps(manifest))
+    output = predict(tmp_path, ['A short statement.', 'A different short statement.'], device='cpu')
+    assert all(row['probability_right'] == .2 and row['label'] == 0 for row in output)
+    assert all(row['balanced_decision_label'] == 1 for row in output)
+    assert all(row['score_right_equal_prior'] == pytest.approx(.5) for row in output)

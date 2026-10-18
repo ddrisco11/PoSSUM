@@ -31,6 +31,8 @@ assert json.loads((root / 'compact-finished.json').read_text())['complete'], 'Co
 
 def update(**fields):
     state = json.loads(state_path.read_text())
+    if fields.get('status') == 'running':
+        state.pop('error', None)
     state.update(fields, updated_at=time.time())
     save_json(state_path, state)
 

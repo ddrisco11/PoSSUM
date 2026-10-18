@@ -12,7 +12,7 @@ import numpy as np
 from .checkpoints import atomic_write, save_json, save_scores
 from .improvement import PARTS, calibration, load_data, report_predictions
 from .option_a import MODELS
-from .revisions import resolve
+from .revisions import resolve, local_snapshot
 
 
 def run(root, name):
@@ -42,9 +42,8 @@ def run(root, name):
         if time.time() >= end:
             return
         if name in MODELS:
-            from huggingface_hub import snapshot_download
             from .components.causal import MLXCausal
-            model = MLXCausal(snapshot_download(backbone[0], revision=backbone[1], local_files_only=True))
+            model = MLXCausal(local_snapshot(backbone[0], backbone[1]))
             model.model.eval()
         else:
             import torch

@@ -14,7 +14,7 @@ from scipy.special import softmax
 from .checkpoints import save_json
 from .improvement import digest, load_data
 from .option_a import MODELS
-from .revisions import resolve
+from .revisions import resolve, local_snapshot
 
 
 def release_memory():
@@ -41,6 +41,8 @@ def encoder_features(name, texts, device):
 
 
 def component(bundle, spec, texts, device, embeddings):
+    if spec['kind'] == 'constant':
+        return np.full(len(texts), spec['probability'])
     if spec['kind'] == 'baseline':
         saved = joblib.load(bundle / spec['model'])
         feature = saved['features']
@@ -81,10 +83,9 @@ def component(bundle, spec, texts, device, embeddings):
         return joblib.load(folder / 'calibrator.joblib').predict_proba(np.asarray(raw)[:, None])[:, 1]
     name = spec['model']
     if name in MODELS:
-        from huggingface_hub import snapshot_download
         from .components.causal import MLXCausal
         backbone = spec['backbone']
-        model = MLXCausal(snapshot_download(backbone[0], revision=backbone[1], local_files_only=True))
+        model = MLXCausal(local_snapshot(backbone[0], backbone[1]))
         model.model.eval()
     else:
         from .components.gliner import GLiNER
@@ -169,7 +170,9 @@ def export(root, device='mps'):
     for name, original in entries.items():
         spec = dict(original)
         spec.pop('scores', None)
-        if spec['kind'] == 'expert':
+        if spec['kind'] == 'constant':
+            pass
+        elif spec['kind'] == 'expert':
             source = root / 'experts' / f'{name}_calibrator.joblib'
             destination = bundle / 'components' / f'{name}_calibrator.joblib'
             destination.parent.mkdir(exist_ok=True)
