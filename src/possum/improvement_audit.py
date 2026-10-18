@@ -41,9 +41,11 @@ def paired_uncertainty(y, candidate, baseline, draws=2000, seed=42):
             'limitations': 'Descriptive development interval, without selection correction or author clustering; not a significance test.'}
 
 
-def run(root):
+def run(root, comparison_dir=None, write=True):
     parts = load_data(root)
-    comparison = json.loads((root / 'mixtures/comparison.json').read_text())
+    directory = root / 'mixtures' if comparison_dir is None else Path(comparison_dir)
+    comparison = json.loads((directory / 'comparison.json').read_text())
+    assert comparison['dataset']['manifest_sha256'] == json.loads((root / 'dataset.json').read_text())['manifest_sha256']
     rows = parts['calibration'] + parts['gate'] + parts['validation']
     ids = [r['id'] for r in rows]
     ncal, ngate = len(parts['calibration']), len(parts['gate'])
@@ -56,7 +58,7 @@ def run(root):
     all_scores = {}
     reports = {}
     for name in comparison['results']:
-        z = np.load(root / 'mixtures' / f'{name}_scores.npz', allow_pickle=False)
+        z = np.load(directory / f'{name}_scores.npz', allow_pickle=False)
         assert z['ids'].tolist() == ids
         p = z['values']; all_scores[name] = p[-len(parts['validation']):][val_mask]
         threshold = choose_threshold(gy, p[ncal:ncal + ngate][gate_mask])
@@ -80,8 +82,10 @@ def run(root):
                            'This is a sensitivity analysis, not evidence that deployment prevalence is 50/50.',
                            'Gate thresholds use only human gate labels; they do not change calibrated probabilities.',
                            'Probability is not ideological intensity or a neutral/nonpolitical detector.']}
-    save_json(root / 'mixtures/audit.json', result)
+    if write:
+        save_json(directory / 'audit.json', result)
     print(json.dumps({'selected': selected, 'paired_uncertainty': result['paired_uncertainty']}), flush=True)
+    return result
 
 
 if __name__ == '__main__':

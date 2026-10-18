@@ -313,7 +313,7 @@ def test_export_shares_predictor_artifacts_and_preserves_calibrated_parity(tmp_p
     (tmp_path / 'dataset.json').write_text(json.dumps(comparison['dataset']))
     (mixture / 'audit.json').write_text(json.dumps({'human_calibration_prior_right': .5,
         'models': {'fixed': {'gate_selected_balanced_threshold': {'threshold': .5}}}}))
-    monkeypatch.setattr(improvement_audit, 'run', lambda root: None)
+    monkeypatch.setattr(improvement_audit, 'run', lambda root, comparison_dir=None, write=True: json.loads((Path(comparison_dir) / 'audit.json').read_text()))
     monkeypatch.setattr(module, 'resolve', lambda name: 'pinned')
     monkeypatch.setattr(module, 'load_data', lambda root: {'calibration': [{'id': i, 'text': t} for i, t in zip(ids, texts)]})
     module.export(tmp_path, device='cpu')
@@ -336,6 +336,20 @@ def test_export_shares_predictor_artifacts_and_preserves_calibrated_parity(tmp_p
     assert len(json.loads((tmp_path / 'export-ledger.json').read_text())['candidates']) == 2
 
 
+    # A prior comparison stays exportable even after the current score file changes.
+    import shutil
+    archived = tmp_path / 'mixture-history' / 'earlier'
+    shutil.copytree(mixture, archived)
+    comparison['selected'] = 'original'
+    (mixture / 'comparison.json').write_text(json.dumps(comparison))
+    save_scores(mixture / 'fixed_scores.npz', np.full(4, .99), ids, [])
+    assert module.best_comparison(tmp_path) == archived
+    module.export(tmp_path, device='cpu')
+    latest = sorted((tmp_path / 'exports').iterdir(), key=lambda p: p.stat().st_mtime_ns)[-1]
+    assert json.loads((latest / 'model.json').read_text())['source_comparison']['path'] == 'mixture-history/earlier'
+    assert json.loads((latest / 'verification.json').read_text())['passed']
+
+
 def test_chat_scoring_uses_nonreasoning_assistant_completion_and_preserves_plain_prompt():
     from possum.components.causal import scoring_prompt, prompt
     class Tokenizer:
@@ -352,3 +366,15 @@ def test_chat_scoring_uses_nonreasoning_assistant_completion_and_preserves_plain
     raw, chat = expert_settings('qwen'), expert_settings('qwen_chat')
     assert raw['backbone'] == chat['backbone'] and chat['engine'] == 'mlx'
     assert raw['prompt_format'] == 'plain' and chat['prompt_format'] == 'chat_nonthinking'
+
+
+def test_best_comparison_excludes_different_dataset_histories(tmp_path):
+    from possum.improvement_inference import best_comparison
+    (tmp_path / 'dataset.json').write_text(json.dumps({'manifest_sha256': 'active'}))
+    for directory, signature, loss in [('mixtures', 'active', .3), ('mixture-history/valid', 'active', .2),
+                                       ('mixture-history/other', 'other', .1)]:
+        folder = tmp_path / directory
+        folder.mkdir(parents=True)
+        (folder / 'comparison.json').write_text(json.dumps({'dataset': {'manifest_sha256': signature},
+            'selected': 'model', 'results': {'model': {'validation': {'sources': {'MITweet': {'log_loss': loss}}}}}}))
+    assert best_comparison(tmp_path) == tmp_path / 'mixture-history/valid'

@@ -178,11 +178,33 @@ def select_verified_export(root):
     return eligible[0]
 
 
-def export(root, device='mps', candidate=None):
-    comparison = json.loads((root / 'mixtures/comparison.json').read_text())
+def best_comparison(root):
+    """Retain prior winners when adding candidates changes newly fitted mixtures."""
+    signature = json.loads((root / 'dataset.json').read_text())['manifest_sha256']
+    paths = [root / 'mixtures/comparison.json', *sorted((root / 'mixture-history').glob('*/comparison.json'))]
+    eligible = []
+    for path in paths:
+        if not path.exists():
+            continue
+        comparison = json.loads(path.read_text())
+        if comparison['dataset']['manifest_sha256'] != signature:
+            continue
+        score = comparison['results'][comparison['selected']]['validation']['sources']['MITweet']['log_loss']
+        if not np.isfinite(score):
+            raise ValueError(f'Nonfinite selection score: {path}')
+        eligible.append((score, str(path)))
+    if not eligible:
+        raise ValueError('No comparison for the active dataset')
+    return Path(min(eligible)[1]).parent
+
+
+def export(root, device='mps', candidate=None, comparison_dir=None):
+    directory = Path(comparison_dir) if comparison_dir is not None else best_comparison(root) if candidate is None else root / 'mixtures'
+    comparison = json.loads((directory / 'comparison.json').read_text())
+    assert comparison['dataset']['manifest_sha256'] == json.loads((root / 'dataset.json').read_text())['manifest_sha256'], 'Comparison dataset differs'
     from .improvement_audit import run as audit
-    audit(root)
-    audit_result = json.loads((root / 'mixtures/audit.json').read_text())
+    audit_result = audit(root, comparison_dir=directory, write=False)
+
     selected_name = comparison['selected'] if candidate is None else candidate
     if selected_name not in comparison['results']:
         raise ValueError(f'Unknown comparison candidate: {selected_name}')
@@ -237,10 +259,11 @@ def export(root, device='mps', candidate=None):
             spec['model'] = copy_once(source, destination)
         components[name] = spec
     if selected['kind'] == 'router':
-        shutil.copy2(root / selected['model'], bundle / 'router.joblib')
+        shutil.copy2(directory / Path(selected['model']).name, bundle / 'router.joblib')
         selected['model'] = 'router.joblib'
     hashes = {str(p.relative_to(bundle)): digest(p) for p in bundle.rglob('*') if p.is_file()}
     manifest = {'format_version': 1, 'status': 'development candidate; final topic holdout pending', 'selected_name': selected_name,
+                'source_comparison': {'path': str(directory.resolve().relative_to(root.resolve())), 'sha256': digest(directory / 'comparison.json')},
                 'selection': selected, 'components': components, 'artifact_hashes': hashes, 'dataset': comparison['dataset'],
                 'encoder_revisions': {name: resolve(name) for name in ['google-bert/bert-base-uncased', 'BAAI/bge-small-en-v1.5']},
                 'decision_rules': {'human_calibration_prior_right': audit_result['human_calibration_prior_right'],
@@ -252,7 +275,7 @@ def export(root, device='mps', candidate=None):
     # Calibration examples are already used; parity checks never touch the topic holdout.
     checks = [parts['calibration'][0], parts['calibration'][-1], max(parts['calibration'], key=lambda r: len(r['text']))]
     actual = np.array([r['probability_right'] for r in predict(bundle, [r['text'] for r in checks], device=device)])
-    z = np.load(root / 'mixtures' / f'{selected_name}_scores.npz', allow_pickle=False)
+    z = np.load(directory / f'{selected_name}_scores.npz', allow_pickle=False)
     lookup = {k: float(v) for k, v in zip(z['ids'].tolist(), z['values'])}
     expected = np.array([lookup[r['id']] for r in checks])
     error = float(np.max(np.abs(actual - expected)))
@@ -267,11 +290,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest='command', required=True)
     make = sub.add_parser('export'); make.add_argument('run', type=Path); make.add_argument('--device', choices=['cpu', 'mps'], default='mps')
+    make.add_argument('--comparison-dir', type=Path, help='Explicit archived comparison directory; must match the active dataset.')
     make.add_argument('--candidate', help='Export a named comparison candidate; incumbent selection remains unchanged.')
     infer = sub.add_parser('predict'); infer.add_argument('bundle', type=Path); infer.add_argument('--text', required=True)
     infer.add_argument('--device', choices=['cpu', 'mps'], default='mps')
     args = parser.parse_args()
     if args.command == 'export':
-        export(args.run, args.device, args.candidate)
+        export(args.run, args.device, args.candidate, args.comparison_dir)
     else:
         print(json.dumps(predict(args.bundle, [args.text], args.device), indent=2))
