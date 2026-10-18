@@ -464,3 +464,25 @@ def test_final_evaluation_requires_freeze_rejects_tampering_and_runs_once(tmp_pa
         raise AssertionError('Completed holdout must not run predictions again')
     monkeypatch.setattr(improvement_inference, 'predict', forbidden)
     assert evaluate(tmp_path, 'cpu') == report
+
+
+def test_inference_benchmark_sampling_and_batch_parity_use_supplied_rows_only():
+    from possum.inference_benchmark import sample_rows, time_requests
+    rows = [{'id': f'{source}-{label}-{i}', 'source': source, 'label': label, 'text': 'word ' * (i + 1)}
+            for source in ['human', 'synthetic'] for label in [0, 1] for i in range(5)]
+    selected = sample_rows(rows)
+    assert len(selected) == 12 and {len(r['text'].split()) for r in selected} == {1, 3, 5}
+    calls = []
+    def predictor(bundle, texts, device):
+        calls.append(texts)
+        return [{'probability_right': len(t.split()) / 10} for t in texts]
+    measured = time_requests('fixture', selected, 'cpu', float('inf'), predictor)
+    assert len(calls) == 13 and len(calls[-1]) == 12
+    assert measured['batch_single_max_absolute_error'] == 0
+    assert measured['examples'] == 12
+    def inconsistent(bundle, texts, device):
+        return [{'probability_right': .2 if len(texts) == 1 else .8} for t in texts]
+    with pytest.raises(AssertionError, match='mismatch'):
+        time_requests('fixture', selected, 'cpu', float('inf'), inconsistent)
+    with pytest.raises(TimeoutError):
+        time_requests('fixture', selected, 'cpu', 0, predictor)
