@@ -1,6 +1,8 @@
 """Compare calibrated experts and small mixtures without accessing the sealed holdout."""
 import argparse
 import json
+import shutil
+import time
 from pathlib import Path
 
 import joblib
@@ -64,10 +66,17 @@ def run(root):
     import torch
     torch.set_num_threads(4)
     parts = load_data(root)
+    # Preserve each completed comparison before regenerating current selections.
+    previous = root / 'mixtures'
+    if (previous / 'comparison.json').exists():
+        history = root / 'mixture-history' / str(time.time_ns())
+        shutil.copytree(previous, history)
     rows = sum([parts[p] for p in PARTS[1:]], [])
     ids = [r['id'] for r in rows]
     calibration_prior = np.mean([r['label'] for r in parts['calibration'] if r['source'] == 'MITweet'])
     entries, probabilities = candidates(root, ids, calibration_prior)
+    from .calibration_cv import augment
+    entries, probabilities = augment(root, parts, entries, probabilities)
     names = list(entries)
     ncal, ngate = len(parts['calibration']), len(parts['gate'])
     gs = slice(ncal, ncal + ngate)

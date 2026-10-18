@@ -1,0 +1,151 @@
+{
+  "selection": "Calibration method chosen by calibration-only out-of-fold log loss; validation is reported, not used for this choice.",
+  "topic_holdout_scored": false,
+  "status": "Partial comparison: compact models and GLiNER; Mistral/Qwen and ModernBERT pending.",
+  "models": {
+    "lexical_mixed_C10": {
+      "selected": "temperature",
+      "calibration_oof_log_loss": {
+        "platt": 0.22853425815658585,
+        "monotone_platt": 0.22853477677943185,
+        "temperature": 0.22703481735265063,
+        "prior_temperature": 0.2995322599254006
+      },
+      "human_validation": {
+        "n": 408,
+        "macro_f1": 0.7272727272727273,
+        "balanced_accuracy": 0.6900858704137393,
+        "log_loss": 0.2098204531773551,
+        "brier": 0.06052809920004024,
+        "ece": 0.0319737395721661
+      },
+      "raw_derivation": "exact inverse of stored affine calibration, with round-trip check"
+    },
+    "bge_human_C10": {
+      "selected": "platt",
+      "calibration_oof_log_loss": {
+        "platt": 0.27089206437444024,
+        "monotone_platt": 0.27088410678621944,
+        "temperature": 0.3564494179903617,
+        "prior_temperature": 0.29097841775997246
+      },
+      "human_validation": {
+        "n": 408,
+        "macro_f1": 0.5549051432828672,
+        "balanced_accuracy": 0.5435206869633099,
+        "log_loss": 0.2503766388797893,
+        "brier": 0.0737813501917106,
+        "ece": 0.034694548179479624
+      },
+      "raw_derivation": "exact inverse of stored affine calibration, with round-trip check"
+    },
+    "bert_human_C10": {
+      "selected": "platt",
+      "calibration_oof_log_loss": {
+        "platt": 0.26903526079750034,
+        "monotone_platt": 0.2690337279474942,
+        "temperature": 0.3807905675681654,
+        "prior_temperature": 0.28016767185346064
+      },
+      "human_validation": {
+        "n": 408,
+        "macro_f1": 0.6065184599025693,
+        "balanced_accuracy": 0.5778688524590164,
+        "log_loss": 0.26054592080520017,
+        "brier": 0.07639878331225854,
+        "ece": 0.025439972271999296
+      },
+      "raw_derivation": "exact inverse of stored affine calibration, with round-trip check"
+    },
+    "bert_full_human": {
+      "selected": "platt",
+      "calibration_oof_log_loss": {
+        "platt": 0.2597777273408828,
+        "monotone_platt": 0.25977629448871564,
+        "temperature": 0.2728399257429013,
+        "prior_temperature": 0.3049923940538668
+      },
+      "human_validation": {
+        "n": 408,
+        "macro_f1": 0.7317019707869199,
+        "balanced_accuracy": 0.6914519906323184,
+        "log_loss": 0.22136615101897775,
+        "brier": 0.06262544907438955,
+        "ece": 0.05175612307393157
+      },
+      "raw_derivation": "exact inverse of stored affine calibration, with round-trip check"
+    },
+    "bert_full_mixed": {
+      "selected": "platt",
+      "calibration_oof_log_loss": {
+        "platt": 0.23675771198572337,
+        "monotone_platt": 0.23675814236988196,
+        "temperature": 0.2570216826426809,
+        "prior_temperature": 0.274948866210178
+      },
+      "human_validation": {
+        "n": 408,
+        "macro_f1": 0.7763115606390019,
+        "balanced_accuracy": 0.7390710382513661,
+        "log_loss": 0.20044798111168288,
+        "brier": 0.055912956271389445,
+        "ece": 0.04771317467426995
+      },
+      "raw_derivation": "exact inverse of stored affine calibration, with round-trip check"
+    },
+    "bert_lora_human": {
+      "selected": "temperature",
+      "calibration_oof_log_loss": {
+        "platt": 0.29898277663203815,
+        "monotone_platt": 0.2989734175781782,
+        "temperature": 0.2966846248912313,
+        "prior_temperature": 0.32631313282752133
+      },
+      "human_validation": {
+        "n": 408,
+        "macro_f1": 0.6102265489946319,
+        "balanced_accuracy": 0.5843091334894613,
+        "log_loss": 0.2979486544086392,
+        "brier": 0.08574342622511802,
+        "ece": 0.04690192574828572
+      },
+      "raw_derivation": "exact inverse of stored affine calibration, with round-trip check"
+    },
+    "bert_lora_mixed": {
+      "selected": "temperature",
+      "calibration_oof_log_loss": {
+        "platt": 0.294695971657667,
+        "monotone_platt": 0.29469547845095795,
+        "temperature": 0.2941687404970656,
+        "prior_temperature": 0.32563059257643756
+      },
+      "human_validation": {
+        "n": 408,
+        "macro_f1": 0.5781954887218045,
+        "balanced_accuracy": 0.5604996096799375,
+        "log_loss": 0.30103811883876586,
+        "brier": 0.0863150017359292,
+        "ece": 0.025113535934934154
+      },
+      "raw_derivation": "exact inverse of stored affine calibration, with round-trip check"
+    },
+    "gliner": {
+      "selected": "monotone_platt",
+      "calibration_oof_log_loss": {
+        "platt": 0.3332566309578547,
+        "monotone_platt": 0.331783586658896,
+        "temperature": 0.6971565481297599,
+        "prior_temperature": 0.3321856415683553
+      },
+      "human_validation": {
+        "n": 408,
+        "macro_f1": 0.4728682170542636,
+        "balanced_accuracy": 0.5,
+        "log_loss": 0.3314977528531777,
+        "brier": 0.09234429065743943,
+        "ece": 7.81801956506456e-10
+      },
+      "raw_derivation": "stored raw class-score difference"
+    }
+  }
+}

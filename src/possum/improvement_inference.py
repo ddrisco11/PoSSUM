@@ -41,6 +41,7 @@ def encoder_features(name, texts, device):
 
 
 def component(bundle, spec, texts, device, embeddings):
+    override = joblib.load(bundle / spec['calibration_override']) if 'calibration_override' in spec else None
     if spec['kind'] == 'constant':
         return np.full(len(texts), spec['probability'])
     if spec['kind'] == 'baseline':
@@ -53,7 +54,7 @@ def component(bundle, spec, texts, device, embeddings):
                 embeddings[feature] = encoder_features(feature, texts, device)
             x = embeddings[feature]
         raw = saved['head'].decision_function(x)
-        return saved['calibrator'].predict_proba(raw[:, None])[:, 1]
+        return (override if override is not None else saved['calibrator']).predict_proba(raw[:, None])[:, 1]
     if spec['kind'] == 'compact':
         import torch
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
@@ -80,7 +81,8 @@ def component(bundle, spec, texts, device, embeddings):
                 raw.extend((z[:, 1] - z[:, 0]).tolist())
         del model
         release_memory()
-        return joblib.load(folder / 'calibrator.joblib').predict_proba(np.asarray(raw)[:, None])[:, 1]
+        calibrator = override if override is not None else joblib.load(folder / 'calibrator.joblib')
+        return calibrator.predict_proba(np.asarray(raw)[:, None])[:, 1]
     name = spec['model']
     if name in MODELS:
         from .components.causal import MLXCausal
@@ -94,7 +96,8 @@ def component(bundle, spec, texts, device, embeddings):
     raw = model.score(texts)
     del model
     release_memory()
-    return joblib.load(bundle / spec['calibrator']).predict_proba((raw[:, 1] - raw[:, 0])[:, None])[:, 1]
+    calibrator = override if override is not None else joblib.load(bundle / spec['calibrator'])
+    return calibrator.predict_proba((raw[:, 1] - raw[:, 0])[:, None])[:, 1]
 
 
 def predict(bundle, texts, device='mps'):
@@ -146,6 +149,27 @@ def predict(bundle, texts, device='mps'):
     return output
 
 
+def select_verified_export(root):
+    signature = json.loads((root / 'dataset.json').read_text())['manifest_sha256']
+    eligible = []
+    for verification in (root / 'exports').glob('*/verification.json'):
+        if not json.loads(verification.read_text()).get('passed'):
+            continue
+        bundle = verification.parent
+        manifest = json.loads((bundle / 'model.json').read_text())
+        if manifest['dataset']['manifest_sha256'] != signature:
+            continue
+        score = manifest['validation']['sources']['MITweet']['log_loss']
+        eligible.append({'path': str(bundle.resolve()), 'selected': manifest['selected_name'], 'verified': True,
+                         'human_validation_log_loss': score})
+    assert eligible, 'No verified export for this dataset'
+    eligible.sort(key=lambda r: (r['human_validation_log_loss'], r['path']))
+    save_json(root / 'export-ledger.json', {'selection_metric': 'MITweet validation log_loss', 'candidates': eligible,
+                                         'topic_holdout_scored': False})
+    save_json(root / 'export.json', eligible[0])
+    return eligible[0]
+
+
 def export(root, device='mps'):
     comparison = json.loads((root / 'mixtures/comparison.json').read_text())
     from .improvement_audit import run as audit
@@ -170,15 +194,21 @@ def export(root, device='mps'):
     for name, original in entries.items():
         spec = dict(original)
         spec.pop('scores', None)
+        if 'calibration_override' in spec:
+            destination = bundle / 'components' / f'{name}_override.joblib'
+            destination.parent.mkdir(exist_ok=True)
+            shutil.copy2(root / spec['calibration_override'], destination)
+            spec['calibration_override'] = str(destination.relative_to(bundle))
         if spec['kind'] == 'constant':
             pass
         elif spec['kind'] == 'expert':
-            source = root / 'experts' / f'{name}_calibrator.joblib'
+            model_name = spec['model']
+            source = root / 'experts' / f'{model_name}_calibrator.joblib'
             destination = bundle / 'components' / f'{name}_calibrator.joblib'
             destination.parent.mkdir(exist_ok=True)
             shutil.copy2(source, destination)
             spec['calibrator'] = str(destination.relative_to(bundle))
-            spec['backbone'] = list(MODELS[name]) if name in MODELS else ['fastino/gliner2.5-base-v1', resolve('fastino/gliner2.5-base-v1')]
+            spec['backbone'] = list(MODELS[model_name]) if model_name in MODELS else ['fastino/gliner2.5-base-v1', resolve('fastino/gliner2.5-base-v1')]
         else:
             source = root / spec['model']
             destination = bundle / 'components' / name
@@ -212,8 +242,8 @@ def export(root, device='mps'):
     assert error < 2e-4, f'Reloaded prediction mismatch: {error}'
     save_json(bundle / 'verification.json', {'passed': True, 'examples': len(checks), 'max_absolute_error': error,
                                            'evaluation_role': 'calibration parity only'})
-    save_json(root / 'export.json', {'path': str(bundle.resolve()), 'selected': selected_name, 'verified': True})
-    print(json.dumps({'export': str(bundle), 'max_absolute_error': error}), flush=True)
+    best_export = select_verified_export(root)
+    print(json.dumps({'export': str(bundle), 'max_absolute_error': error, 'best_verified_export': best_export}), flush=True)
 
 
 if __name__ == '__main__':
