@@ -1,0 +1,15 @@
+{
+  "variant": "compact",
+  "selected_name": "deberta_full_mixed",
+  "manifest_sha256": "85b300588d3f07574e0c82183a7975018c99c1909c6e685bc868956cae3e6b56",
+  "selection_sha256": "03341c305f63d26a3f040d60fb8400eb01a0768b0807d0ba4321fde10532585e",
+  "dataset_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17",
+  "device": "cpu",
+  "examples": 3,
+  "max_absolute_error_against_cached_mps_scores": 5.7348230053655413e-08,
+  "passed": true,
+  "mlx_initialized": false,
+  "seconds_including_loading_and_integrity_checks": 2.998716250000143,
+  "scope": "Existing calibration passages on the same Mac and installed runtime. No holdout predictions or accuracy reevaluation.",
+  "limitations": "Confirms CPU inference for the compact encoder only; the quantized Mistral/Qwen exports still use MLX on Apple Silicon."
+}

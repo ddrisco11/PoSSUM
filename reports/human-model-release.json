@@ -153,7 +153,22 @@
         "fresh_process_seconds": 5.448124624999764
       },
       "local_bundle_bytes": 746066907,
-      "base_models_cached_separately": []
+      "base_models_cached_separately": [],
+      "cpu_verification": {
+        "variant": "compact",
+        "selected_name": "deberta_full_mixed",
+        "manifest_sha256": "85b300588d3f07574e0c82183a7975018c99c1909c6e685bc868956cae3e6b56",
+        "selection_sha256": "03341c305f63d26a3f040d60fb8400eb01a0768b0807d0ba4321fde10532585e",
+        "dataset_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17",
+        "device": "cpu",
+        "examples": 3,
+        "max_absolute_error_against_cached_mps_scores": 5.7348230053655413e-08,
+        "passed": true,
+        "mlx_initialized": false,
+        "seconds_including_loading_and_integrity_checks": 2.998716250000143,
+        "scope": "Existing calibration passages on the same Mac and installed runtime. No holdout predictions or accuracy reevaluation.",
+        "limitations": "Confirms CPU inference for the compact encoder only; the quantized Mistral/Qwen exports still use MLX on Apple Silicon."
+      }
     },
     "single_expert": {
       "selected_name": "mistral_human_lora_e2",
@@ -231,7 +246,8 @@
   "evidence_sha256": {
     "human-topic-stress.json": "aa6d79223b0020e0b75506efe0356eb41b82dcb1d165e14fe37e7050739db5b8",
     "human-export-portability.json": "2bf87571084926ad2cfa50baee4b15c66dd151c1f77fa736a77757c1eddf815a",
-    "human-inference-latency.json": "828b262d12e8e67936b15216f07f2cffae7f99b7bcf5542ee5bf3615f874f061"
+    "human-inference-latency.json": "828b262d12e8e67936b15216f07f2cffae7f99b7bcf5542ee5bf3615f874f061",
+    "human-compact-cpu.json": "7f6b6813c6880e0b130097bbe2a7b4dc6c682977a6aea50337365d73c89df41a"
   },
   "scoring_contract": {
     "labels": {

@@ -48,11 +48,19 @@ def build(root, reports):
             'local_bundle_bytes': sum(p.stat().st_size for p in bundle.rglob('*') if p.is_file()),
             'base_models_cached_separately': [spec['backbone'] for spec in manifest['components'].values() if spec.get('engine') == 'mlx'],
         }
+    evidence = [topic_path, portability_path, latency_path]
+    cpu_path = reports / 'human-compact-cpu.json'
+    if cpu_path.exists():
+        cpu = json.loads(cpu_path.read_text())
+        assert cpu['selection_sha256'] == signature and cpu['dataset_sha256'] == plan['dataset']['manifest_sha256']
+        assert cpu['manifest_sha256'] == models['compact']['manifest_sha256'] and cpu['passed'] and cpu['device'] == 'cpu'
+        models['compact']['cpu_verification'] = cpu
+        evidence.append(cpu_path)
     return {'release_id': 'PoSSUM-2026-10-18-research', 'status': 'Research candidate; completed frozen topic stress audit.',
             'primary_variant': 'selected', 'selection_sha256': signature,
             'dataset_sha256': plan['dataset']['manifest_sha256'], 'topic_holdout_sha256': topic['holdout_sha256'],
             'models': models,
-            'evidence_sha256': {p.name: digest(p) for p in [topic_path, portability_path, latency_path]},
+            'evidence_sha256': {p.name: digest(p) for p in evidence},
             'scoring_contract': {'labels': {'0': 'Left', '1': 'Right'}, 'default_threshold': .5,
                                  'development_word_range': [12, 150], 'maximum_model_input_tokens': 256,
                                  'meaning': 'Binary class probability under the calibration distribution, not ideological intensity or neutrality.'},

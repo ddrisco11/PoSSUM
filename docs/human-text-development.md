@@ -158,3 +158,8 @@ The Python `predict(bundle, texts, device)` interface accepts a list or tuple of
 `python -m possum.release_index RUN --reports reports` joins the immutable selection record with completed test, timing and relocation evidence. It verifies that artifact hashes, dataset hashes and candidate identities match, and that published test results equal the completed local audit. The public [research release index](../reports/human-model-release.json) contains no local paths, raw passages or weights. A local `release.json` additionally records the bundle locations for use on the current machine.
 
 Frozen model manifests retain their original pre-evaluation status text because their hashes were fixed before testing. The release index records the completed audit without changing those artifacts. Its status is a research candidate, not a claim of production readiness, clean installation or broad political-text validation. Local bundle size excludes separately cached causal-model bases; DeBERTa includes its encoder weights.
+
+
+## Compact CPU fallback
+
+The frozen DeBERTa export was verified with `--device cpu` in a fresh process on the same Mac. Three existing calibration passages matched cached MPS probabilities within 5.735e−8; model loading, integrity checks and inference took 3.00 seconds for that batch. MLX was not initialized. This is a functionality/parity check, not a latency distribution or new accuracy evaluation. `scripts/verify_compact_cpu.py RUN OUTPUT` reproduces the check, and the release index verifies its model/dataset/selection hashes before attaching the evidence. It does not establish CPU support for the quantized causal exports or a different operating system.
