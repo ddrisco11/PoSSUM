@@ -12,6 +12,51 @@ from .checkpoints import save_json, save_scores
 from .improvement import digest, report_predictions
 
 
+def decision_summary(y, p, threshold=.5):
+    """Fixed-threshold errors, with undefined absent-class recall kept explicit."""
+    y, p = np.asarray(y), np.asarray(p)
+    assert y.shape == p.shape and len(y) and set(np.unique(y)) <= {0, 1}
+    assert np.isfinite(p).all() and ((p >= 0) & (p <= 1)).all()
+    predicted = p >= threshold
+    matrix = [[int(((y == c) & (predicted == d)).sum()) for d in [0, 1]] for c in [0, 1]]
+    recalls = {}
+    for c in [0, 1]:
+        n, correct = sum(matrix[c]), matrix[c][c]
+        if not n:
+            recalls[str(c)] = {'n': 0, 'recall': None, 'wilson_95_interval': None}
+            continue
+        rate, z = correct / n, 1.959963984540054
+        center = (rate + z * z / (2 * n)) / (1 + z * z / n)
+        radius = z * np.sqrt(rate * (1 - rate) / n + z * z / (4 * n * n)) / (1 + z * z / n)
+        recalls[str(c)] = {'n': n, 'recall': rate,
+                           'wilson_95_interval': [max(0., float(center - radius)), min(1., float(center + radius))]}
+    return {'threshold': threshold, 'confusion_matrix_true_rows_predicted_columns': matrix,
+            'class_order': [0, 1], 'class_recalls': recalls,
+            'balanced_accuracy': float(np.mean([recalls[str(c)]['recall'] for c in [0, 1]]))
+                if all(sum(row) for row in matrix) else None}
+
+
+def uncertainty(y, p, draws=2000, seed=42):
+    """Descriptive fixed-class-count intervals; no holdout-dependent choices."""
+    y, p = np.asarray(y), np.asarray(p)
+    decision_summary(y, p)  # Validate probability range and binary labels.
+    rng = np.random.default_rng(seed)
+    indices = np.concatenate([rng.choice(np.flatnonzero(y == c), size=(draws, int((y == c).sum())), replace=True)
+                              for c in [0, 1] if (y == c).any()], axis=1)
+    clipped = np.clip(p, 1e-12, 1 - 1e-12)
+    losses = -(y * np.log(clipped) + (1 - y) * np.log1p(-clipped))
+    samples = {'log_loss': losses[indices].mean(axis=1), 'brier': ((p - y) ** 2)[indices].mean(axis=1)}
+    yy, pp = y[indices], p[indices] >= .5
+    tp, tn = ((yy == 1) & pp).sum(axis=1), ((yy == 0) & ~pp).sum(axis=1)
+    fp, fn = ((yy == 0) & pp).sum(axis=1), ((yy == 1) & ~pp).sum(axis=1)
+    if set(np.unique(y)) == {0, 1}:
+        samples['balanced_accuracy'] = (tp / (tp + fn) + tn / (tn + fp)) / 2
+        samples['macro_f1'] = (2 * tp / (2 * tp + fp + fn) + 2 * tn / (2 * tn + fp + fn)) / 2
+    return {'percentile_95_intervals': {key: np.quantile(value, [.025, .975]).tolist() for key, value in samples.items()},
+            'draws': draws, 'seed': seed, 'method': 'Class-stratified row bootstrap with fixed observed class counts.',
+            'limitations': 'Conditional on these passages and class counts; does not capture topic/author dependence, label uncertainty or population shift. Only three topic groups cannot establish broad topic generalization.'}
+
+
 def deadline(root):
     return datetime.datetime.fromisoformat(json.loads((root / 'state.json').read_text())['deadline']).timestamp()
 
@@ -121,15 +166,20 @@ def evaluate(root, device='mps'):
             save_scores(target, values, ids[:len(values)], seconds)
             save_json(out / 'progress.json', {'bundle': name, 'completed': len(values), 'total': len(rows), 'updated_at': time.time()})
         p = np.asarray(values)
+        y = np.array([r['label'] for r in rows])
         report = report_predictions(rows, p)
+        report['default_decision'] = decision_summary(y, p)
+        report['uncertainty'] = uncertainty(y, p)
+        for field, key in [('source', 'sources'), ('topic', 'topics')]:
+            for group, summary in report[key].items():
+                mask = np.array([r[field] == group for r in rows])
+                summary['default_decision'] = decision_summary(y[mask], p[mask])
         report['class_counts'] = {str(c): sum(r['label'] == c for r in rows) for c in [0, 1]}
         report['end_to_end_seconds'] = sum(seconds)
         report['timing_scope'] = 'Sequential batches of ten with model loading and integrity checks; not warm-server latency.'
         if record['decision_rules']:
-            from .improvement_audit import threshold_balanced_accuracy
-            y = np.array([r['label'] for r in rows])
             threshold = record['decision_rules']['gate_balanced_threshold']
-            report['gate_fixed_balanced_decision'] = {'threshold': threshold, 'balanced_accuracy': threshold_balanced_accuracy(y, p, threshold)}
+            report['gate_fixed_balanced_decision'] = decision_summary(y, p, threshold)
         reports[name] = report
     result = {'selection_sha256': signature, 'dataset_sha256': plan['dataset']['manifest_sha256'],
               'holdout_sha256': plan['holdout_sha256'], 'results': reports, 'rows': len(rows),

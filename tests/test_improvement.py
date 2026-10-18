@@ -459,6 +459,10 @@ def test_final_evaluation_requires_freeze_rejects_tampering_and_runs_once(tmp_pa
     (bundle / 'model.json').write_text(original)
     report = evaluate(tmp_path, 'cpu')
     assert report['rows'] == 4 and report['results']['selected']['class_counts'] == {'0': 2, '1': 2}
+    selected = report['results']['selected']
+    assert selected['default_decision']['confusion_matrix_true_rows_predicted_columns'] == [[2, 0], [2, 0]]
+    assert selected['topics']['topic']['default_decision']['class_recalls']['1']['recall'] == 0
+    assert selected['uncertainty']['draws'] == 2000
     assert (tmp_path / 'final-evaluation/exposure.json').exists()
     def forbidden(*args, **kwargs):
         raise AssertionError('Completed holdout must not run predictions again')
@@ -486,3 +490,30 @@ def test_inference_benchmark_sampling_and_batch_parity_use_supplied_rows_only():
         time_requests('fixture', selected, 'cpu', float('inf'), inconsistent)
     with pytest.raises(TimeoutError):
         time_requests('fixture', selected, 'cpu', 0, predictor)
+
+
+def test_final_decisions_expose_class_errors_and_undefined_absent_recall():
+    from possum.final_evaluation import decision_summary, uncertainty
+    y = np.array([0, 0, 0, 1, 1])
+    p = np.array([.1, .2, .8, .3, .9])
+    summary = decision_summary(y, p)
+    assert summary['confusion_matrix_true_rows_predicted_columns'] == [[2, 1], [1, 1]]
+    assert summary['balanced_accuracy'] == pytest.approx((2 / 3 + 1 / 2) / 2)
+    assert summary['class_recalls']['0']['n'] == 3
+    assert summary['class_recalls']['1']['wilson_95_interval'] == pytest.approx([.0945312057, .9054687943])
+    changed = decision_summary(y, p, .25)
+    assert changed['confusion_matrix_true_rows_predicted_columns'] == [[2, 1], [0, 2]]
+    one_class = decision_summary(y[:3], p[:3])
+    assert one_class['balanced_accuracy'] is None
+    assert one_class['class_recalls']['1']['recall'] is None
+    assert one_class['class_recalls']['1']['wilson_95_interval'] is None
+    intervals = uncertainty(y, p, draws=100)
+    assert uncertainty(y, p, draws=100) == intervals
+    assert set(intervals['percentile_95_intervals']) == {'log_loss', 'brier', 'balanced_accuracy', 'macro_f1'}
+    assert all(np.isfinite(v).all() and v[0] <= v[1] for v in intervals['percentile_95_intervals'].values())
+    perfect = uncertainty(y, y.astype(float), draws=100)
+    assert perfect['percentile_95_intervals']['macro_f1'] == [1., 1.]
+    assert perfect['percentile_95_intervals']['brier'] == [0., 0.]
+    assert set(uncertainty(y[:3], p[:3], draws=100)['percentile_95_intervals']) == {'log_loss', 'brier'}
+    with pytest.raises(AssertionError):
+        uncertainty(y, p * 2)
