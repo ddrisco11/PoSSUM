@@ -18,9 +18,12 @@ PoSSUM studies the political viewpoint expressed in short English passages about
 | BERT distilled from Mistral, alpha 0.25 | 0.802 | 0.206 |
 | BERT distilled from Mistral, alpha 0.5 | 0.758 | 0.209 |
 | Frozen Mistral | 0.852 | 0.145 |
+| Human-only Mistral LoRA, epoch 1 (interim) | 0.865 | 0.122 |
 | Frozen Qwen, raw-completion prompt | 0.604 | 0.265 |
 | Frozen Qwen, nonthinking chat template | 0.764 | 0.191 |
 | **Best verified fixed mixture** | **0.873** | **0.123** |
+
+The first human-only Mistral adapter epoch improves human validation loss from 0.145 to 0.122 and balanced accuracy from 0.863 to 0.876. Its loss is effectively tied with the larger verified mixture: the descriptive paired interval for their difference spans zero. Synthetic macro-F1 improves, but synthetic log loss worsens from 0.062 to 0.112. Epoch two is still running, and adapter export verification is pending. [Interim matched comparison](reports/human-mistral-adapter-interim.json).
 
 Both distillation settings finished four epochs and selected epoch 3. Neither improves BERT's primary metric, calibrated log loss; the alpha-0.25 F1 increase does not change that selection rule. Paired loss intervals include zero. Before the chat-template comparison, the mixture refit with distilled candidates reached 0.126 log loss and did not replace the earlier 0.124 mixture. [Distillation results, including all epochs](reports/human-distillation-development.json).
 
