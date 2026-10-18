@@ -6,7 +6,7 @@
 
 PoSSUM studies the political viewpoint expressed in short English passages about U.S. politics. It combines calibrated predictions from multiple models and compares equal averaging with learned mixture weights. Neural routing uses 384-dimensional BGE-small embeddings; an optional self-prediction branch lets the routing head contribute its own answer.
 
-**Current status:** The strongest verified candidate on the revised human-text development benchmark is a calibrated fixed mixture of frozen Mistral, fine-tuned BERT and a lexical classifier. It reaches **0.873 macro-F1 / 0.869 balanced accuracy / 0.124 log loss** on 408 MITweet validation passages. Neural routing is weaker in this comparison. A reloadable local research export is available; there is no validated production release. The final 159-example topic holdout remains sealed.
+**Current status:** The strongest verified candidate on the revised human-text development benchmark is a calibrated fixed mixture of frozen Mistral, chat-formatted Qwen and BERT variants. It reaches **0.873 macro-F1 / 0.869 balanced accuracy / 0.123 log loss** on 408 MITweet validation passages. Neural routing is weaker in this comparison. A reloadable local research export is available; there is no validated production release. The final 159-example topic holdout remains sealed.
 
 **Human-text development (October 18, in progress):** The revised corpus contains **2,199 MITweet passages mapped from human ideology facets** and **2,113 synthetic passages**. Broader admission recovers meaningful short statements and additional topics while keeping ambiguous and conflicting labels out. The human validation subset is strongly left-skewed (**366 left / 42 right**). These are exploratory development results, with checkpoint and architecture selection on the same validation set.
 
@@ -19,11 +19,12 @@ PoSSUM studies the political viewpoint expressed in short English passages about
 | BERT distilled from Mistral, alpha 0.5 | 0.758 | 0.209 |
 | Frozen Mistral | 0.852 | 0.145 |
 | Frozen Qwen, raw-completion prompt | 0.604 | 0.265 |
-| **Best verified fixed mixture** | **0.873** | **0.124** |
+| Frozen Qwen, nonthinking chat template | 0.764 | 0.191 |
+| **Best verified fixed mixture** | **0.873** | **0.123** |
 
-Both distillation settings finished four epochs and selected epoch 3. Neither improves BERT's primary metric, calibrated log loss; the alpha-0.25 F1 increase does not change that selection rule. Paired loss intervals include zero. The mixture refit with distilled candidates reaches 0.126 log loss, so the earlier verified 0.124 mixture remains selected. [Distillation results, including all epochs](reports/human-distillation-development.json).
+Both distillation settings finished four epochs and selected epoch 3. Neither improves BERT's primary metric, calibrated log loss; the alpha-0.25 F1 increase does not change that selection rule. Paired loss intervals include zero. Before the chat-template comparison, the mixture refit with distilled candidates reached 0.126 log loss and did not replace the earlier 0.124 mixture. [Distillation results, including all epochs](reports/human-distillation-development.json).
 
-Both ModernBERT trials finished behind BERT (human-only log loss 0.228; mixed-data 0.230). BERT seed repetitions give human log loss from 0.200 to 0.229; equal averaging gives 0.197, with an uncertain improvement over seed 42. Qwen's separate chat-template comparison is running, and a human-only Mistral LoRA comparison is queued. [Seed sensitivity](reports/human-seed-sensitivity.json) · [Completed compact comparison](reports/human-compact-completed.json) · [Qwen raw-prompt results](reports/human-qwen-development.json) · [Mistral and mixture comparison](reports/human-mistral-development.json).
+Both ModernBERT trials finished behind BERT (human-only log loss 0.228; mixed-data 0.230). BERT seed repetitions give human log loss from 0.200 to 0.229; equal averaging gives 0.197, with an uncertain improvement over seed 42. Qwen's nonthinking chat-template comparison is complete: macro-F1 improves from 0.604 to 0.764 and log loss from 0.265 to 0.191. Adding it to the mixture changes loss from 0.12385 to 0.12288 with unchanged F1; the paired loss interval spans zero, and the added inference cost still needs measurement. [Chat-template and mixture comparison](reports/human-qwen-chat-development.json). Human-only Mistral LoRA training is now running. [Seed sensitivity](reports/human-seed-sensitivity.json) · [Completed compact comparison](reports/human-compact-completed.json) · [Qwen raw-prompt results](reports/human-qwen-development.json) · [Mistral and mixture comparison](reports/human-mistral-development.json).
 
 These figures use different inputs from the historical evaluations below and cannot be compared directly. [Protocol](docs/human-text-development.md) · [Aggregate data audit](reports/human-development-data.json) · [Initial baselines](reports/human-development-baselines.json).
 
@@ -39,7 +40,7 @@ These figures use different inputs from the historical evaluations below and can
 | Evaluated components | Lexical and embedding baselines; BERT fine-tunes and distillation; ModernBERT; frozen Mistral, GLiNER and Qwen; historical adapters |
 | Routing input | BGE-small, 384-dimensional embeddings |
 | Current development selection | Regularized fixed mixture, selected by human validation log loss |
-| Training status | Current compact comparisons complete; new human-only Mistral adapter trial queued |
+| Training status | Compact and frozen-expert comparisons complete; human-only Mistral adapter training running |
 | Deployment status | Reloadable local adapters and mixture export; fresh human evaluation and abstention remain incomplete |
 
 Every enabled expert runs on every passage. This is a dense prediction ensemble, not sparse routing that avoids expert computation. Component weights and source datasets are downloaded separately.

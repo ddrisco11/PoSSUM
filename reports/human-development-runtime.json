@@ -1,0 +1,31 @@
+{
+  "recorded_at": "2026-10-18T09:26:33.220953+00:00",
+  "python": "3.12.11",
+  "os": {
+    "system": "Darwin",
+    "version": "14.1.1",
+    "architecture": "arm64"
+  },
+  "packages": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "torch": "2.14.1",
+    "transformers": "5.20.1",
+    "tokenizers": "0.23.3",
+    "peft": "0.21.2",
+    "mlx": "0.32.4",
+    "mlx-lm": "0.32.2",
+    "huggingface-hub": "2.2.0",
+    "safetensors": "0.8.0",
+    "joblib": "1.6.0",
+    "gliner2": "2.1.0",
+    "sentencepiece": "0.2.2"
+  },
+  "accelerators_used": [
+    "PyTorch MPS for compact training and inference",
+    "MLX for quantized causal models"
+  ],
+  "scope": "Installed package metadata from the development environment; not a fresh-install reproducibility verification or a cross-platform dependency lock.",
+  "dataset_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17"
+}
