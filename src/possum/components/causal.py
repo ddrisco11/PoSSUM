@@ -61,10 +61,10 @@ class Causal:
 
 class MLXCausal:
     """Pass an explicitly selected, revision-pinned 4-bit MLX model directory."""
-    def __init__(self, model_id, prompt_format='plain'):
+    def __init__(self, model_id, prompt_format='plain', adapter_path=None):
         self.prompt_format = prompt_format
         from mlx_lm import load
-        self.model, self.tokenizer = load(model_id)
+        self.model, self.tokenizer = load(model_id, adapter_path=adapter_path)
     def score(self, texts):
         import mlx.core as mx
         rows = []

@@ -378,3 +378,33 @@ def test_best_comparison_excludes_different_dataset_histories(tmp_path):
         (folder / 'comparison.json').write_text(json.dumps({'dataset': {'manifest_sha256': signature},
             'selected': 'model', 'results': {'model': {'validation': {'sources': {'MITweet': {'log_loss': loss}}}}}}))
     assert best_comparison(tmp_path) == tmp_path / 'mixture-history/valid'
+
+
+def test_human_adapter_uses_only_fit_human_rows_and_covers_each_epoch(monkeypatch):
+    from possum import human_adapter
+    rows = [{'id': 'h0', 'source': 'MITweet', 'label': 0}, {'id': 'h1', 'source': 'MITweet', 'label': 1},
+            {'id': 'synthetic', 'source': 'synthetic', 'label': 1}]
+    monkeypatch.setattr(human_adapter, 'load_data', lambda root: {'fit': rows, 'validation': [{'id': 'protected'}]})
+    assert [r['id'] for r in human_adapter.fit_rows(Path('.'))] == ['h0', 'h1']
+    first = np.concatenate([human_adapter.update_indices(11, step) for step in range(3)])
+    second = np.concatenate([human_adapter.update_indices(11, step) for step in range(3, 6)])
+    assert sorted(first.tolist()) == sorted(second.tolist()) == list(range(11))
+    assert first.tolist() != second.tolist()
+    np.testing.assert_array_equal(human_adapter.update_indices(11, 4), second[4:8])
+    from possum.improvement_experts import expert_settings
+    assert expert_settings('mistral_human_lora_e1')['adapter'] == 'adapters/mistral_human/epoch-1'
+    assert expert_settings('mistral_human_lora_e2')['adapter'] == 'adapters/mistral_human/epoch-2'
+
+
+def test_adapter_scoring_rejects_changed_weights_before_model_load(tmp_path, monkeypatch):
+    from possum import improvement_experts
+    from possum.improvement import PARTS
+    monkeypatch.setattr(improvement_experts, 'load_data', lambda root: {p: [] for p in PARTS})
+    (tmp_path / 'dataset.json').write_text(json.dumps({'manifest_sha256': 'frozen'}))
+    (tmp_path / 'state.json').write_text(json.dumps({'deadline': '2026-10-18T14:00:00+00:00'}))
+    adapter = tmp_path / 'adapters/mistral_human/epoch-1'
+    adapter.mkdir(parents=True)
+    (adapter / 'adapters.safetensors').write_bytes(b'modified')
+    (adapter / 'training.json').write_text(json.dumps({'complete': True, 'signature': {'manifest_sha256': 'frozen'}, 'adapter_sha256': 'wrong'}))
+    with pytest.raises(AssertionError):
+        improvement_experts.run(tmp_path, 'mistral_human_lora_e1')

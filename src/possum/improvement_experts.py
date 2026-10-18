@@ -10,15 +10,18 @@ import joblib
 import numpy as np
 
 from .checkpoints import atomic_write, save_json, save_scores
-from .improvement import PARTS, calibration, load_data, report_predictions
+from .improvement import PARTS, calibration, load_data, report_predictions, digest
 from .option_a import MODELS
 from .revisions import resolve, local_snapshot
 
 
-EXPERT_NAMES = ('gliner', 'mistral', 'qwen', 'qwen_chat')
+EXPERT_NAMES = ('gliner', 'mistral', 'qwen', 'qwen_chat', 'mistral_human_lora_e1', 'mistral_human_lora_e2')
 
 
 def expert_settings(name):
+    if name in ['mistral_human_lora_e1', 'mistral_human_lora_e2']:
+        return {'backbone': list(MODELS['mistral']), 'engine': 'mlx', 'prompt_format': 'plain',
+                'adapter': f'adapters/mistral_human/epoch-{name[-1]}'}
     base = 'qwen' if name == 'qwen_chat' else name
     if base in MODELS:
         return {'backbone': list(MODELS[base]), 'engine': 'mlx',
@@ -42,7 +45,14 @@ def run(root, name):
     settings = expert_settings(name)
     backbone = settings['backbone']
     signature = {'manifest_sha256': json.loads((root / 'dataset.json').read_text())['manifest_sha256'],
-                 'backbone': list(backbone), 'frozen': True, 'prompt_version': 'qwen-chat-nonthinking-v1' if name == 'qwen_chat' else 'causal-v1' if name in MODELS else 'gliner-v1'}
+                 'backbone': list(backbone), 'frozen': 'adapter' not in settings, 'prompt_version': 'qwen-chat-nonthinking-v1' if name == 'qwen_chat' else 'causal-v1' if settings['engine'] == 'mlx' else 'gliner-v1'}
+    if 'adapter' in settings:
+        adapter = root / settings['adapter']
+        training = json.loads((adapter / 'training.json').read_text())
+        assert training['complete'] and training['signature']['manifest_sha256'] == signature['manifest_sha256']
+        assert digest(adapter / 'adapters.safetensors') == training['adapter_sha256']
+        signature['adapter_sha256'] = training['adapter_sha256']
+        signature['training_sha256'] = digest(adapter / 'training.json')
     values, elapsed = [], []
     if meta.exists():
         assert json.loads(meta.read_text())['signature'] == signature
@@ -57,7 +67,8 @@ def run(root, name):
             return
         if settings['engine'] == 'mlx':
             from .components.causal import MLXCausal
-            model = MLXCausal(local_snapshot(backbone[0], backbone[1]), prompt_format=settings['prompt_format'])
+            model = MLXCausal(local_snapshot(backbone[0], backbone[1]), prompt_format=settings['prompt_format'],
+                              adapter_path=str(root / settings['adapter']) if 'adapter' in settings else None)
             model.model.eval()
         else:
             import torch

@@ -1,0 +1,204 @@
+{
+  "stage": "Six initial compact recipes complete; seed repetitions and distillation pending.",
+  "dataset_sha256": "44956f833721c180faa612ad197d73841702de2cf091276b6571259d2c557d17",
+  "compact_models": {
+    "bert_lora_human": {
+      "epoch": 4,
+      "trial": {
+        "name": "bert_lora_human",
+        "mode": "lora",
+        "regime": "human",
+        "lr": 0.0002,
+        "epochs": 4,
+        "seed": 42
+      },
+      "fit_rows": 1224,
+      "validation": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.33444816053511706,
+          "balanced_accuracy": 0.5,
+          "log_loss": 1.3003687668630912,
+          "brier": 0.4201212648893792,
+          "ece": 0.4239108634872197
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.550326797385621,
+          "balanced_accuracy": 0.5407884465261514,
+          "log_loss": 0.2929778730933217,
+          "brier": 0.0834051248827762,
+          "ece": 0.037233693708742945
+        }
+      }
+    },
+    "bert_full_human": {
+      "epoch": 4,
+      "trial": {
+        "name": "bert_full_human",
+        "mode": "full",
+        "regime": "human",
+        "lr": 2e-05,
+        "epochs": 4,
+        "seed": 42
+      },
+      "fit_rows": 1224,
+      "validation": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.340033500837521,
+          "balanced_accuracy": 0.5025252525252525,
+          "log_loss": 1.3607001274863009,
+          "brier": 0.4230365428684333,
+          "ece": 0.42898305891526994
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.7317019707869199,
+          "balanced_accuracy": 0.6914519906323184,
+          "log_loss": 0.22136615101897775,
+          "brier": 0.06262544907438955,
+          "ece": 0.05175612307393157
+        }
+      }
+    },
+    "bert_full_mixed": {
+      "epoch": 3,
+      "trial": {
+        "name": "bert_full_mixed",
+        "mode": "full",
+        "regime": "mixed",
+        "lr": 2e-05,
+        "epochs": 4,
+        "seed": 42
+      },
+      "fit_rows": 2180,
+      "validation": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.93689551292215,
+          "balanced_accuracy": 0.9368686868686869,
+          "log_loss": 0.25548650481505686,
+          "brier": 0.06599751042038562,
+          "ece": 0.09945016351430934
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.7763115606390019,
+          "balanced_accuracy": 0.7390710382513661,
+          "log_loss": 0.20044798111168288,
+          "brier": 0.05591295627138944,
+          "ece": 0.04771317467426995
+        }
+      }
+    },
+    "bert_lora_mixed": {
+      "epoch": 4,
+      "trial": {
+        "name": "bert_lora_mixed",
+        "mode": "lora",
+        "regime": "mixed",
+        "lr": 0.0001,
+        "epochs": 4,
+        "seed": 42
+      },
+      "fit_rows": 2180,
+      "validation": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.9647805420711975,
+          "balanced_accuracy": 0.9646717171717172,
+          "log_loss": 0.11688423124035295,
+          "brier": 0.026472507220548936,
+          "ece": 0.052726778151656314
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.5863399193847524,
+          "balanced_accuracy": 0.5645979703356753,
+          "log_loss": 0.2959018242868673,
+          "brier": 0.08535749996875303,
+          "ece": 0.03234073839172781
+        }
+      }
+    },
+    "modernbert_full_human": {
+      "epoch": 3,
+      "trial": {
+        "name": "modernbert_full_human",
+        "model_id": "answerdotai/ModernBERT-base",
+        "mode": "full",
+        "regime": "human",
+        "lr": 2e-05,
+        "epochs": 4,
+        "seed": 42
+      },
+      "fit_rows": 1224,
+      "validation": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.351059826915841,
+          "balanced_accuracy": 0.5075757575757576,
+          "log_loss": 1.2045168728404578,
+          "brier": 0.3971413807502818,
+          "ece": 0.40727265158371384
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.6783180026281209,
+          "balanced_accuracy": 0.6282201405152225,
+          "log_loss": 0.22770669653588,
+          "brier": 0.06462745262106426,
+          "ece": 0.046675024830845256
+        }
+      }
+    },
+    "modernbert_full_mixed": {
+      "epoch": 4,
+      "trial": {
+        "name": "modernbert_full_mixed",
+        "model_id": "answerdotai/ModernBERT-base",
+        "mode": "full",
+        "regime": "mixed",
+        "lr": 2e-05,
+        "epochs": 4,
+        "seed": 42
+      },
+      "fit_rows": 2180,
+      "validation": {
+        "GPT-4 Political Ideologies": {
+          "n": 398,
+          "macro_f1": 0.9723476690057667,
+          "balanced_accuracy": 0.9722727272727273,
+          "log_loss": 0.09582996501779666,
+          "brier": 0.02180704774364162,
+          "ece": 0.046969591154223535
+        },
+        "MITweet": {
+          "n": 408,
+          "macro_f1": 0.7253718380197589,
+          "balanced_accuracy": 0.6731069476971117,
+          "log_loss": 0.23009529763667635,
+          "brier": 0.06241510413671213,
+          "ece": 0.0315201359394824
+        }
+      }
+    }
+  },
+  "best_verified_mixture": {
+    "selected": "fixed_0.1",
+    "human_validation_log_loss": 0.12384896516631964,
+    "reload_verification": {
+      "passed": true,
+      "examples": 3,
+      "max_absolute_error": 3.6523788594228224e-10,
+      "evaluation_role": "calibration parity only"
+    }
+  },
+  "limitations": [
+    "Checkpoint and model selection use the same development validation set.",
+    "MITweet validation has 366 left and 42 right passages.",
+    "Human labels map ideology facets to a binary axis; broad US passage generalization remains unproven."
+  ],
+  "topic_holdout_scored": false
+}

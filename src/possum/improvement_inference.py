@@ -83,7 +83,8 @@ def raw_component(bundle, spec, texts, device, embeddings):
     if spec.get('engine') == 'mlx' or name in MODELS:
         from .components.causal import MLXCausal
         backbone = spec['backbone']
-        model = MLXCausal(local_snapshot(backbone[0], backbone[1]), prompt_format=spec.get('prompt_format', 'plain'))
+        model = MLXCausal(local_snapshot(backbone[0], backbone[1]), prompt_format=spec.get('prompt_format', 'plain'),
+                          adapter_path=str(bundle / spec['adapter']) if 'adapter' in spec else None)
         model.model.eval()
     else:
         from .components.gliner import GLiNER
@@ -100,7 +101,7 @@ def component(bundle, spec, texts, device, embeddings, raw_cache=None):
         return np.full(len(texts), spec['probability'])
     # Cache is scoped to one prediction call; never reuse scores for another batch.
     cache = raw_cache if raw_cache is not None else {}
-    key = json.dumps({k: spec[k] for k in ['kind', 'model', 'backbone', 'calibrator', 'trial', 'prompt_format'] if k in spec}, sort_keys=True)
+    key = json.dumps({k: spec[k] for k in ['kind', 'model', 'backbone', 'calibrator', 'trial', 'prompt_format', 'adapter'] if k in spec}, sort_keys=True)
     if key not in cache:
         cache[key] = raw_component(bundle, spec, texts, device, embeddings)
     raw, default_calibrator = cache[key]
@@ -253,6 +254,8 @@ def export(root, device='mps', candidate=None, comparison_dir=None):
             spec['calibrator'] = copy_once(source, destination)
             from .improvement_experts import expert_settings
             spec.update(expert_settings(model_name))
+            if 'adapter' in spec:
+                spec['adapter'] = copy_once(root / spec['adapter'], bundle / 'components' / f'{name}_adapter')
         else:
             source = root / spec['model']
             destination = bundle / 'components' / name
