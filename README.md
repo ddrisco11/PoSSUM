@@ -59,13 +59,19 @@ These figures use different inputs from the historical evaluations below and can
 | Task | Binary political slant classification |
 | Labels | `0 = Left`, `1 = Right` |
 | Input | Short English passages about U.S. politics; current development admission uses 12–150 words |
-| Evaluated components | Lexical and embedding baselines; BERT fine-tunes and distillation; ModernBERT; frozen Mistral, GLiNER and Qwen; historical adapters |
+| Evaluated components | Lexical and embedding baselines; BERT, ModernBERT and DeBERTa fine-tunes; BERT distillation; Mistral LoRA; frozen GLiNER and Qwen |
 | Routing input | BGE-small, 384-dimensional embeddings |
 | Current development selection | Two-model fixed mixture, selected by human validation log loss |
 | Training status | Planned compact, frozen-expert, distillation and human-only Mistral adapter comparisons complete |
 | Deployment status | Verified local exports and completed 159-passage topic audit; broader human evaluation and abstention remain incomplete |
 
 Every enabled expert runs on every passage. This is a dense prediction ensemble, not sparse routing that avoids expert computation. Component weights and source datasets are downloaded separately.
+
+## Verified research release
+
+[PoSSUM-2026-10-18-research](reports/human-model-release.json) records the three frozen variants, exact manifest hashes, evaluation results, decision rules and deployment checks. The selected mixture remains the primary development-selected model; the single adapter and compact encoder are documented alternatives.
+
+DeBERTa's local bundle is approximately **712 MiB**, including its encoder weights. The mixture and single-Mistral bundles are approximately **1.6 MiB each**, containing adapters/calibration rather than base weights: they require two and one separately cached quantized base models, respectively. These bundle sizes are not total download or memory requirements. Weights remain local.
 
 ## Run the current local models
 

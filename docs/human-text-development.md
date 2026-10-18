@@ -151,3 +151,10 @@ All three exports passed. Maximum absolute differences were 1.11e−16 for the s
 ## Inference input and error contract
 
 The Python `predict(bundle, texts, device)` interface accepts a list or tuple of passage strings. A bare string is rejected to prevent accidental character-by-character classification, and non-text or empty inputs fail before model loading. BOM removal and whitespace normalization preserve the existing valid-input preprocessing. Expert probabilities must be finite and within [0, 1]; mixture weights must be finite, nonnegative and sum to one. Invalid results raise errors rather than returning a misleading class label. Both encoder and causal inference release model resources when scoring fails, including token-limit rejection. These checks do not introduce a neutrality detector or alter the frozen decision rules.
+
+
+## Release identity and evidence
+
+`python -m possum.release_index RUN --reports reports` joins the immutable selection record with completed test, timing and relocation evidence. It verifies that artifact hashes, dataset hashes and candidate identities match, and that published test results equal the completed local audit. The public [research release index](../reports/human-model-release.json) contains no local paths, raw passages or weights. A local `release.json` additionally records the bundle locations for use on the current machine.
+
+Frozen model manifests retain their original pre-evaluation status text because their hashes were fixed before testing. The release index records the completed audit without changing those artifacts. Its status is a research candidate, not a claim of production readiness, clean installation or broad political-text validation. Local bundle size excludes separately cached causal-model bases; DeBERTa includes its encoder weights.

@@ -764,3 +764,33 @@ def test_compact_overlength_error_releases_model_resources(tmp_path, monkeypatch
     with pytest.raises(ValueError, match='256-token'):
         module.raw_component(tmp_path, {'kind': 'compact', 'model': 'fixture', 'trial': {'mode': 'full'}}, ['long passage'], 'cpu', {})
     assert released == [True]
+
+
+def test_release_index_joins_matching_evidence_without_local_paths(tmp_path):
+    from possum.final_evaluation import freeze, evaluate
+    from possum.release_index import build
+    rows = [{'id': str(i), 'text': 'Private fixture', 'label': i % 2,
+             'source': 'MITweet', 'topic': 'fixture'} for i in range(4)]
+    _, bundle = final_fixture(tmp_path, ''.join(json.dumps(r) + '\n' for r in rows))
+    plan = freeze(tmp_path, allow_incomplete=True, reason='Fixture')
+    topic = evaluate(tmp_path, 'cpu')
+    reports = tmp_path / 'reports'; reports.mkdir()
+    (reports / 'human-topic-stress.json').write_text(json.dumps(topic))
+    sha = digest(bundle / 'model.json')
+    portability = {'selection_sha256': digest(tmp_path / 'selection-freeze.json'),
+                   'dataset_sha256': plan['dataset']['manifest_sha256'],
+                   'results': {'selected': {'manifest_sha256': sha, 'passed': True}}}
+    (reports / 'human-export-portability.json').write_text(json.dumps(portability))
+    timing = {'results': [{'bundle_manifest_sha256': sha,
+                          'plan': {'dataset_sha256': plan['dataset']['manifest_sha256']},
+                          'measurements': {'batch_single_parity_passed': True}}]}
+    (reports / 'human-inference-latency.json').write_text(json.dumps(timing))
+    result = build(tmp_path, reports)
+    assert result['models']['selected']['manifest_sha256'] == sha
+    assert result['models']['selected']['topic_stress'] == topic['results']['selected']['all']
+    assert result['models']['selected']['local_bundle_bytes'] > 0
+    assert str(tmp_path) not in json.dumps(result) and 'Private fixture' not in json.dumps(result)
+    portability['results']['selected']['manifest_sha256'] = 'different'
+    (reports / 'human-export-portability.json').write_text(json.dumps(portability))
+    with pytest.raises(AssertionError):
+        build(tmp_path, reports)
